@@ -2,7 +2,7 @@
 <view class="container">
   <!-- 用户信息区 -->
   <view class="user-card" wx:if="{{userInfo}}">
-    <text class="username">欢迎回来，{{userInfo.profile.persona || '健身伙伴'}}！</text>
+    <text class="username">欢迎回来，{{userInfo.profile.persona === 'beauty_coach' ? '美女教练' : userInfo.profile.persona || '健身伙伴'}}！</text>
     <view class="streak">
       <text class="streak-num">{{streakDays}}</text>
       <text class="streak-label">连续打卡天数</text>
