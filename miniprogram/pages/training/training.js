@@ -161,6 +161,11 @@ Page({
     this.setData({ showRPESelector: true })
   },
 
+  // 隐藏RPE选择器
+  hideRPESelector() {
+    this.setData({ showRPESelector: false })
+  },
+
   // 选择RPE评分
   selectRPE(e) {
     const rpe = parseInt(e.currentTarget.dataset.rpe)

@@ -4,7 +4,8 @@ Page({
   data: {
     achievements: [],
     totalPoints: 0,
-    loading: true
+    loading: true,
+    unlockedAchievementCount: 0
   },
 
   onLoad() {
@@ -86,9 +87,13 @@ Page({
           }
         ]
 
+        // 计算已解锁成就数量
+        const unlockedCount = allAchievements.filter(a => a.unlocked).length
+
         this.setData({
           achievements: allAchievements,
           totalPoints,
+          unlockedAchievementCount: unlockedCount,
           loading: false
         })
       }

@@ -67,7 +67,7 @@
 
   <!-- RPE评分弹窗 -->
   <view class="rpe-modal" wx:if="{{showRPESelector}}">
-    <view class="modal-overlay" bindtap="showRPESelector = false"></view>
+    <view class="modal-overlay" bindtap="hideRPESelector"></view>
     <view class="modal-content">
       <text class="modal-title">本次训练感觉如何？</text>
       <text class="modal-desc">请选择 RPE 评分（6-10分）</text>
