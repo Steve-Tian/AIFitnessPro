@@ -151,10 +151,11 @@ Page({
         app.globalData.userInfo = users[0]
       }
 
-      wx.showToast({ title: '设置完成！', icon: 'success', duration: 1500 })
+      wx.showToast({ title: '设置完成！', icon: 'success', duration: 2000 })
       setTimeout(() => {
+        wx.clearStorageSync()
         wx.reLaunch({ url: '/pages/index/index' })
-      }, 1500)
+      }, 2000)
     } catch (err) {
       console.error('保存失败：', err)
       wx.showToast({ title: '保存失败，请重试', icon: 'none' })

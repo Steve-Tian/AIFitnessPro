@@ -3,7 +3,9 @@ const app = getApp()
 Page({
   data: {
     userInfo: null,
-    streakDays: 0
+    streakDays: 0,
+    weeklyPlan: null,
+    generatingPlan: false
   },
 
   applyUser(user) {
@@ -17,9 +19,11 @@ Page({
   onLoad() {
     if (app.globalData.userInfo) {
       this.applyUser(app.globalData.userInfo)
+      this.loadWeeklyPlan()
     } else {
       app._userInfoReadyCallback = (userInfo) => {
         this.applyUser(userInfo)
+        this.loadWeeklyPlan()
       }
     }
   },
@@ -27,10 +31,55 @@ Page({
   onShow() {
     if (app.globalData.userInfo) {
       this.applyUser(app.globalData.userInfo)
+      this.loadWeeklyPlan()
     }
     const tabBar = this.getTabBar && this.getTabBar()
     if (tabBar) {
       tabBar.setData({ selected: 0 })
+    }
+  },
+
+  async loadWeeklyPlan() {
+    try {
+      const db = wx.cloud.database()
+      if (!app.globalData.userInfo?.current_plan_id) {
+        this.setData({ weeklyPlan: null })
+        return
+      }
+
+      const { data } = await db.collection('plans').doc(app.globalData.userInfo.current_plan_id).get()
+      if (data && data.weeklyPlan) {
+        this.setData({ weeklyPlan: data.weeklyPlan })
+      }
+    } catch (err) {
+      console.error('加载计划失败：', err)
+    }
+  },
+
+  async generatePlan() {
+    if (this.data.generatingPlan) return
+    this.setData({ generatingPlan: true })
+
+    try {
+      const { result } = await wx.cloud.callFunction({ name: 'genPlan' })
+      
+      if (result.success) {
+        wx.showToast({ title: '计划生成成功！', icon: 'success' })
+        this.setData({ 
+          weeklyPlan: result.weeklyPlan,
+          generatingPlan: false 
+        })
+        
+        // 更新全局状态
+        app.globalData.userInfo.current_plan_id = result.planId
+      } else {
+        wx.showToast({ title: result.message || '生成失败', icon: 'none' })
+        this.setData({ generatingPlan: false })
+      }
+    } catch (err) {
+      console.error('调用云函数失败：', err)
+      wx.showToast({ title: '网络错误，请重试', icon: 'none' })
+      this.setData({ generatingPlan: false })
     }
   }
 })

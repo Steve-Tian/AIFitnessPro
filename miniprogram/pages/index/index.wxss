@@ -1,94 +1,158 @@
-.page {
-  min-height: 100vh;
-  background-color: #f5f6fa;
-  background-color: var(--color-bg);
-}
-
+/* miniprogram/pages/index/index.wxss */
 .container {
-  padding: 32rpx;
-  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
 }
 
-.welcome {
-  margin-bottom: 40rpx;
+.user-card {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  color: white;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
 }
 
-.welcome-title {
+.username {
+  font-size: 36rpx;
+  font-weight: bold;
   display: block;
-  font-size: var(--font-xl);
-  font-weight: 700;
-  color: var(--color-text);
-  line-height: 1.35;
-}
-
-.welcome-sub {
-  display: block;
-  margin-top: 12rpx;
-  font-size: var(--font-sm);
-}
-
-.card {
-  background: var(--color-card);
-  border-radius: var(--radius-lg);
-  padding: 32rpx;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 24rpx;
-}
-
-.card-head {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16rpx;
-}
-
-.card-label {
-  font-size: var(--font-md);
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.card-icon {
-  font-size: 40rpx;
-  line-height: 1;
-}
-
-.card-placeholder {
-  font-size: var(--font-base);
-  line-height: 1.5;
-}
-
-.card-train {
-  border-left: 6rpx solid var(--color-primary);
-}
-
-.card-diet {
-  border-left: 6rpx solid var(--color-primary-light);
+  margin-bottom: 20rpx;
 }
 
 .streak {
-  margin-top: 8rpx;
-  padding: 28rpx 32rpx;
-  background: var(--color-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-}
-
-.streak-line {
-  display: block;
-  font-size: var(--font-base);
-  text-align: center;
-  line-height: 1.5;
-}
-
-.streak-muted {
-  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
 }
 
 .streak-num {
-  font-size: var(--font-2xl);
-  font-weight: 700;
-  color: var(--color-primary);
-  vertical-align: middle;
+  font-size: 60rpx;
+  font-weight: bold;
+  margin-right: 15rpx;
+}
+
+.streak-label {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.plan-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.generate-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 50rpx;
+  padding: 15rpx 30rpx;
+  font-size: 28rpx;
+}
+
+.generate-btn[disabled] {
+  background: #ccc;
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300rpx, 1fr));
+  gap: 20rpx;
+}
+
+.day-card {
+  border: 2rpx solid #e0e0e0;
+  border-radius: 15rpx;
+  padding: 25rpx;
+  position: relative;
+}
+
+.day-card.push {
+  border-left: 8rpx solid #ff6b6b;
+}
+
+.day-card.pull {
+  border-left: 8rpx solid #4ecdc4;
+}
+
+.day-card.legs {
+  border-left: 8rpx solid #45b7d1;
+}
+
+.day-card.rest-day {
+  border-left: 8rpx solid #95a5a6;
+  background-color: #f8f9fa;
+}
+
+.day-date {
+  font-size: 24rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.day-type {
+  font-size: 32rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.workout-list {
+  margin-top: 15rpx;
+}
+
+.exercise-item {
+  padding: 15rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+.exercise-item:last-child {
+  border-bottom: none;
+}
+
+.exercise-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.exercise-meta {
+  font-size: 24rpx;
+  color: #888;
+}
+
+.rest-note {
+  font-style: italic;
+  color: #666;
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80rpx 0;
+  color: #999;
+}
+
+.empty-state text {
+  display: block;
+  margin-bottom: 20rpx;
 }

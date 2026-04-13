@@ -1,0 +1,14 @@
+{
+  "name": "genPlan",
+  "version": "1.0.0",
+  "description": "AIFitnessPro - 个性化7天训练计划生成器",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AIFitnessPro Team",
+  "license": "MIT",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}
