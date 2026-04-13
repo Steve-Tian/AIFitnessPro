@@ -4,12 +4,11 @@ Page({
   data: {
     userInfo: null,
     weeklyPlan: null,
-    generatingPlan: false,
-    showDebug: false,  // 添加调试开关
-    debugInfo: ''      // 添加调试信息
+    generatingPlan: false
   },
 
   onLoad() {
+    console.log('Index page loaded')
     if (app.globalData.userInfo) {
       this.applyUser(app.globalData.userInfo)
       this.loadWeeklyPlan()
@@ -22,6 +21,7 @@ Page({
   },
 
   onShow() {
+    console.log('Index page shown')
     if (app.globalData.userInfo) {
       this.applyUser(app.globalData.userInfo)
       this.loadWeeklyPlan()
@@ -38,82 +38,64 @@ Page({
       userInfo: user || null,
       streakDays: streak
     })
+    console.log('User applied:', user)
   },
 
   async loadWeeklyPlan() {
     try {
+      console.log('Loading weekly plan...')
       const db = wx.cloud.database()
+      
       if (!app.globalData.userInfo?.current_plan_id) {
+        console.log('No current_plan_id found')
         this.setData({ weeklyPlan: null })
         return
       }
 
-      console.log('尝试加载计划ID:', app.globalData.userInfo.current_plan_id)
+      console.log('Plan ID:', app.globalData.userInfo.current_plan_id)
       
       const result = await db.collection('plans').doc(app.globalData.userInfo.current_plan_id).get()
-      console.log('数据库查询结果:', result)
+      console.log('DB result:', result)
       
       if (result.data && result.data.weeklyPlan) {
-        console.log('加载到的计划数据:', result.data.weeklyPlan)
-        this.setData({ 
-          weeklyPlan: result.data.weeklyPlan,
-          debugInfo: `成功加载计划，共${result.data.weeklyPlan.length}天`
-        })
+        console.log('Weekly plan loaded:', result.data.weeklyPlan)
+        this.setData({ weeklyPlan: result.data.weeklyPlan })
       } else {
-        console.log('未找到计划数据')
-        this.setData({ 
-          weeklyPlan: null,
-          debugInfo: '未找到计划数据或数据结构异常'
-        })
+        console.log('No plan data found')
+        this.setData({ weeklyPlan: null })
       }
     } catch (err) {
-      console.error('加载计划失败：', err)
-      this.setData({ 
-        weeklyPlan: null,
-        debugInfo: '加载失败: ' + err.message
-      })
+      console.error('Load plan error:', err)
+      this.setData({ weeklyPlan: null })
     }
   },
 
   async generatePlan() {
+    console.log('Generate plan clicked')
     if (this.data.generatingPlan) return
     this.setData({ generatingPlan: true })
 
     try {
-      console.log('调用genPlan云函数...')
       const { result } = await wx.cloud.callFunction({ name: 'genPlan' })
-      console.log('云函数返回结果:', result)
+      console.log('GenPlan result:', result)
       
       if (result.success) {
         wx.showToast({ title: '计划生成成功！', icon: 'success' })
         this.setData({ 
           weeklyPlan: result.weeklyPlan,
-          generatingPlan: false,
-          debugInfo: `生成成功，共${result.weeklyPlan.length}天计划`
+          generatingPlan: false 
         })
         
         // 更新全局状态
         app.globalData.userInfo.current_plan_id = result.planId
       } else {
         wx.showToast({ title: result.message || '生成失败', icon: 'none' })
-        this.setData({ 
-          generatingPlan: false,
-          debugInfo: '生成失败: ' + result.message
-        })
+        this.setData({ generatingPlan: false })
       }
     } catch (err) {
-      console.error('调用云函数失败：', err)
+      console.error('Generate plan error:', err)
       wx.showToast({ title: '网络错误，请重试', icon: 'none' })
-      this.setData({ 
-        generatingPlan: false,
-        debugInfo: '网络错误: ' + err.message
-      })
+      this.setData({ generatingPlan: false })
     }
-  },
-
-  toggleDebug() {
-    this.setData({
-      showDebug: !this.data.showDebug
-    })
   }
 })

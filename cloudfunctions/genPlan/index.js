@@ -123,24 +123,38 @@ exports.main = async (event, context) => {
 
     // 存储到数据库
     const planId = `plan_${Date.now()}_${OPENID.substring(0, 8)}`
-    await db.collection('plans').add({
-      data: {
-        _id: planId,
-        userId: OPENID,
-        startDate: new Date(),
-        endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        weeklyPlan,
-        createdAt: db.serverDate()
-      }
-    })
+    console.log('准备创建计划文档，ID:', planId)
+    
+    try {
+      await db.collection('plans').add({
+        data: {
+          _id: planId,
+          userId: OPENID,
+          startDate: new Date(),
+          endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          weeklyPlan,
+          createdAt: db.serverDate()
+        }
+      })
+      console.log('计划文档创建成功')
+    } catch (addErr) {
+      console.error('创建计划文档失败:', addErr)
+      throw addErr
+    }
 
     // 更新用户当前计划
-    await db.collection('users').where({ _openid: OPENID }).update({
-      data: {
-        current_plan_id: planId,
-        updated_at: db.serverDate()
-      }
-    })
+    try {
+      const updateResult = await db.collection('users').where({ _openid: OPENID }).update({
+        data: {
+          current_plan_id: planId,
+          updated_at: db.serverDate()
+        }
+      })
+      console.log('用户文档更新成功，影响行数:', updateResult.stats.updated)
+    } catch (updateErr) {
+      console.error('更新用户文档失败:', updateErr)
+      // 即使更新用户失败，计划已创建，仍可返回成功
+    }
 
     return {
       success: true,
