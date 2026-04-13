@@ -1,0 +1,36 @@
+<view class="page">
+  <view class="container">
+    <!-- 欢迎语 -->
+    <view class="welcome">
+      <text class="welcome-title">准备好今天的\n训练了吗？</text>
+      <text class="welcome-sub text-secondary" wx:if="{{userReady}}">连续打卡中，继续保持 💪</text>
+    </view>
+
+    <!-- 今日训练卡片 -->
+    <view class="card card-train">
+      <view class="card-head">
+        <text class="card-label">今日训练</text>
+        <text class="card-icon">⚡</text>
+      </view>
+      <text class="card-placeholder text-hint">训练计划将在迭代 2 上线</text>
+    </view>
+
+    <!-- 今日饮食卡片 -->
+    <view class="card card-diet">
+      <view class="card-head">
+        <text class="card-label">今日饮食</text>
+        <text class="card-icon">🥗</text>
+      </view>
+      <text class="card-placeholder text-hint">饮食模块将在迭代 5 上线</text>
+    </view>
+
+    <!-- 打卡天数 -->
+    <view class="streak">
+      <text class="streak-line">
+        <text class="streak-muted">连续打卡 </text>
+        <text class="streak-num">{{streakDays}}</text>
+        <text class="streak-muted"> 天</text>
+      </text>
+    </view>
+  </view>
+</view>

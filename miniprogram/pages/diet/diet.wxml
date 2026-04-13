@@ -1,0 +1,38 @@
+<view class="page">
+  <view class="container">
+    <view class="target-row">
+      <text class="target-value">目标：<text class="dash">--</text> kcal</text>
+      <text class="target-hint text-hint">今日热量预算</text>
+    </view>
+
+    <view class="macros">
+      <text class="macros-title">三大营养素</text>
+      <view class="macro-row">
+        <text class="macro-name">蛋白质</text>
+        <view class="macro-bar-wrap">
+          <view class="macro-bar macro-bar--protein" style="width: 0%;"></view>
+        </view>
+        <text class="macro-pct text-hint">--</text>
+      </view>
+      <view class="macro-row">
+        <text class="macro-name">碳水</text>
+        <view class="macro-bar-wrap">
+          <view class="macro-bar macro-bar--carb" style="width: 0%;"></view>
+        </view>
+        <text class="macro-pct text-hint">--</text>
+      </view>
+      <view class="macro-row">
+        <text class="macro-name">脂肪</text>
+        <view class="macro-bar-wrap">
+          <view class="macro-bar macro-bar--fat" style="width: 0%;"></view>
+        </view>
+        <text class="macro-pct text-hint">--</text>
+      </view>
+    </view>
+
+    <view class="card">
+      <text class="card-emoji">🥗</text>
+      <text class="placeholder text-secondary">饮食模块将在迭代 5 上线</text>
+    </view>
+  </view>
+</view>

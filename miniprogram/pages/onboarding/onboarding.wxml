@@ -1,0 +1,356 @@
+<view class="onboarding">
+  <!-- 顶部进度 -->
+  <view class="header">
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{(currentStep + 1) / totalSteps * 100}}%"></view>
+    </view>
+    <text class="step-counter">{{currentStep + 1}} / {{totalSteps}}</text>
+  </view>
+
+  <!-- 问题区域 -->
+  <view class="question-area">
+
+    <!-- Step 0: 性别 -->
+    <view class="step" wx:if="{{currentStep === 0}}" style="animation: slideIn 0.3s ease">
+      <text class="q-title">你的性别是？</text>
+      <text class="q-desc">我们会根据性别优化训练方案</text>
+      <view class="options-grid cols-2">
+        <view
+          class="option-card {{formData.gender === 'male' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="gender" data-value="male"
+        >
+          <text class="option-emoji">♂</text>
+          <text class="option-label">男</text>
+        </view>
+        <view
+          class="option-card {{formData.gender === 'female' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="gender" data-value="female"
+        >
+          <text class="option-emoji">♀</text>
+          <text class="option-label">女</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 1: 年龄 -->
+    <view class="step" wx:if="{{currentStep === 1}}" style="animation: slideIn 0.3s ease">
+      <text class="q-title">你的年龄</text>
+      <text class="q-desc">不同年龄段训练策略不同</text>
+      <view class="number-display">
+        <text class="number-value">{{formData.age}}</text>
+        <text class="number-unit">岁</text>
+      </view>
+      <slider
+        class="custom-slider"
+        min="16" max="65" step="1"
+        value="{{formData.age}}"
+        activeColor="#6C5CE7"
+        backgroundColor="#EEEEF5"
+        block-size="28"
+        block-color="#6C5CE7"
+        bindchanging="onSliderChange"
+        data-field="age"
+      />
+      <view class="slider-labels">
+        <text>16</text>
+        <text>65</text>
+      </view>
+    </view>
+
+    <!-- Step 2: 身高 -->
+    <view class="step" wx:if="{{currentStep === 2}}" style="animation: slideIn 0.3s ease">
+      <text class="q-title">你的身高</text>
+      <text class="q-desc">用于计算基础代谢和训练负荷</text>
+      <view class="number-display">
+        <text class="number-value">{{formData.height}}</text>
+        <text class="number-unit">cm</text>
+      </view>
+      <slider
+        class="custom-slider"
+        min="140" max="220" step="1"
+        value="{{formData.height}}"
+        activeColor="#6C5CE7"
+        backgroundColor="#EEEEF5"
+        block-size="28"
+        block-color="#6C5CE7"
+        bindchanging="onSliderChange"
+        data-field="height"
+      />
+      <view class="slider-labels">
+        <text>140</text>
+        <text>220</text>
+      </view>
+    </view>
+
+    <!-- Step 3: 体重 -->
+    <view class="step" wx:if="{{currentStep === 3}}" style="animation: slideIn 0.3s ease">
+      <text class="q-title">你的体重</text>
+      <text class="q-desc">用于计算热量目标和推荐重量</text>
+      <view class="number-display">
+        <text class="number-value">{{formData.weight}}</text>
+        <text class="number-unit">kg</text>
+      </view>
+      <slider
+        class="custom-slider"
+        min="30" max="200" step="0.5"
+        value="{{formData.weight}}"
+        activeColor="#6C5CE7"
+        backgroundColor="#EEEEF5"
+        block-size="28"
+        block-color="#6C5CE7"
+        bindchanging="onSliderChange"
+        data-field="weight"
+      />
+      <view class="slider-labels">
+        <text>30</text>
+        <text>200</text>
+      </view>
+    </view>
+
+    <!-- Step 4: 训练目标 -->
+    <view class="step" wx:if="{{currentStep === 4}}" style="animation: slideIn 0.3s ease">
+      <text class="q-title">你的训练目标</text>
+      <text class="q-desc">我们会据此调整训练强度和饮食方案</text>
+      <view class="options-list">
+        <view
+          class="option-card horizontal {{formData.goal === 'bulk' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="goal" data-value="bulk"
+        >
+          <text class="option-emoji">💪</text>
+          <view class="option-info">
+            <text class="option-label">增肌</text>
+            <text class="option-hint">增加肌肉量，塑造体型</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal {{formData.goal === 'cut' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="goal" data-value="cut"
+        >
+          <text class="option-emoji">🔥</text>
+          <view class="option-info">
+            <text class="option-label">减脂</text>
+            <text class="option-hint">降低体脂率，保持肌肉</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal {{formData.goal === 'strength' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="goal" data-value="strength"
+        >
+          <text class="option-emoji">⚡</text>
+          <view class="option-info">
+            <text class="option-label">力量提升</text>
+            <text class="option-hint">突破重量极限，提高力量水平</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 5: 训练经验 -->
+    <view class="step" wx:if="{{currentStep === 5}}" style="animation: slideIn 0.3s ease">
+      <text class="q-title">你的训练经验</text>
+      <text class="q-desc">帮我们给你匹配合适的起步重量</text>
+      <view class="options-list">
+        <view
+          class="option-card horizontal {{formData.experience === 'beginner' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="experience" data-value="beginner"
+        >
+          <text class="option-emoji">🌱</text>
+          <view class="option-info">
+            <text class="option-label">纯新手</text>
+            <text class="option-hint">从未系统训练过</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal {{formData.experience === 'casual' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="experience" data-value="casual"
+        >
+          <text class="option-emoji">🏃</text>
+          <view class="option-info">
+            <text class="option-label">练过但不规律</text>
+            <text class="option-hint">断断续续有锻炼习惯</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal {{formData.experience === 'intermediate' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="experience" data-value="intermediate"
+        >
+          <text class="option-emoji">🏋️</text>
+          <view class="option-info">
+            <text class="option-label">规律训练半年+</text>
+            <text class="option-hint">有固定健身习惯和基础</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal {{formData.experience === 'advanced' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="experience" data-value="advanced"
+        >
+          <text class="option-emoji">🏆</text>
+          <view class="option-info">
+            <text class="option-label">规律训练两年+</text>
+            <text class="option-hint">经验丰富的训练者</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 6: 每周训练天数 -->
+    <view class="step" wx:if="{{currentStep === 6}}" style="animation: slideIn 0.3s ease">
+      <text class="q-title">每周能练几天？</text>
+      <text class="q-desc">我们会匹配最适合的训练分化方案</text>
+      <view class="options-grid cols-3">
+        <view
+          class="option-card {{formData.days_per_week === 3 ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="days_per_week" data-value="{{3}}"
+        >
+          <text class="option-emoji">3</text>
+          <text class="option-label">天/周</text>
+          <text class="option-hint">推/拉/腿</text>
+        </view>
+        <view
+          class="option-card {{formData.days_per_week === 4 ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="days_per_week" data-value="{{4}}"
+        >
+          <text class="option-emoji">4</text>
+          <text class="option-label">天/周</text>
+          <text class="option-hint">上/下交替</text>
+        </view>
+        <view
+          class="option-card {{formData.days_per_week === 5 ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="days_per_week" data-value="{{5}}"
+        >
+          <text class="option-emoji">5</text>
+          <text class="option-label">天/周</text>
+          <text class="option-hint">五日分化</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 7: 可用器械 -->
+    <view class="step" wx:if="{{currentStep === 7}}" style="animation: slideIn 0.3s ease">
+      <text class="q-title">你有哪些器械？</text>
+      <text class="q-desc">可多选，我们会据此筛选适合的动作</text>
+      <view class="options-list">
+        <view
+          class="option-card horizontal {{formData.equipment_full_gym ? 'selected' : ''}}"
+          bindtap="onToggleEquipment" data-key="equipment_full_gym"
+        >
+          <text class="option-emoji">🏢</text>
+          <view class="option-info">
+            <text class="option-label">全器械健身房</text>
+            <text class="option-hint">杠铃、哑铃、固定器械、绳索</text>
+          </view>
+          <view class="checkbox {{formData.equipment_full_gym ? 'checked' : ''}}">
+            <text wx:if="{{formData.equipment_full_gym}}">✓</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal {{formData.equipment_barbell ? 'selected' : ''}}"
+          bindtap="onToggleEquipment" data-key="equipment_barbell"
+        >
+          <text class="option-emoji">🏋️</text>
+          <view class="option-info">
+            <text class="option-label">哑铃 + 卧推架</text>
+            <text class="option-hint">基本自由重量器械</text>
+          </view>
+          <view class="checkbox {{formData.equipment_barbell ? 'checked' : ''}}">
+            <text wx:if="{{formData.equipment_barbell}}">✓</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal {{formData.equipment_dumbbell ? 'selected' : ''}}"
+          bindtap="onToggleEquipment" data-key="equipment_dumbbell"
+        >
+          <text class="option-emoji">💪</text>
+          <view class="option-info">
+            <text class="option-label">只有哑铃</text>
+            <text class="option-hint">一对可调节哑铃</text>
+          </view>
+          <view class="checkbox {{formData.equipment_dumbbell ? 'checked' : ''}}">
+            <text wx:if="{{formData.equipment_dumbbell}}">✓</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal {{formData.equipment_bodyweight ? 'selected' : ''}}"
+          bindtap="onToggleEquipment" data-key="equipment_bodyweight"
+        >
+          <text class="option-emoji">🤸</text>
+          <view class="option-info">
+            <text class="option-label">纯徒手</text>
+            <text class="option-hint">无任何器械</text>
+          </view>
+          <view class="checkbox {{formData.equipment_bodyweight ? 'checked' : ''}}">
+            <text wx:if="{{formData.equipment_bodyweight}}">✓</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 8: 搭子风格 -->
+    <view class="step" wx:if="{{currentStep === 8}}" style="animation: slideIn 0.3s ease">
+      <text class="q-title">选一个训练搭子</text>
+      <text class="q-desc">TA 会在训练中陪伴和激励你</text>
+      <view class="options-list">
+        <view
+          class="option-card horizontal persona {{formData.persona === 'coach' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="persona" data-value="coach"
+        >
+          <view class="persona-avatar coach-bg">
+            <text class="persona-icon">🔥</text>
+          </view>
+          <view class="option-info">
+            <text class="option-label">硬核教练</text>
+            <text class="option-hint">「再来！你比你以为的更强！」</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal persona {{formData.persona === 'bro' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="persona" data-value="bro"
+        >
+          <view class="persona-avatar bro-bg">
+            <text class="persona-icon">😎</text>
+          </view>
+          <view class="option-info">
+            <text class="option-label">暖男兄弟</text>
+            <text class="option-hint">「哥们儿这组稳了，慢慢来」</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal persona {{formData.persona === 'roast' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="persona" data-value="roast"
+        >
+          <view class="persona-avatar roast-bg">
+            <text class="persona-icon">😈</text>
+          </view>
+          <view class="option-info">
+            <text class="option-label">幽默毒舌</text>
+            <text class="option-hint">「就这重量？我奶奶都能推」</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="nav-area">
+    <button
+      class="btn-back"
+      wx:if="{{currentStep > 0}}"
+      bindtap="prevStep"
+    >上一步</button>
+    <view wx:else class="btn-placeholder"></view>
+    <button
+      class="btn-next {{canProceed ? '' : 'disabled'}}"
+      bindtap="nextStep"
+      disabled="{{!canProceed}}"
+    >{{currentStep === totalSteps - 1 ? '开始训练 →' : '下一步 →'}}</button>
+  </view>
+
+  <!-- Loading overlay -->
+  <view class="loading-overlay" wx:if="{{submitting}}">
+    <view class="loading-content">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">正在为你定制训练计划...</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,25 @@
+# Node modules
+node_modules/
+
+# Miniprogram NPM dependencies
+miniprogram/miniprogram_npm/
+
+# WeChat DevTools cache & logs
+.project
+.project.settings
+.idea/
+*.log
+
+# Build outputs
+miniprogram/dist/
+cloudfunctions/*/dist/
+
+# IDE files
+.vscode/
+
+# Sensitive config (keep local only)
+project.config.json
+
+# User data
+miniprogram/.history/
+

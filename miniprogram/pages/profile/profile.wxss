@@ -1,0 +1,138 @@
+.page {
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  background-color: var(--color-bg);
+}
+
+.container {
+  padding: 32rpx;
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.avatar {
+  width: 144rpx;
+  height: 144rpx;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--color-primary), var(--color-primary-dark));
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-text {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.avatar-emoji {
+  font-size: 64rpx;
+  line-height: 1;
+}
+
+.hero-hint {
+  margin-top: 16rpx;
+  font-size: var(--font-sm);
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.info-card {
+  padding: 32rpx;
+  margin-bottom: 40rpx;
+}
+
+.info-card.muted {
+  padding: 32rpx;
+}
+
+.info-title {
+  display: block;
+  font-size: var(--font-md);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 24rpx;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid var(--color-divider);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.info-label {
+  font-size: var(--font-base);
+  flex-shrink: 0;
+  margin-right: 24rpx;
+}
+
+.info-value {
+  font-size: var(--font-base);
+  color: var(--color-text);
+  text-align: right;
+  flex: 1;
+}
+
+.empty-hint {
+  font-size: var(--font-sm);
+  line-height: 1.6;
+}
+
+.section-label {
+  display: block;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 16rpx;
+  padding-left: 8rpx;
+}
+
+.settings-card {
+  padding: 0 8rpx;
+  overflow: hidden;
+}
+
+.settings-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 24rpx;
+}
+
+.settings-name {
+  font-size: var(--font-base);
+  color: var(--color-text);
+}
+
+.settings-chevron {
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+.settings-divider {
+  height: 1rpx;
+  background: var(--color-divider);
+  margin-left: 24rpx;
+}

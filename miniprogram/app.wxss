@@ -1,0 +1,152 @@
+/* ============================================
+   AIFitnessPro — 全局样式 & 设计系统
+   ============================================ */
+
+page {
+  --color-primary: #6C5CE7;
+  --color-primary-light: #A29BFE;
+  --color-primary-dark: #5A4BD1;
+  --color-accent: #FF6348;
+  --color-success: #26DE81;
+  --color-warning: #FFC312;
+  --color-danger: #FF4757;
+
+  --color-bg: #F5F6FA;
+  --color-card: #FFFFFF;
+  --color-text: #2D3436;
+  --color-text-secondary: #636E72;
+  --color-text-hint: #B2BEC3;
+  --color-border: #EEEEF5;
+  --color-divider: #F0F0F5;
+
+  --radius-sm: 8rpx;
+  --radius-md: 16rpx;
+  --radius-lg: 24rpx;
+  --radius-xl: 32rpx;
+  --radius-full: 999rpx;
+
+  --shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+
+  --font-xs: 22rpx;
+  --font-sm: 24rpx;
+  --font-base: 28rpx;
+  --font-md: 32rpx;
+  --font-lg: 36rpx;
+  --font-xl: 44rpx;
+  --font-2xl: 56rpx;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC',
+    'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+  font-size: var(--font-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  box-sizing: border-box;
+}
+
+view, text, image {
+  box-sizing: border-box;
+}
+
+.container {
+  padding: 32rpx;
+  min-height: 100vh;
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  box-shadow: var(--shadow-sm);
+}
+
+.gradient-primary {
+  background: linear-gradient(135deg, #6C5CE7, #4A90FF);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #6C5CE7, #4A90FF);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--font-md);
+  font-weight: 600;
+  padding: 24rpx 0;
+  text-align: center;
+  width: 100%;
+  line-height: 1.5;
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.btn-primary[disabled] {
+  opacity: 0.4;
+  background: linear-gradient(135deg, #6C5CE7, #4A90FF);
+  color: #FFFFFF;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: none;
+  font-size: var(--font-base);
+  padding: 24rpx 0;
+  text-align: center;
+}
+
+.btn-secondary::after {
+  border: none;
+}
+
+.section-title {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 24rpx;
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-hint {
+  color: var(--color-text-hint);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.gap-sm {
+  gap: 16rpx;
+}
+
+.gap-md {
+  gap: 24rpx;
+}
+
+.gap-lg {
+  gap: 32rpx;
+}

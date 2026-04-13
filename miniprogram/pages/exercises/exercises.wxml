@@ -1,0 +1,20 @@
+<view class="page">
+  <view class="container">
+    <text class="page-header">动作库</text>
+
+    <view class="search-placeholder">
+      <text class="search-icon">🔍</text>
+      <text class="search-hint text-hint">搜索动作名称...</text>
+    </view>
+
+    <view class="card notice">
+      <text class="notice-text text-secondary">70+ 动作将在迭代 2 录入</text>
+    </view>
+
+    <view class="grid">
+      <view class="grid-item" wx:for="{{groups}}" wx:key="*this">
+        <text class="grid-label">{{item}}</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/training/training",
+    "pages/exercises/exercises",
+    "pages/diet/diet",
+    "pages/profile/profile",
+    "pages/onboarding/onboarding"
+  ],
+  "window": {
+    "backgroundColor": "#F5F6FA",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "AIFitnessPro",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#8E8EA0",
+    "selectedColor": "#6C5CE7",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/training/training", "text": "训练" },
+      { "pagePath": "pages/exercises/exercises", "text": "动作库" },
+      { "pagePath": "pages/diet/diet", "text": "饮食" },
+      { "pagePath": "pages/profile/profile", "text": "我的" }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,94 @@
+.page {
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  background-color: var(--color-bg);
+}
+
+.container {
+  padding: 32rpx;
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+}
+
+.welcome {
+  margin-bottom: 40rpx;
+}
+
+.welcome-title {
+  display: block;
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.35;
+}
+
+.welcome-sub {
+  display: block;
+  margin-top: 12rpx;
+  font-size: var(--font-sm);
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24rpx;
+}
+
+.card-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.card-label {
+  font-size: var(--font-md);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.card-icon {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.card-placeholder {
+  font-size: var(--font-base);
+  line-height: 1.5;
+}
+
+.card-train {
+  border-left: 6rpx solid var(--color-primary);
+}
+
+.card-diet {
+  border-left: 6rpx solid var(--color-primary-light);
+}
+
+.streak {
+  margin-top: 8rpx;
+  padding: 28rpx 32rpx;
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.streak-line {
+  display: block;
+  font-size: var(--font-base);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.streak-muted {
+  color: var(--color-text-secondary);
+}
+
+.streak-num {
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  vertical-align: middle;
+}

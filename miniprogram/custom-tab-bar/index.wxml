@@ -1,0 +1,48 @@
+<view class="tab-bar">
+  <view
+    wx:for="{{list}}"
+    wx:key="index"
+    class="tab-item {{selected === index ? 'active' : ''}}"
+    data-index="{{index}}"
+    data-path="{{item.pagePath}}"
+    bindtap="switchTab"
+  >
+    <!-- 首页 -->
+    <view class="tab-icon" wx:if="{{item.icon === 'home'}}">
+      <view class="icon-home">
+        <view class="icon-home-roof"></view>
+        <view class="icon-home-body"></view>
+      </view>
+    </view>
+    <!-- 训练 -->
+    <view class="tab-icon" wx:elif="{{item.icon === 'training'}}">
+      <view class="icon-training">
+        <view class="icon-bar"></view>
+        <view class="icon-bar short"></view>
+        <view class="icon-bar"></view>
+      </view>
+    </view>
+    <!-- 动作库 -->
+    <view class="tab-icon" wx:elif="{{item.icon === 'exercises'}}">
+      <view class="icon-book">
+        <view class="icon-book-spine"></view>
+        <view class="icon-book-page"></view>
+      </view>
+    </view>
+    <!-- 饮食 -->
+    <view class="tab-icon" wx:elif="{{item.icon === 'diet'}}">
+      <view class="icon-diet">
+        <view class="icon-bowl"></view>
+        <view class="icon-steam"></view>
+      </view>
+    </view>
+    <!-- 我的 -->
+    <view class="tab-icon" wx:elif="{{item.icon === 'profile'}}">
+      <view class="icon-profile">
+        <view class="icon-head"></view>
+        <view class="icon-body"></view>
+      </view>
+    </view>
+    <text class="tab-text">{{item.text}}</text>
+  </view>
+</view>

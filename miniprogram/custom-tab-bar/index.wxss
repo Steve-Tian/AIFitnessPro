@@ -1,0 +1,204 @@
+.tab-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 110rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: #FFFFFF;
+  border-top: 1rpx solid #F0F0F5;
+  position: relative;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.tab-icon {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4rpx;
+}
+
+.tab-text {
+  font-size: 20rpx;
+  color: #8E8EA0;
+  transition: color 0.2s ease;
+}
+
+.tab-item.active .tab-text {
+  color: #6C5CE7;
+  font-weight: 600;
+}
+
+/* Icon: Home */
+.icon-home {
+  width: 40rpx;
+  height: 36rpx;
+  position: relative;
+}
+
+.icon-home-roof {
+  width: 0;
+  height: 0;
+  border-left: 20rpx solid transparent;
+  border-right: 20rpx solid transparent;
+  border-bottom: 16rpx solid #8E8EA0;
+  transition: border-color 0.2s ease;
+}
+
+.icon-home-body {
+  width: 28rpx;
+  height: 18rpx;
+  border: 3rpx solid #8E8EA0;
+  border-top: none;
+  margin: 0 auto;
+  border-radius: 0 0 4rpx 4rpx;
+  transition: border-color 0.2s ease;
+}
+
+.tab-item.active .icon-home-roof {
+  border-bottom-color: #6C5CE7;
+}
+
+.tab-item.active .icon-home-body {
+  border-color: #6C5CE7;
+}
+
+/* Icon: Training (barbell) */
+.icon-training {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rpx;
+  height: 32rpx;
+}
+
+.icon-bar {
+  width: 8rpx;
+  height: 28rpx;
+  background: #8E8EA0;
+  border-radius: 3rpx;
+  transition: background 0.2s ease;
+}
+
+.icon-bar.short {
+  height: 6rpx;
+  width: 16rpx;
+  border-radius: 3rpx;
+}
+
+.tab-item.active .icon-bar {
+  background: #6C5CE7;
+}
+
+/* Icon: Book (exercises) */
+.icon-book {
+  width: 34rpx;
+  height: 32rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.icon-book-spine {
+  width: 6rpx;
+  height: 32rpx;
+  background: #8E8EA0;
+  border-radius: 3rpx 0 0 3rpx;
+  transition: background 0.2s ease;
+}
+
+.icon-book-page {
+  width: 26rpx;
+  height: 32rpx;
+  border: 3rpx solid #8E8EA0;
+  border-left: none;
+  border-radius: 0 5rpx 5rpx 0;
+  transition: border-color 0.2s ease;
+}
+
+.tab-item.active .icon-book-spine {
+  background: #6C5CE7;
+}
+
+.tab-item.active .icon-book-page {
+  border-color: #6C5CE7;
+}
+
+/* Icon: Diet (bowl) */
+.icon-diet {
+  width: 36rpx;
+  height: 36rpx;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-bowl {
+  width: 32rpx;
+  height: 18rpx;
+  border: 3rpx solid #8E8EA0;
+  border-top: none;
+  border-radius: 0 0 16rpx 16rpx;
+  margin-top: 14rpx;
+  transition: border-color 0.2s ease;
+}
+
+.icon-steam {
+  width: 4rpx;
+  height: 10rpx;
+  background: #8E8EA0;
+  border-radius: 4rpx;
+  position: absolute;
+  top: 0;
+  transition: background 0.2s ease;
+}
+
+.tab-item.active .icon-bowl {
+  border-color: #6C5CE7;
+}
+
+.tab-item.active .icon-steam {
+  background: #6C5CE7;
+}
+
+/* Icon: Profile */
+.icon-profile {
+  width: 36rpx;
+  height: 36rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-head {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: #8E8EA0;
+  transition: background 0.2s ease;
+}
+
+.icon-body {
+  width: 28rpx;
+  height: 14rpx;
+  border-radius: 14rpx 14rpx 0 0;
+  background: #8E8EA0;
+  margin-top: 4rpx;
+  transition: background 0.2s ease;
+}
+
+.tab-item.active .icon-head,
+.tab-item.active .icon-body {
+  background: #6C5CE7;
+}
