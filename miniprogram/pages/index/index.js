@@ -47,12 +47,21 @@ Page({
         return
       }
 
+      console.log('尝试加载计划ID:', app.globalData.userInfo.current_plan_id)
+      
       const { data } = await db.collection('plans').doc(app.globalData.userInfo.current_plan_id).get()
+      console.log('从数据库获取的数据:', data)
+      
       if (data && data.weeklyPlan) {
         this.setData({ weeklyPlan: data.weeklyPlan })
+      } else {
+        console.log('未找到计划数据，计划ID可能已过期或不存在')
+        this.setData({ weeklyPlan: null })
       }
     } catch (err) {
       console.error('加载计划失败：', err)
+      // 如果计划不存在，设置为空值，让用户可以重新生成
+      this.setData({ weeklyPlan: null })
     }
   },
 

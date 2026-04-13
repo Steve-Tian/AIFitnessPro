@@ -107,7 +107,7 @@ exports.main = async (event, context) => {
     }
 
     // 存储到数据库
-    const planId = `plan_${Date.now()}`
+    const planId = `plan_${Date.now()}_${OPENID.substring(0, 8)}`
     await db.collection('plans').add({
       data: {
         _id: planId,
