@@ -30,7 +30,7 @@
         wx:for="{{weeklyPlan}}" 
         wx:key="date"
       >
-        <text class="day-date">{{day.date.toString().split(' ')[0]}}</text>
+        <text class="day-date">{{day.date}}</text>
         <text class="day-type">{{day.title}}</text>
         <view class="workout-list" wx:if="{{day.workout}}">
           <view class="exercise-item" wx:for="{{day.workout}}" wx:key="name">

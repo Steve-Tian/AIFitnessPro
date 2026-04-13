@@ -89,7 +89,7 @@ exports.main = async (event, context) => {
       
       if (dayType === 'rest') {
         weeklyPlan.push({
-          date: new Date(Date.now() + i * 24 * 60 * 60 * 1000),
+          date: new Date(Date.now() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
           type: 'rest',
           title: '休息日',
           note: '充分恢复，为下周训练储备能量'
@@ -97,7 +97,7 @@ exports.main = async (event, context) => {
       } else {
         const workout = generateDayWorkout(dayType, profile.equipment, i)
         weeklyPlan.push({
-          date: new Date(Date.now() + i * 24 * 60 * 60 * 1000),
+          date: new Date(Date.now() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
           type: dayType,
           title: `${dayType === 'push' ? '推' : dayType === 'pull' ? '拉' : '腿'}日`,
           workout,
