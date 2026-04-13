@@ -1,0 +1,51 @@
+<!-- miniprogram/pages/achievements/achievements.wxml -->
+<view class="container">
+  <!-- 顶部统计 -->
+  <view class="stats-card">
+    <view class="stat-item">
+      <text class="stat-number">{{achievements.filter(a => a.unlocked).length}}</text>
+      <text class="stat-label">已解锁</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-number">{{achievements.length}}</text>
+      <text class="stat-label">总成就</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-number">{{totalPoints}}</text>
+      <text class="stat-label">积分</text>
+    </view>
+  </view>
+
+  <!-- 成就列表 -->
+  <view class="achievements-list">
+    <view class="achievement-card {{achievement.unlocked ? 'unlocked' : 'locked'}}" 
+          wx:for="{{achievements}}" 
+          wx:key="id">
+      <view class="achievement-icon">{{achievement.icon}}</view>
+      <view class="achievement-content">
+        <view class="achievement-header">
+          <text class="achievement-name">{{achievement.name}}</text>
+          <text class="achievement-points">+{{achievement.points}}分</text>
+        </view>
+        <text class="achievement-description">{{achievement.description}}</text>
+      </view>
+      <view class="achievement-status">
+        <text class="status-text">{{achievement.unlocked ? '✓ 已解锁' : '🔒 未解锁'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 检查新成就按钮 -->
+  <view class="check-button-container">
+    <button class="check-button" bindtap="checkNewAchievements">
+      检查新成就
+    </button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
