@@ -234,6 +234,10 @@
   background: linear-gradient(135deg, #6C5CE7, #A29BFE);
 }
 
+.beauty-coach-bg {
+  background: linear-gradient(135deg, #FF7EB3, #FF758C);
+}
+
 .option-card.persona.selected .persona-avatar {
   box-shadow: 0 4rpx 16rpx rgba(108, 92, 231, 0.3);
 }
