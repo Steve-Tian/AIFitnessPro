@@ -1,0 +1,37 @@
+<view class="container">
+  <text class="title">调试页面 - 计划数据查看</text>
+  
+  <button bindtap="generatePlan" class="generate-btn">重新生成计划</button>
+  
+  <view class="info-section">
+    <text class="section-title">用户信息</text>
+    <text class="info-text">{{userInfo ? JSON.stringify(userInfo, null, 2) : '未登录'}}</text>
+  </view>
+  
+  <view class="info-section">
+    <text class="section-title">计划数据</text>
+    <text class="info-text">{{debugInfo}}</text>
+  </view>
+  
+  <view class="info-section">
+    <text class="section-title">原始数据</text>
+    <text class="info-text">{{rawData}}</text>
+  </view>
+  
+  <view class="info-section" wx:if="{{weeklyPlan}}">
+    <text class="section-title">计划详情</text>
+    <view class="day-item" wx:for="{{weeklyPlan}}" wx:key="index">
+      <text class="day-header">第{{index + 1}}天 - {{item.title}}</text>
+      <text class="day-detail">日期: {{item.date}}</text>
+      <text class="day-detail">类型: {{item.type}}</text>
+      <text class="day-detail">workout存在: {{item.workout ? '是' : '否'}}</text>
+      <text class="day-detail">workout数量: {{item.workout ? item.workout.length : 0}}</text>
+      <view wx:if="{{item.workout && item.workout.length > 0}}" class="exercise-list">
+        <view class="exercise-item" wx:for="{{item.workout}}" wx:key="name">
+          <text class="exercise-name">{{item.name}} ({{item.sets}}组×{{item.reps}}次)</text>
+        </view>
+      </view>
+      <text wx:if="{{item.note}}" class="rest-note">{{item.note}}</text>
+    </view>
+  </view>
+</view>

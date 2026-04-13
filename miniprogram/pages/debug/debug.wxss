@@ -1,0 +1,96 @@
+.container {
+  padding: 30rpx;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 30rpx;
+  text-align: center;
+  color: #333;
+}
+
+.generate-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  font-size: 32rpx;
+  margin-bottom: 30rpx;
+  width: 100%;
+}
+
+.info-section {
+  margin-bottom: 40rpx;
+  background: white;
+  padding: 20rpx;
+  border-radius: 10rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 15rpx;
+  color: #333;
+}
+
+.info-text {
+  font-size: 24rpx;
+  line-height: 1.5;
+  color: #666;
+  white-space: pre-wrap;
+  background: #f9f9f9;
+  padding: 15rpx;
+  border-radius: 8rpx;
+  font-family: monospace;
+}
+
+.day-item {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8rpx;
+  padding: 15rpx;
+  margin-bottom: 15rpx;
+}
+
+.day-header {
+  font-size: 28rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+  color: #333;
+}
+
+.day-detail {
+  font-size: 24rpx;
+  display: block;
+  margin-bottom: 5rpx;
+  color: #666;
+}
+
+.exercise-list {
+  margin-top: 10rpx;
+  padding-left: 20rpx;
+}
+
+.exercise-item {
+  margin-bottom: 8rpx;
+}
+
+.exercise-name {
+  font-size: 24rpx;
+  color: #4CAF50;
+  display: block;
+}
+
+.rest-note {
+  font-size: 24rpx;
+  color: #FF9800;
+  display: block;
+  font-style: italic;
+}
