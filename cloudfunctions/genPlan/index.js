@@ -44,12 +44,15 @@ function generateDayWorkout(dayType, userEquipment, dayIndex) {
     throw new Error(`设备 ${userEquipment.join(',')} 无法满足${dayType}日训练需求`)
   }
 
-  // 随机选取4-6个动作（避免重复）
+  // 随机选取动作
   const selectedExercises = []
   const shuffled = [...availableExercises].sort(() => Math.random() - 0.5)
   
+  // 确保至少选择1个动作，最多选择2-3个
+  const maxExercises = Math.min(Math.random() > 0.5 ? 2 : 3, shuffled.length)
+  
   for (const ex of shuffled) {
-    if (selectedExercises.length >= (Math.random() > 0.5 ? 2 : 3)) break
+    if (selectedExercises.length >= maxExercises) break
     if (!selectedExercises.find(se => se.muscle === ex.muscle)) {
       selectedExercises.push({
         name: ex.name,
@@ -59,6 +62,18 @@ function generateDayWorkout(dayType, userEquipment, dayIndex) {
         rest: 90 + (dayIndex % 2) * 30 // 休息时间微调
       })
     }
+  }
+
+  // 如果因为肌肉群限制导致没有选中任何动作，至少选择一个动作
+  if (selectedExercises.length === 0 && shuffled.length > 0) {
+    const firstExercise = shuffled[0]
+    selectedExercises.push({
+      name: firstExercise.name,
+      alias: firstExercise.alias[0],
+      sets: 3 + dayIndex % 2,
+      reps: 8 + (dayIndex % 3) * 2,
+      rest: 90 + (dayIndex % 2) * 30
+    })
   }
 
   return selectedExercises

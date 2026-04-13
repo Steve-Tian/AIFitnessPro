@@ -32,7 +32,7 @@
       >
         <text class="day-date">{{day.date}}</text>
         <text class="day-type">{{day.title}}</text>
-        <view class="workout-list" wx:if="{{day.workout}}">
+        <view class="workout-list" wx:if="{{day.workout && day.workout.length > 0}}">
           <view class="exercise-item" wx:for="{{day.workout}}" wx:key="name">
             <text class="exercise-name">{{item.name}}</text>
             <text class="exercise-meta">{{item.sets}}组 × {{item.reps}}次 | 休息{{item.rest}}秒</text>
