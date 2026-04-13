@@ -1,0 +1,14 @@
+{
+  "name": "saveFeedback",
+  "version": "1.0.0",
+  "description": "AIFitnessPro - 训练反馈收集与自适应调整",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AIFitnessPro Team",
+  "license": "MIT",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

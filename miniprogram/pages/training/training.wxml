@@ -1,11 +1,94 @@
-<view class="page">
-  <view class="container">
-    <view class="header-block">
-      <text class="section-title">本周课表</text>
+<!-- miniprogram/pages/training/training.wxml -->
+<view class="container">
+  <!-- 顶部导航 -->
+  <view class="header">
+    <button class="back-btn" bindtap="goBack">← 返回</button>
+    <text class="title">训练会话</text>
+    <view class="spacer"></view>
+  </view>
+
+  <!-- 训练主体区域 -->
+  <view class="training-body">
+    <!-- 动作信息 -->
+    <view class="exercise-info">
+      <text class="exercise-name">{{exercise.name}}</text>
+      <text class="exercise-alias">别名：{{exercise.alias}}</text>
+      <view class="set-progress">
+        <text class="set-text">第 {{currentSet}}/{{totalSets}} 组</text>
+        <progress percent="{{(currentSet / totalSets) * 100}}" activeColor="#667eea" />
+      </view>
     </view>
-    <view class="card">
-      <text class="card-emoji">📅</text>
-      <text class="placeholder text-secondary">计划引擎将在迭代 2 上线</text>
+
+    <!-- 倒计时区域 -->
+    <view class="timer-area" wx:if="{{isCountingDown}}">
+      <text class="timer-text">准备！</text>
+      <text class="timer-number">{{countdown}}</text>
+      <text class="timer-label">{{isResting ? '休息中' : '准备开始'}}</text>
+    </view>
+
+    <!-- 休息倒计时区域 -->
+    <view class="timer-area" wx:elif="{{isResting}}">
+      <text class="timer-text">休息时间</text>
+      <text class="timer-number">{{countdown}}</text>
+      <text class="timer-label">距离下一组</text>
+    </view>
+
+    <!-- 动作GIF/图片展示区 -->
+    <view class="media-area" wx:else>
+      <image 
+        src="{{exercise.gifUrl || '/images/default_exercise.png'}}" 
+        class="exercise-gif" 
+        mode="aspectFit"
+        lazy-load="true"
+      />
+      <view class="instructions">
+        <text class="subtitle">动作要领：</text>
+        <text class="instruction" wx:for="{{exercise.instructions}}" wx:key="index">{{item}}</text>
+      </view>
+    </view>
+
+    <!-- 底部操作区 -->
+    <view class="controls">
+      <button class="control-btn skip-btn" bindtap="skipExercise">跳过</button>
+      
+      <button 
+        class="control-btn start-btn" 
+        bindtap="startExercise" 
+        wx:if="{{!isCountingDown && !isResting}}"
+      >
+        {{currentSet > totalSets ? '完成' : '开始'}}
+      </button>
+      
+      <button class="control-btn disabled-btn" wx:else disabled>
+        {{isCountingDown ? '进行中...' : '休息中...'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- RPE评分弹窗 -->
+  <view class="rpe-modal" wx:if="{{showRPESelector}}">
+    <view class="modal-overlay" bindtap="showRPESelector = false"></view>
+    <view class="modal-content">
+      <text class="modal-title">本次训练感觉如何？</text>
+      <text class="modal-desc">请选择 RPE 评分（6-10分）</text>
+      
+      <view class="rpe-grid">
+        <button 
+          class="rpe-btn {{rpeValue === rpe ? 'active' : ''}}" 
+          wx:for="{{[6,7,8,9,10]}}" 
+          wx:key="rpe"
+          data-rpe="{{item}}"
+          bindtap="selectRPE"
+        >
+          {{item}}
+        </button>
+      </view>
+      
+      <text class="rpe-legend">
+        6=很轻松  7=较轻松  8=刚好  9=很累  10=极限
+      </text>
+      
+      <button class="confirm-btn" bindtap="submitFeedback">提交反馈</button>
     </view>
   </view>
 </view>

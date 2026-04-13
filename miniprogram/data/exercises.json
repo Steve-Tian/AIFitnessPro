@@ -1,0 +1,419 @@
+{
+  "exercises": [
+    {
+      "id": "bench_press",
+      "name": "杠铃卧推",
+      "alias": ["卧推"],
+      "category": "push",
+      "muscle": ["chest", "triceps", "front_delts"],
+      "equipment": ["full_gym", "barbell_bench"],
+      "difficulty": "intermediate",
+      "gifUrl": "https://example.com/gifs/bench_press.gif",
+      "instructions": [
+        "仰卧在平板凳上，双脚平放地面",
+        "双手握杠铃，略宽于肩",
+        "缓慢下放至胸部附近，停留1秒",
+        "推起至手臂伸直但不过锁"
+      ],
+      "tips": [
+        "保持肩胛骨收紧",
+        "手腕中立位，避免过度弯曲"
+      ],
+      "commonMistakes": [
+        "拱腰过大",
+        "肘角过窄伤肩"
+      ]
+    },
+    {
+      "id": "dumbbell_fly",
+      "name": "哑铃飞鸟",
+      "alias": ["飞鸟"],
+      "category": "push",
+      "muscle": ["chest"],
+      "equipment": ["dumbbell_only"],
+      "difficulty": "beginner",
+      "gifUrl": "https://example.com/gifs/dumbbell_fly.gif",
+      "instructions": [
+        "仰卧平板，双手持哑铃举过胸前",
+        "手肘微屈，向两侧打开至胸部有拉伸感",
+        "沿弧线回到起始位置"
+      ],
+      "tips": [
+        "手肘角度固定不变",
+        "控制下降速度"
+      ],
+      "commonMistakes": [
+        "手肘过度弯曲",
+        "动作幅度过大"
+      ]
+    },
+    {
+      "id": "overhead_press",
+      "name": "杠铃肩推",
+      "alias": ["肩推"],
+      "category": "push",
+      "muscle": ["shoulders", "triceps"],
+      "equipment": ["full_gym", "barbell_bench"],
+      "difficulty": "intermediate",
+      "gifUrl": "https://example.com/gifs/overhead_press.gif",
+      "instructions": [
+        "坐姿或站姿，杠铃置于锁骨处",
+        "挺胸收腹，推起至头顶上方",
+        "缓慢下放至起始位置"
+      ],
+      "tips": [
+        "核心绷紧，避免过度后倾",
+        "呼吸配合：推起时呼气"
+      ],
+      "commonMistakes": [
+        "腰部过度反弓",
+        "颈部压迫杠铃"
+      ]
+    },
+    {
+      "id": "lateral_raise",
+      "name": "哑铃侧平举",
+      "alias": ["侧平举"],
+      "category": "push",
+      "muscle": ["shoulders"],
+      "equipment": ["dumbbell_only"],
+      "difficulty": "beginner",
+      "gifUrl": "https://example.com/gifs/lateral_raise.gif",
+      "instructions": [
+        "站立，双手持哑铃垂于身体两侧",
+        "向两侧抬起至与肩同高",
+        "缓慢下放至起始位置"
+      ],
+      "tips": [
+        "轻微前倾身体以更好孤立三角肌",
+        "控制动作节奏"
+      ],
+      "commonMistakes": [
+        "借力摆动身体",
+        "抬得过高造成耸肩"
+      ]
+    },
+    {
+      "id": "push_up",
+      "name": "俯卧撑",
+      "alias": ["宽距俯卧撑"],
+      "category": "push",
+      "muscle": ["chest", "triceps", "front_delts"],
+      "equipment": ["bodyweight"],
+      "difficulty": "beginner",
+      "gifUrl": "https://example.com/gifs/push_up.gif",
+      "instructions": [
+        "俯卧，双手略宽于肩支撑",
+        "身体呈直线，屈肘下放至胸部接近地面",
+        "推起至手臂伸直"
+      ],
+      "tips": [
+        "核心收紧，保持身体稳定",
+        "肘角约45度，避免过度外展"
+      ],
+      "commonMistakes": [
+        "塌腰或撅臀",
+        "头部过度下垂或抬起"
+      ]
+    },
+    {
+      "id": "tricep_dip",
+      "name": "双杠臂屈伸",
+      "alias": ["臂屈伸"],
+      "category": "push",
+      "muscle": ["triceps", "chest"],
+      "equipment": ["full_gym"],
+      "difficulty": "intermediate",
+      "gifUrl": "https://example.com/gifs/tricep_dip.gif",
+      "instructions": [
+        "双杠支撑，身体下沉至大臂与地面平行",
+        "推起至手臂伸直",
+        "可负重增加难度"
+      ],
+      "tips": [
+        "身体略向前倾可更多刺激胸肌",
+        "垂直向下则更多刺激三头肌"
+      ],
+      "commonMistakes": [
+        "肩膀过度耸起",
+        "动作不完整"
+      ]
+    },
+    {
+      "id": "pull_up",
+      "name": "引体向上",
+      "alias": ["宽距引体"],
+      "category": "pull",
+      "muscle": ["back", "biceps"],
+      "equipment": ["full_gym"],
+      "difficulty": "advanced",
+      "gifUrl": "https://example.com/gifs/pull_up.gif",
+      "instructions": [
+        "正握单杠，比肩稍宽",
+        "用背部力量拉起至下巴过杠",
+        "缓慢下放至手臂伸直"
+      ],
+      "tips": [
+        "启动时肩胛骨后缩",
+        "全程控制节奏"
+      ],
+      "commonMistakes": [
+        "借力摆动",
+        "半程动作"
+      ]
+    },
+    {
+      "id": "barbell_row",
+      "name": "杠铃划船",
+      "alias": ["划船"],
+      "category": "pull",
+      "muscle": ["back", "biceps"],
+      "equipment": ["full_gym", "barbell_bench"],
+      "difficulty": "intermediate",
+      "gifUrl": "https://example.com/gifs/barbell_row.gif",
+      "instructions": [
+        "双脚与肩同宽，屈髋俯身",
+        "双手正握杠铃，向上拉至腹部",
+        "缓慢还原至手臂伸直"
+      ],
+      "tips": [
+        "保持脊柱中立",
+        "用背部而非手臂发力"
+      ],
+      "commonMistakes": [
+        "过度弓腰",
+        "用重量摇摆借力"
+      ]
+    },
+    {
+      "id": "dumbbell_row",
+      "name": "哑铃划船",
+      "alias": ["单臂哑铃划船"],
+      "category": "pull",
+      "muscle": ["back", "biceps"],
+      "equipment": ["dumbbell_only"],
+      "difficulty": "intermediate",
+      "gifUrl": "https://example.com/gifs/dumbbell_row.gif",
+      "instructions": [
+        "单手持哑铃，另一手支撑在平板上",
+        "向上拉至躯干平行，挤压肩胛骨",
+        "缓慢下放至手臂伸直"
+      ],
+      "tips": [
+        "核心稳定，避免扭转",
+        "控制离心收缩"
+      ],
+      "commonMistakes": [
+        "身体过度旋转",
+        "用惯性摆动重量"
+      ]
+    },
+    {
+      "id": "face_pull",
+      "name": "绳索面拉",
+      "alias": ["面拉"],
+      "category": "pull",
+      "muscle": ["rear_delts", "rhomboids"],
+      "equipment": ["full_gym", "cable"],
+      "difficulty": "beginner",
+      "gifUrl": "https://example.com/gifs/face_pull.gif",
+      "instructions": [
+        "面向高位滑轮，双手持绳索",
+        "向面部拉动，肘部高于手腕",
+        "顶峰收缩后缓慢还原"
+      ],
+      "tips": [
+        "控制肘部轨迹",
+        "避免耸肩"
+      ],
+      "commonMistakes": [
+        "肘部过低",
+        "颈部前伸"
+      ]
+    },
+    {
+      "id": "barbell_curl",
+      "name": "杠铃弯举",
+      "alias": ["弯举"],
+      "category": "pull",
+      "muscle": ["biceps"],
+      "equipment": ["barbell_bench"],
+      "difficulty": "beginner",
+      "gifUrl": "https://example.com/gifs/barbell_curl.gif",
+      "instructions": [
+        "站立，双手正握杠铃",
+        "肱二头肌发力弯举至胸前",
+        "缓慢下放至手臂伸直"
+      ],
+      "tips": [
+        "固定肘部位置",
+        "避免身体摆动"
+      ],
+      "commonMistakes": [
+        "借力摆动",
+        "动作幅度过小"
+      ]
+    },
+    {
+      "id": "hammer_curl",
+      "name": "哑铃锤式弯举",
+      "alias": ["锤式弯举"],
+      "category": "pull",
+      "muscle": ["biceps", "forearms"],
+      "equipment": ["dumbbell_only"],
+      "difficulty": "beginner",
+      "gifUrl": "https://example.com/gifs/hammer_curl.gif",
+      "instructions": [
+        "站立，双手持哑铃，掌心相对",
+        "弯举至肩膀高度",
+        "缓慢下放至起始位置"
+      ],
+      "tips": [
+        "保持掌心相对",
+        "控制动作节奏"
+      ],
+      "commonMistakes": [
+        "手腕翻转",
+        "借力摆动"
+      ]
+    },
+    {
+      "id": "squat",
+      "name": "杠铃深蹲",
+      "alias": ["深蹲"],
+      "category": "legs",
+      "muscle": ["quads", "glutes", "hamstrings"],
+      "equipment": ["full_gym", "barbell_bench"],
+      "difficulty": "intermediate",
+      "gifUrl": "https://example.com/gifs/squat.gif",
+      "instructions": [
+        "杠铃置于上斜方肌处，双脚与肩同宽",
+        "屈膝下蹲至大腿与地面平行",
+        "发力站起至膝盖伸直"
+      ],
+      "tips": [
+        "膝盖与脚尖方向一致",
+        "保持胸部挺起"
+      ],
+      "commonMistakes": [
+        "膝盖内扣",
+        "腰部过度前倾"
+      ]
+    },
+    {
+      "id": "deadlift",
+      "name": "硬拉",
+      "alias": ["罗马尼亚硬拉"],
+      "category": "legs",
+      "muscle": ["hamstrings", "glutes", "back"],
+      "equipment": ["full_gym", "barbell_bench"],
+      "difficulty": "advanced",
+      "gifUrl": "https://example.com/gifs/deadlift.gif",
+      "instructions": [
+        "双脚与肩同宽，杠铃贴近小腿",
+        "挺胸收腹，臀部后坐拉起杠铃",
+        "至身体直立，杠铃贴身"
+      ],
+      "tips": [
+        "全程保持杠铃贴身",
+        "启动时肩胛骨后缩"
+      ],
+      "commonMistakes": [
+        "圆背拉起",
+        "臀部先起"
+      ]
+    },
+    {
+      "id": "bulgarian_split_squat",
+      "name": "保加利亚分腿蹲",
+      "alias": ["分腿蹲"],
+      "category": "legs",
+      "muscle": ["quads", "glutes"],
+      "equipment": ["dumbbell_only"],
+      "difficulty": "intermediate",
+      "gifUrl": "https://example.com/gifs/bulgarian_split_squat.gif",
+      "instructions": [
+        "后脚放在平板上，前脚支撑",
+        "前腿屈膝下蹲至大腿与地面平行",
+        "前腿发力站起至起始位置"
+      ],
+      "tips": [
+        "前脚足跟发力",
+        "保持躯干直立"
+      ],
+      "commonMistakes": [
+        "后膝触地",
+        "前膝过度前移"
+      ]
+    },
+    {
+      "id": "hip_thrust",
+      "name": "杠铃臀桥",
+      "alias": ["臀桥"],
+      "category": "legs",
+      "muscle": ["glutes", "hamstrings"],
+      "equipment": ["full_gym", "barbell_bench"],
+      "difficulty": "intermediate",
+      "gifUrl": "https://example.com/gifs/hip_thrust.gif",
+      "instructions": [
+        "上背靠在平板边缘，杠铃置于髋部",
+        "臀部发力向上顶起至身体呈直线",
+        "缓慢下放至髋部轻触地面"
+      ],
+      "tips": [
+        "避免腰部过度拱起",
+        "顶峰收缩1-2秒"
+      ],
+      "commonMistakes": [
+        "腰部悬空",
+        "用腿部代偿"
+      ]
+    },
+    {
+      "id": "lunges",
+      "name": "哑铃弓步蹲",
+      "alias": ["弓步蹲"],
+      "category": "legs",
+      "muscle": ["quads", "glutes"],
+      "equipment": ["dumbbell_only"],
+      "difficulty": "intermediate",
+      "gifUrl": "https://example.com/gifs/lunges.gif",
+      "instructions": [
+        "双手持哑铃，向前迈出一大步",
+        "后膝接近地面，前膝呈90度",
+        "前腿发力站起至起始位置"
+      ],
+      "tips": [
+        "前脚足跟发力",
+        "保持躯干直立"
+      ],
+      "commonMistakes": [
+        "前膝超过脚尖",
+        "后膝过度撞击地面"
+      ]
+    },
+    {
+      "id": "calf_raise",
+      "name": "哑铃小腿提踵",
+      "alias": ["提踵"],
+      "category": "legs",
+      "muscle": ["calves"],
+      "equipment": ["dumbbell_only"],
+      "difficulty": "beginner",
+      "gifUrl": "https://example.com/gifs/calf_raise.gif",
+      "instructions": [
+        "双手持哑铃，双脚与肩同宽站立",
+        "脚尖发力向上提起至最高点",
+        "缓慢下放至脚跟轻触地面"
+      ],
+      "tips": [
+        "控制下降速度",
+        "顶峰收缩1秒"
+      ],
+      "commonMistakes": [
+        "动作过快",
+        "身体晃动"
+      ]
+    }
+  ]
+}

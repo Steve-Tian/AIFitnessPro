@@ -1,45 +1,264 @@
-.page {
-  min-height: 100vh;
-  background-color: #f5f6fa;
-  background-color: var(--color-bg);
-}
-
+/* miniprogram/pages/training/training.wxss */
 .container {
-  padding: 32rpx;
-  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f2f5;
 }
 
-.header-block {
-  margin-bottom: 24rpx;
+.header {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background: white;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
+  z-index: 10;
 }
 
-.section-title {
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 32rpx;
+  padding: 0;
+  margin: 0;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.spacer {
+  width: 80rpx; /* 占位符，保证标题居中 */
+}
+
+.training-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 30rpx;
+  overflow-y: auto;
+}
+
+.exercise-info {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.exercise-name {
+  font-size: 40rpx;
+  font-weight: bold;
   display: block;
-  font-size: var(--font-lg);
-  font-weight: 700;
-  color: var(--color-text);
-  line-height: 1.3;
+  margin-bottom: 15rpx;
+  color: #333;
 }
 
-.card {
-  background: var(--color-card);
-  border-radius: var(--radius-lg);
-  padding: 48rpx 32rpx;
-  box-shadow: var(--shadow-sm);
-  border-top: 4rpx solid var(--color-primary);
+.exercise-alias {
+  font-size: 28rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 25rpx;
+}
+
+.set-progress {
+  margin-top: 20rpx;
+}
+
+.set-text {
+  font-size: 28rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 15rpx;
+}
+
+.timer-area {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20rpx;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20rpx;
+  color: white;
+  margin: 20rpx 0;
 }
 
-.card-emoji {
-  font-size: 56rpx;
-  line-height: 1;
+.timer-text {
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
 }
 
-.placeholder {
-  font-size: var(--font-base);
+.timer-number {
+  font-size: 120rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.timer-label {
+  font-size: 32rpx;
+  opacity: 0.9;
+}
+
+.media-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin: 20rpx 0;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.exercise-gif {
+  width: 100%;
+  height: 400rpx;
+  border-radius: 15rpx;
+  margin-bottom: 30rpx;
+}
+
+.instructions {
+  margin-top: 20rpx;
+}
+
+.subtitle {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.instruction {
+  font-size: 28rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 15rpx;
   line-height: 1.6;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 30rpx 0;
+}
+
+.control-btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  margin: 0 15rpx;
+}
+
+.start-btn {
+  background: #667eea;
+  color: white;
+}
+
+.skip-btn {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.disabled-btn {
+  background: #ccc;
+  color: #999;
+}
+
+.confirm-btn {
+  background: #667eea;
+  color: white;
+  border-radius: 50rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 32rpx;
+  margin-top: 30rpx;
+}
+
+/* RPE 评分弹窗 */
+.rpe-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  position: relative;
+  background: white;
+  border-radius: 25rpx;
+  padding: 50rpx;
+  margin: 50rpx;
+  width: 80%;
+  max-width: 600rpx;
   text-align: center;
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 15rpx;
+}
+
+.modal-desc {
+  font-size: 28rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 40rpx;
+}
+
+.rpe-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.rpe-btn {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  border: 2rpx solid #ddd;
+  background: white;
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rpe-btn.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.rpe-legend {
+  font-size: 24rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 30rpx;
 }
