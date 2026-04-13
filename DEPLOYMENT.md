@@ -43,25 +43,17 @@ AIFitnessPro/
 1. 在微信开发者工具中打开项目
 2. 点击右上角「云开发」按钮
 3. 创建新的云开发环境（或选择现有环境）
-4. 记录环境ID，替换 `project.config.json` 中的 `YOUR_ENV_ID`
+4. 记录环境ID，本项目的环境ID为：`cloud1-6g1a5yel097ba48d`
 
 ### 2. 配置项目
 
 修改 `project.config.json`：
 ```json
 {
-  "appid": "你的小程序AppID",
+  "appid": "wx0b39a8a84f0a810f",  // 使用您的小程序AppID，或保持测试ID
   "cloudfunctionRoot": "cloudfunctions/",
   "miniprogramRoot": "miniprogram/"
 }
-```
-
-修改 `miniprogram/app.js` 中的环境ID：
-```javascript
-wx.cloud.init({
-  env: '你的云环境ID',  // 替换为此处的实际ID
-  traceUser: true
-})
 ```
 
 ### 3. 上传云函数
@@ -80,10 +72,15 @@ wx.cloud.init({
 
 ### 4. 初始化云数据库
 
+**方式一：使用初始化脚本**
+1. 在微信开发者工具中打开「云开发」控制台
+2. 点击「数据库」→「集合管理」
+3. 运行项目根目录下的 `init_database.js` 脚本创建集合
+
+**方式二：手动创建集合**
 创建以下集合（设置权限为「仅创建者可读写」或「所有用户可读，仅创建者可写」）：
 
-```javascript
-// 集合名称及用途
+```
 users: {                    // 用户档案
   _openid: "用户OpenID",
   profile: { ... },         // 用户问卷数据
