@@ -28,7 +28,7 @@ const EXERCISE_LIBRARY = {
     { name: '保加利亚分腿蹲', alias: ['分腿蹲'], equipment: ['dumbbell_only'], muscle: 'quads' },
     { name: '臀桥', alias: ['杠铃臀桥'], equipment: ['full_gym', 'barbell_bench'], muscle: 'glutes' },
     { name: '弓步蹲', alias: ['哑铃弓步'], equipment: ['dumbbell_only'], muscle: 'quads' },
-    { name: '小腿提踵', alias: ['提踵'], equipment: ['dumbbell_only'], equipment: ['dumbbell_only'], muscle: 'calves' }
+    { name: '小腿提踵', alias: ['提踵'], equipment: ['dumbbell_only'], muscle: 'calves' }
   ]
 }
 
@@ -40,7 +40,7 @@ function filterExercisesByEquipment(exercises, userEquipment) {
 // 生成单日训练计划
 function generateDayWorkout(dayType, userEquipment, dayIndex) {
   const availableExercises = filterExercisesByEquipment(EXERCISE_LIBRARY[dayType], userEquipment)
-  if (availableExercises.length < 4) {
+  if (availableExercises.length < 2) {
     throw new Error(`设备 ${userEquipment.join(',')} 无法满足${dayType}日训练需求`)
   }
 
@@ -49,7 +49,7 @@ function generateDayWorkout(dayType, userEquipment, dayIndex) {
   const shuffled = [...availableExercises].sort(() => Math.random() - 0.5)
   
   for (const ex of shuffled) {
-    if (selectedExercises.length >= (Math.random() > 0.5 ? 4 : 5)) break
+    if (selectedExercises.length >= (Math.random() > 0.5 ? 2 : 3)) break
     if (!selectedExercises.find(se => se.muscle === ex.muscle)) {
       selectedExercises.push({
         name: ex.name,
