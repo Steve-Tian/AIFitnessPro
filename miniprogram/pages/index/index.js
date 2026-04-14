@@ -14,6 +14,10 @@ function getWelcomeLabel(user) {
   return PERSONA_LABEL[persona] || '健身伙伴'
 }
 
+function cacheWeeklyPlan(plan) {
+  app.globalData.currentWeeklyPlan = Array.isArray(plan) ? plan : null
+}
+
 Page({
   data: {
     userInfo: null,
@@ -57,28 +61,47 @@ Page({
 
   async loadWeeklyPlan() {
     try {
-      const db = wx.cloud.database()
+      const currentUser = app.globalData.userInfo
       
-      if (!app.globalData.userInfo?.current_plan_id) {
+      if (!currentUser || !currentUser.current_plan_id) {
+        cacheWeeklyPlan(null)
         this.setData({ weeklyPlan: null })
         return
       }
-      
-      const result = await db.collection('plans').doc(app.globalData.userInfo.current_plan_id).get()
-      
-      if (result.data && result.data.weeklyPlan) {
-        this.setData({ weeklyPlan: result.data.weeklyPlan })
+
+      if (Array.isArray(app.globalData.currentWeeklyPlan) && app.globalData.currentWeeklyPlan.length > 0) {
+        this.setData({ weeklyPlan: app.globalData.currentWeeklyPlan })
+        return
+      }
+
+      const { result } = await wx.cloud.callFunction({
+        name: 'getPlan',
+        data: {
+          planId: currentUser.current_plan_id
+        }
+      })
+
+      if (result && result.success && Array.isArray(result.weeklyPlan)) {
+        cacheWeeklyPlan(result.weeklyPlan)
+        this.setData({ weeklyPlan: result.weeklyPlan })
       } else {
+        cacheWeeklyPlan(null)
         this.setData({ weeklyPlan: null })
       }
     } catch (err) {
       console.error('Load plan error:', err)
+      cacheWeeklyPlan(null)
       this.setData({ weeklyPlan: null })
     }
   },
 
   async generatePlan() {
     if (this.data.generatingPlan) return
+    if (!app.globalData.userInfo) {
+      wx.showToast({ title: '用户信息加载中，请稍后重试', icon: 'none' })
+      return
+    }
+
     this.setData({ generatingPlan: true })
 
     try {
@@ -86,13 +109,17 @@ Page({
       
       if (result.success) {
         wx.showToast({ title: '计划生成成功！', icon: 'success' })
+        cacheWeeklyPlan(result.weeklyPlan)
         this.setData({ 
           weeklyPlan: result.weeklyPlan,
           generatingPlan: false 
         })
         
         // 更新全局状态
-        app.globalData.userInfo.current_plan_id = result.planId
+        app.globalData.userInfo = {
+          ...app.globalData.userInfo,
+          current_plan_id: result.planId
+        }
       } else {
         wx.showToast({ title: result.message || '生成失败', icon: 'none' })
         this.setData({ generatingPlan: false })
@@ -123,8 +150,13 @@ Page({
       date: day.date,
       type: day.type,
       title: day.title,
-      workout: day.workout
+      workout: day.workout,
+      warmup: day.warmup || [],
+      cooldown: day.cooldown || [],
+      adaptive_notes: day.adaptive_notes || []
     }
+    app.globalData.pendingWorkoutDate = day.date || ''
+    cacheWeeklyPlan(weeklyPlan)
 
     wx.switchTab({ url: '/pages/training/training' })
   }

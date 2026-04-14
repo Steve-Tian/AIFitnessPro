@@ -7,35 +7,80 @@
     <view class="spacer"></view>
   </view>
 
-  <!-- 训练主体区域 -->
-  <view class="training-body">
+  <view class="state-card" wx:if="{{isLoading}}">
+    <text class="state-title">训练内容加载中</text>
+    <text class="state-desc">正在同步本地动作库与云端内容，请稍等片刻</text>
+  </view>
+
+  <view class="state-card error" wx:if="{{loadError}}">
+    <text class="state-title">{{loadError}}</text>
+    <text class="state-desc">可以返回首页重新生成计划，或稍后再试</text>
+  </view>
+
+  <view class="training-body" wx:if="{{showTrainingBody}}">
+    <view class="support-card" wx:if="{{warmup.length}}">
+      <view class="section-head">
+        <text class="section-name">训练前热身</text>
+        <text class="section-tag">今日针对性</text>
+      </view>
+      <view class="support-item" wx:for="{{warmup}}" wx:key="name">
+        <view class="support-head">
+          <text class="support-name">{{item.name}}</text>
+          <text class="support-duration">{{item.duration}}</text>
+        </view>
+        <text class="support-focus" wx:if="{{item.focusText}}">{{item.focusText}}</text>
+        <view class="support-step" wx:for="{{item.instructionSteps}}" wx:key="label">
+          <text class="support-badge">{{item.label}}</text>
+          <text class="support-text">{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+
     <!-- 动作信息 -->
     <view class="exercise-info">
       <text class="exercise-name">{{exercise.name}}</text>
       <text class="exercise-alias" wx:if="{{exercise.alias}}">别名：{{exercise.alias}}</text>
       <text class="exercise-summary">{{exercise.summary}}</text>
+      <view class="adaptive-banner" wx:if="{{exercise.hasAdaptiveNote}}">
+        <text class="adaptive-title">自动调节建议</text>
+        <text class="adaptive-text">{{exercise.adaptiveNote}}</text>
+      </view>
       <view class="set-progress">
         <text class="set-text">第 {{currentSet}}/{{totalSets}} 组</text>
-        <progress percent="{{(currentSet / totalSets) * 100}}" activeColor="#667eea" />
+        <progress percent="{{progressPercent}}" activeColor="#667eea" />
       </view>
     </view>
 
-    <!-- 倒计时区域 -->
+    <view class="support-card adaptive-notes" wx:if="{{adaptiveNotes.length}}">
+      <view class="section-head">
+        <text class="section-name">本日自动调节</text>
+        <text class="section-tag">根据上次反馈</text>
+      </view>
+      <view class="adaptive-note" wx:for="{{adaptiveNotes}}" wx:key="exerciseName">
+        <text class="adaptive-note-name">{{item.exerciseName}}</text>
+        <text class="adaptive-note-text">{{item.note}}</text>
+      </view>
+    </view>
+
     <view class="timer-area" wx:if="{{isCountingDown}}">
       <text class="timer-text">准备！</text>
       <text class="timer-number">{{countdown}}</text>
-      <text class="timer-label">{{isResting ? '休息中' : '准备开始'}}</text>
+      <text class="timer-label">{{prepStatusLabel}}</text>
+      <button class="timer-skip-btn" bindtap="skipCurrentSet">{{setSkipButtonLabel}}</button>
     </view>
 
-    <!-- 休息倒计时区域 -->
-    <view class="timer-area" wx:elif="{{isResting}}">
+    <view class="timer-area" wx:if="{{showRestTimer}}">
       <text class="timer-text">休息时间</text>
       <text class="timer-number">{{countdown}}</text>
       <text class="timer-label">距离下一组</text>
+      <view class="timer-skip-row">
+        <button class="timer-quick-btn" data-seconds="15" bindtap="shortenRestPeriod">-15 秒</button>
+        <button class="timer-quick-btn" data-seconds="30" bindtap="shortenRestPeriod">-30 秒</button>
+      </view>
+      <button class="timer-skip-btn" bindtap="skipRestPeriod">{{restSkipButtonLabel}}</button>
     </view>
 
-    <!-- 动作GIF/图片展示区 -->
-    <view class="media-area" wx:else>
+    <view class="media-area" wx:if="{{showMediaArea}}">
       <view class="visual-card">
         <view class="section-head">
           <text class="section-name">动作示意</text>
@@ -70,10 +115,10 @@
 
             <view class="diagram-column">
               <text class="diagram-column-title">辅助肌群</text>
-              <view class="tag-row" wx:if="{{exercise.secondaryMuscles && exercise.secondaryMuscles.length}}">
+              <view class="tag-row" wx:if="{{exercise.hasSecondaryMuscles}}">
                 <text class="muscle-chip secondary" wx:for="{{exercise.secondaryMuscles}}" wx:key="index">{{item}}</text>
               </view>
-              <text class="fallback-note" wx:else>核心稳定 / 关节控制</text>
+              <text class="fallback-note" wx:if="{{!exercise.hasSecondaryMuscles}}">核心稳定 / 关节控制</text>
             </view>
           </view>
 
@@ -116,13 +161,13 @@
           <text class="instruction-badge">{{item.label}}</text>
           <text class="instruction-body">{{item.text}}</text>
         </view>
-        <view class="tips" wx:if="{{exercise.tips && exercise.tips.length}}">
+        <view class="tips" wx:if="{{exercise.hasTips}}">
           <text class="tips-title">训练提示</text>
           <view class="tip-card" wx:for="{{exercise.tips}}" wx:key="index">
             <text class="tip">{{item}}</text>
           </view>
         </view>
-        <view class="mistakes" wx:if="{{exercise.commonMistakes && exercise.commonMistakes.length}}">
+        <view class="mistakes" wx:if="{{exercise.hasCommonMistakes}}">
           <text class="tips-title">常见错误</text>
           <view class="mistake-card" wx:for="{{exercise.commonMistakes}}" wx:key="index">
             <text class="tip">{{item}}</text>
@@ -133,23 +178,65 @@
 
     <!-- 底部操作区 -->
     <view class="controls">
-      <button class="control-btn skip-btn" bindtap="skipExercise">跳过</button>
+      <button class="control-btn skip-btn" bindtap="skipCurrentExercise">{{skipButtonLabel}}</button>
       
-      <button 
-        class="control-btn start-btn" 
-        bindtap="startExercise" 
-        wx:if="{{!isCountingDown && !isResting}}"
+      <button
+        class="control-btn start-btn"
+        bindtap="startExercise"
+        wx:if="{{showMediaArea}}"
       >
-        {{currentSet > totalSets ? '完成' : '开始'}}
+        {{actionButtonLabel}}
       </button>
       
-      <button class="control-btn disabled-btn" wx:else disabled>
-        {{isCountingDown ? '进行中...' : '休息中...'}}
+      <button class="control-btn disabled-btn" wx:if="{{!showMediaArea}}" disabled>
+        {{disabledButtonLabel}}
       </button>
+    </view>
+
+    <view class="support-card" wx:if="{{cooldown.length}}">
+      <view class="section-head">
+        <text class="section-name">练后拉伸</text>
+        <text class="section-tag">训练结束后完成</text>
+      </view>
+      <view class="support-item" wx:for="{{cooldown}}" wx:key="name">
+        <view class="support-head">
+          <text class="support-name">{{item.name}}</text>
+          <text class="support-duration">{{item.duration}}</text>
+        </view>
+        <view class="support-step" wx:for="{{item.instructionSteps}}" wx:key="label">
+          <text class="support-badge">{{item.label}}</text>
+          <text class="support-text">{{item.text}}</text>
+        </view>
+      </view>
     </view>
   </view>
 
-  <!-- RPE评分弹窗 -->
+  <view class="rpe-modal" wx:if="{{showExerciseFeedbackSelector}}">
+    <view class="modal-overlay"></view>
+    <view class="modal-content">
+      <text class="modal-title">{{exerciseFeedbackTarget.exerciseName}} 完成情况</text>
+      <text class="modal-desc">这个动作感觉如何？我们会据此自动调整后续重量、组数或次数。</text>
+      
+      <view class="rpe-grid">
+        <button 
+          class="{{item.className}}" 
+          wx:for="{{exerciseFeedbackOptions}}" 
+          wx:key="value"
+          data-rpe="{{item.value}}"
+          bindtap="selectExerciseRPE"
+        >
+          {{item.value}}
+        </button>
+      </view>
+      
+      <text class="rpe-legend">
+        6=很轻松  7=较轻松  8=刚好  9=很累  10=极限
+      </text>
+      
+      <button class="confirm-btn" bindtap="confirmExerciseFeedback">确认并继续</button>
+    </view>
+  </view>
+
   <view class="rpe-modal" wx:if="{{showRPESelector}}">
     <view class="modal-overlay" bindtap="hideRPESelector"></view>
     <view class="modal-content">
@@ -158,13 +245,13 @@
       
       <view class="rpe-grid">
         <button 
-          class="rpe-btn {{rpeValue === rpe ? 'active' : ''}}" 
-          wx:for="{{[6,7,8,9,10]}}" 
-          wx:key="rpe"
-          data-rpe="{{item}}"
+          class="{{item.className}}" 
+          wx:for="{{rpeOptions}}" 
+          wx:key="value"
+          data-rpe="{{item.value}}"
           bindtap="selectRPE"
         >
-          {{item}}
+          {{item.value}}
         </button>
       </view>
       

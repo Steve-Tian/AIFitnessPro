@@ -1,7 +1,7 @@
 <view class="page">
   <view class="container">
     <text class="page-header">动作库</text>
-    <text class="page-subtitle">列表页先看静态封面，进入详情再看动作说明与媒体资源</text>
+    <text class="page-subtitle">优先读取你自己的动作数据库；列表看封面，详情直接看 GIF / 视频示范</text>
 
     <view class="search-box">
       <text class="search-icon">搜</text>
@@ -28,7 +28,8 @@
 
     <view class="summary-card">
       <text class="summary-number">{{exercises.length}}</text>
-      <text class="summary-label">当前可浏览动作</text>
+      <text class="summary-label">{{isLoading ? '正在刷新动作内容' : '当前可浏览动作'}}</text>
+      <text class="summary-label">当前来源：{{librarySourceLabel}}</text>
     </view>
 
     <view class="exercise-list" wx:if="{{exercises.length}}">
@@ -52,7 +53,7 @@
 
           <view class="footer-row">
             <text class="media-status">{{item.mediaStatus}}</text>
-            <text class="detail-link">查看详情</text>
+            <text class="detail-link">{{item.hasVideo ? '看视频' : (item.hasGif ? '看 GIF' : '看详情')}}</text>
           </view>
         </view>
       </view>

@@ -1,6 +1,11 @@
 const bundledCatalog = require('../data/exercises.json')
 
 const DEFAULT_EXERCISE_IMAGE = '/images/default_exercise.png'
+const DEFAULT_EXERCISE_INSTRUCTIONS = [
+  '先用轻重量或徒手完成起始姿势，确认关节和身体排列稳定',
+  '按推荐节奏完成动作全程，保持核心收紧和目标肌群主动发力',
+  '每次还原都控制速度，若出现明显疼痛或动作变形请立即降强度'
+]
 
 const CATEGORY_LABELS = {
   all: '全部',
@@ -38,6 +43,12 @@ const DIFFICULTY_LABELS = {
   beginner: '入门',
   intermediate: '中级',
   advanced: '进阶'
+}
+
+const SOURCE_LABELS = {
+  ExerciseDB: 'ExerciseDB 主源',
+  Wger: 'Wger 补充源',
+  'local-bundle': '内置种子库'
 }
 
 const ADDITIONAL_EXERCISES = [
@@ -199,6 +210,17 @@ function translateLabels(values, dictionary) {
   return normalizeList(values).map((value) => dictionary[value] || value)
 }
 
+function buildInstructionSteps(instructions) {
+  return normalizeList(instructions).map((text, index) => ({
+    label: `步骤 ${index + 1}`,
+    text
+  }))
+}
+
+function getSourceLabel(provider) {
+  return SOURCE_LABELS[provider] || '自有动作库'
+}
+
 function inferEnglishName(exercise) {
   const aliases = normalizeList(exercise.alias)
   const englishAlias = aliases.find((alias) => /[a-zA-Z]/.test(alias))
@@ -250,20 +272,59 @@ function buildBundledRecord(exercise) {
   }
 }
 
+function normalizeRecordShape(record) {
+  if (!record || typeof record !== 'object') {
+    return null
+  }
+
+  if (record.exercise_id) {
+    return {
+      ...record,
+      aliases: normalizeList(record.aliases || record.alias),
+      equipment_required: normalizeList(record.equipment_required),
+      primary_muscles: normalizeList(record.primary_muscles),
+      secondary_muscles: normalizeList(record.secondary_muscles),
+      instructions: normalizeList(record.instructions),
+      exercise_tips: normalizeList(record.exercise_tips || record.tips),
+      common_mistakes: normalizeList(record.common_mistakes || record.commonMistakes),
+      overview: record.overview || '',
+      media: {
+        muscle_map_url: record.media && record.media.muscle_map_url ? record.media.muscle_map_url : '',
+        gif_url: record.media && record.media.gif_url ? record.media.gif_url : '',
+        video_url: record.media && record.media.video_url ? record.media.video_url : '',
+        thumbnail_url: record.media && record.media.thumbnail_url ? record.media.thumbnail_url : DEFAULT_EXERCISE_IMAGE
+      }
+    }
+  }
+
+  return buildBundledRecord(record)
+}
+
 function decorateRecord(record) {
-  const primaryMuscles = translateLabels(record.primary_muscles, MUSCLE_LABELS)
-  const secondaryMuscles = translateLabels(record.secondary_muscles, MUSCLE_LABELS)
-  const equipmentLabels = translateLabels(record.equipment_required, EQUIPMENT_LABELS)
-  const hasGif = Boolean(sanitizeRemoteMedia(record.media && record.media.gif_url))
-  const hasVideo = Boolean(record.media && record.media.video_url)
-  const coverUrl = (record.media && record.media.thumbnail_url) || DEFAULT_EXERCISE_IMAGE
+  const normalizedRecord = normalizeRecordShape(record)
+  if (!normalizedRecord) {
+    return null
+  }
+
+  const primaryMuscles = translateLabels(normalizedRecord.primary_muscles, MUSCLE_LABELS)
+  const secondaryMuscles = translateLabels(normalizedRecord.secondary_muscles, MUSCLE_LABELS)
+  const equipmentLabels = translateLabels(normalizedRecord.equipment_required, EQUIPMENT_LABELS)
+  const hasGif = Boolean(sanitizeRemoteMedia(normalizedRecord.media && normalizedRecord.media.gif_url))
+  const hasVideo = Boolean(sanitizeRemoteMedia(normalizedRecord.media && normalizedRecord.media.video_url))
+  const coverUrl = (normalizedRecord.media && normalizedRecord.media.thumbnail_url) || DEFAULT_EXERCISE_IMAGE
+  const videoUrl = sanitizeRemoteMedia(normalizedRecord.media && normalizedRecord.media.video_url)
+  const instructions = normalizeList(normalizedRecord.instructions)
+  const exerciseTips = normalizeList(normalizedRecord.exercise_tips)
+  const commonMistakes = normalizeList(normalizedRecord.common_mistakes)
+  const provider = normalizedRecord.source && normalizedRecord.source.provider ? normalizedRecord.source.provider : 'local-bundle'
+  const sourceLabel = getSourceLabel(provider)
 
   return {
-    ...record,
-    id: record.exercise_id,
-    name: record.name_cn,
-    alias: record.aliases && record.aliases.length ? record.aliases[0] : '',
-    categoryLabel: CATEGORY_LABELS[record.category] || record.category || '动作',
+    ...normalizedRecord,
+    id: normalizedRecord.exercise_id,
+    name: normalizedRecord.name_cn,
+    alias: normalizedRecord.aliases && normalizedRecord.aliases.length ? normalizedRecord.aliases[0] : '',
+    categoryLabel: CATEGORY_LABELS[normalizedRecord.category] || normalizedRecord.category || '动作',
     primaryMuscles,
     secondaryMuscles,
     primaryText: primaryMuscles.join(' / ') || '全身协调发力',
@@ -272,16 +333,20 @@ function decorateRecord(record) {
       ? `主练 ${primaryMuscles.join('、')}${secondaryMuscles.length ? `，辅助 ${secondaryMuscles.join('、')}` : ''}`
       : '重点关注动作轨迹、核心稳定和离心控制',
     equipmentText: equipmentLabels.join(' / ') || '按现有器械完成',
-    difficultyLabel: DIFFICULTY_LABELS[record.difficulty] || '常规难度',
+    difficultyLabel: DIFFICULTY_LABELS[normalizedRecord.difficulty] || '常规难度',
     coverUrl,
-    mediaUrl: hasGif ? record.media.gif_url : coverUrl,
+    videoUrl,
+    mediaUrl: hasGif ? normalizedRecord.media.gif_url : coverUrl,
     hasGif,
     hasVideo,
+    sourceLabel,
+    sourceProvider: provider,
+    overviewText: normalizedRecord.overview || '',
     mediaStatus: hasGif || hasVideo ? '已同步媒体资源' : '待同步动图/视频',
-    instructionSteps: normalizeList(record.instructions).map((text, index) => ({
-      label: `步骤 ${index + 1}`,
-      text
-    }))
+    instructions: instructions.length ? instructions : DEFAULT_EXERCISE_INSTRUCTIONS,
+    exercise_tips: exerciseTips,
+    common_mistakes: commonMistakes,
+    instructionSteps: buildInstructionSteps(instructions.length ? instructions : DEFAULT_EXERCISE_INSTRUCTIONS)
   }
 }
 
@@ -291,13 +356,22 @@ const rawBundledExercises = Array.isArray(bundledCatalog.exercises)
 
 const bundledRecords = rawBundledExercises.map(buildBundledRecord)
 
-const decoratedRecords = bundledRecords.map(decorateRecord)
+const decoratedRecords = bundledRecords.map(decorateRecord).filter(Boolean)
+
+let runtimeRecordsCache = null
+let runtimeRecordsPromise = null
+let runtimeMetaCache = {
+  source: 'bundle',
+  sourceLabel: getSourceLabel('local-bundle'),
+  count: decoratedRecords.length
+}
 
 function getExerciseLibrary(options = {}) {
   const keyword = (options.keyword || '').trim().toLowerCase()
   const category = options.category || 'all'
+  const records = Array.isArray(options.records) ? options.records : decoratedRecords
 
-  return decoratedRecords.filter((record) => {
+  return records.filter((record) => {
     const matchCategory = category === 'all' || record.category === category
     if (!matchCategory) {
       return false
@@ -338,10 +412,163 @@ function getExerciseByKey(key) {
   }) || null
 }
 
+function createExerciseLookup(records) {
+  const lookup = {}
+  ;(Array.isArray(records) ? records : []).forEach((record) => {
+    if (!record) return
+    lookup[record.exercise_id] = record
+    lookup[record.name_cn] = record
+    lookup[record.name] = record
+    if (record.name_en) {
+      lookup[record.name_en] = record
+    }
+    normalizeList(record.aliases).forEach((alias) => {
+      lookup[alias] = record
+    })
+  })
+
+  return lookup
+}
+
+function mergeWorkoutExercise(workoutExercise, record) {
+  const reference = record || {}
+  const primaryMuscles = normalizeList(reference.primaryMuscles)
+  const secondaryMuscles = normalizeList(reference.secondaryMuscles)
+  const instructions = normalizeList(reference.instructions).length
+    ? normalizeList(reference.instructions)
+    : DEFAULT_EXERCISE_INSTRUCTIONS
+
+  return {
+    ...reference,
+    ...workoutExercise,
+    id: reference.exercise_id || reference.id || workoutExercise.id || '',
+    name: workoutExercise.name || reference.name_cn || reference.name || '',
+    alias: workoutExercise.alias || reference.alias || '',
+    categoryLabel: reference.categoryLabel || CATEGORY_LABELS[reference.category] || '',
+    mediaUrl: reference.mediaUrl || DEFAULT_EXERCISE_IMAGE,
+    videoUrl: reference.videoUrl || '',
+    hasMedia: Boolean(reference.hasGif),
+    hasGif: Boolean(reference.hasGif),
+    hasVideo: Boolean(reference.hasVideo),
+    instructions,
+    instructionSteps: buildInstructionSteps(instructions),
+    tips: normalizeList(reference.exercise_tips),
+    commonMistakes: normalizeList(reference.common_mistakes),
+    primaryMuscles,
+    secondaryMuscles,
+    primaryMusclesText: primaryMuscles.join(' / ') || '全身协调发力',
+    secondaryMusclesText: secondaryMuscles.join(' / ') || '核心稳定与关节控制',
+    targetSummary: reference.targetSummary || '重点关注动作轨迹、核心稳定和离心控制',
+    equipmentText: reference.equipmentText || '按现有器械完成',
+    difficultyLabel: reference.difficultyLabel || '常规难度',
+    summary: `${workoutExercise.sets || reference.default_sets || 3} 组 × ${workoutExercise.reps || reference.default_reps || 8} 次 · 休息 ${workoutExercise.rest || 90} 秒`
+  }
+}
+
+function getCloudDatabase() {
+  if (typeof wx === 'undefined' || !wx || !wx.cloud || typeof wx.cloud.database !== 'function') {
+    return null
+  }
+  return wx.cloud.database()
+}
+
+async function fetchRuntimeRecords(forceRefresh) {
+  if (!forceRefresh && Array.isArray(runtimeRecordsCache) && runtimeRecordsCache.length > 0) {
+    return runtimeRecordsCache
+  }
+
+  if (!forceRefresh && runtimeRecordsPromise) {
+    return runtimeRecordsPromise
+  }
+
+  runtimeRecordsPromise = (async () => {
+    const db = getCloudDatabase()
+    if (!db) {
+      runtimeRecordsCache = decoratedRecords
+      runtimeMetaCache = {
+        source: 'bundle',
+        sourceLabel: getSourceLabel('local-bundle'),
+        count: runtimeRecordsCache.length
+      }
+      return runtimeRecordsCache
+    }
+
+    try {
+      const result = await db.collection('exercises').get()
+      const records = Array.isArray(result.data)
+        ? result.data.map((record) => decorateRecord(record)).filter(Boolean)
+        : []
+
+      runtimeRecordsCache = records.length > 0 ? records : decoratedRecords
+      runtimeMetaCache = {
+        source: records.length > 0 ? 'cloud' : 'bundle',
+        sourceLabel: records.length > 0 ? '云端动作库' : getSourceLabel('local-bundle'),
+        count: runtimeRecordsCache.length
+      }
+      return runtimeRecordsCache
+    } catch (error) {
+      runtimeRecordsCache = decoratedRecords
+      runtimeMetaCache = {
+        source: 'bundle',
+        sourceLabel: getSourceLabel('local-bundle'),
+        count: runtimeRecordsCache.length
+      }
+      return runtimeRecordsCache
+    } finally {
+      runtimeRecordsPromise = null
+    }
+  })()
+
+  return runtimeRecordsPromise
+}
+
+async function loadExerciseLibrary(options = {}) {
+  const records = await fetchRuntimeRecords(Boolean(options.forceRefresh))
+  return getExerciseLibrary({
+    ...options,
+    records
+  })
+}
+
+async function loadExerciseById(id, options = {}) {
+  const records = await fetchRuntimeRecords(Boolean(options.forceRefresh))
+  return records.find((record) => record.exercise_id === id) || null
+}
+
+async function loadExerciseByKey(key, options = {}) {
+  if (!key) return null
+  const records = await fetchRuntimeRecords(Boolean(options.forceRefresh))
+  return createExerciseLookup(records)[key] || null
+}
+
+async function enrichWorkoutExercises(workout, options = {}) {
+  const records = await fetchRuntimeRecords(Boolean(options.forceRefresh))
+  const lookup = createExerciseLookup(records)
+
+  return (Array.isArray(workout) ? workout : []).map((exercise) => {
+    const candidateKeys = [exercise && exercise.id, exercise && exercise.name, exercise && exercise.alias]
+      .filter(Boolean)
+    let reference = null
+
+    candidateKeys.some((key) => {
+      reference = lookup[key] || null
+      return Boolean(reference)
+    })
+
+    return mergeWorkoutExercise(exercise, reference)
+  })
+}
+
 function buildExerciseSeedRecords() {
   return bundledRecords.map((record) => ({
     ...record
   }))
+}
+
+function getExerciseRuntimeMeta() {
+  return {
+    ...runtimeMetaCache
+  }
 }
 
 module.exports = {
@@ -354,8 +581,16 @@ module.exports = {
   normalizeList,
   translateLabels,
   getExerciseLibrary,
+  loadExerciseLibrary,
   getExerciseById,
+  loadExerciseById,
   getExerciseByKey,
+  loadExerciseByKey,
+  enrichWorkoutExercises,
+  mergeWorkoutExercise,
+  fetchRuntimeRecords,
   buildExerciseSeedRecords,
-  decorateRecord
+  decorateRecord,
+  getExerciseRuntimeMeta,
+  getSourceLabel
 }

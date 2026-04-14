@@ -1,7 +1,10 @@
 App({
   globalData: {
     openid: null,
-    userInfo: null
+    userInfo: null,
+    currentWeeklyPlan: null,
+    selectedWorkoutDay: null,
+    pendingWorkoutDate: ''
   },
 
   onLaunch() {

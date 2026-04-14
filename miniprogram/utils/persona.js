@@ -146,7 +146,8 @@ class PersonaEngine {
    * @returns {string} 个性化话术
    */
   getRandomMessage(category, context = {}) {
-    const categoryTemplates = this.templates[this.style]?.[category] || []
+    const styleTemplates = this.templates[this.style] || {}
+    const categoryTemplates = styleTemplates[category] || []
     if (categoryTemplates.length === 0) {
       return '加油！'
     }

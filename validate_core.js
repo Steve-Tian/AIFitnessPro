@@ -95,6 +95,9 @@ global.wx = {
       if (name === 'unlockAchievement') {
         return { result: { success: true, unlocked: [], message: '暂无新成就' } };
       }
+      if (name === 'getPlan') {
+        return { result: { success: true, weeklyPlan: [{ type: 'push', title: '推日', workout: [] }] } };
+      }
       return { result: { success: true } };
     }
   },
@@ -173,16 +176,21 @@ try {
   originalLog('\n🔍 测试云函数模块...');
   
   const genPlanFunc = require('./cloudfunctions/genPlan/index.js');
+  const getPlanFunc = require('./cloudfunctions/getPlan/index.js');
   const saveFeedbackFunc = require('./cloudfunctions/saveFeedback/index.js');
   const unlockAchievementFunc = require('./cloudfunctions/unlockAchievement/index.js');
   
   originalLog('✅ genPlan 云函数模块加载成功');
+  originalLog('✅ getPlan 云函数模块加载成功');
   originalLog('✅ saveFeedback 云函数模块加载成功');
   originalLog('✅ unlockAchievement 云函数模块加载成功');
   
   // 验证云函数导出
   if (typeof genPlanFunc.main === 'function') {
     originalLog('✅ genPlan 主函数存在');
+  }
+  if (typeof getPlanFunc.main === 'function') {
+    originalLog('✅ getPlan 主函数存在');
   }
   if (typeof saveFeedbackFunc.main === 'function') {
     originalLog('✅ saveFeedback 主函数存在');
@@ -209,7 +217,7 @@ try {
   originalLog('   - 反馈收集引擎: ✅ 正常');
   originalLog('   - 成就系统引擎: ✅ 正常');
   originalLog('   - 动作内容库: ✅ 正常 (', exercisesData.exercises.length, '个动作)');
-  originalLog('   - 云函数模块: ✅ 正常 (3个核心函数)');
+  originalLog('   - 云函数模块: ✅ 正常 (4个核心函数)');
   
   originalLog('\n🎉 AIFitnessPro 核心功能验证完成！');
   originalLog('🚀 项目已准备就绪，可导入微信开发者工具进行部署和测试');

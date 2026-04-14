@@ -99,6 +99,9 @@ function createDatabaseApi() {
     serverDate: () => new Date('2026-04-13T08:00:00.000Z'),
     collection(name) {
       return {
+        async get() {
+          return { data: clone(ensureCollection(name)) }
+        },
         where(query = {}) {
           return {
             async get() {

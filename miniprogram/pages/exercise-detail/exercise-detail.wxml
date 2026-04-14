@@ -1,25 +1,56 @@
 <view class="page" wx:if="{{exercise}}">
   <scroll-view class="scroll" scroll-y>
     <view class="hero-card">
-      <image class="hero-image" src="{{exercise.coverUrl}}" mode="aspectFill" bindtap="previewMedia" />
+      <video
+        wx:if="{{exercise.hasVideo}}"
+        class="hero-image"
+        src="{{exercise.videoUrl}}"
+        poster="{{exercise.coverUrl}}"
+        controls
+        object-fit="cover"
+      />
+      <image wx:else class="hero-image" src="{{exercise.hasGif ? exercise.mediaUrl : exercise.coverUrl}}" mode="aspectFill" bindtap="previewMedia" />
       <view class="hero-overlay">
         <text class="hero-name">{{exercise.name_cn}}</text>
         <text class="hero-en">{{exercise.name_en}}</text>
         <view class="hero-tags">
           <text class="hero-pill">{{exercise.categoryLabel}}</text>
           <text class="hero-pill">{{exercise.difficultyLabel}}</text>
+          <text class="hero-pill">{{exercise.hasVideo ? '视频示范' : (exercise.hasGif ? 'GIF 示范' : '封面待升级')}}</text>
         </view>
       </view>
     </view>
 
     <view class="section">
       <view class="section-head">
-        <text class="section-title">媒体资源</text>
+        <text class="section-title">动作示范</text>
         <text class="section-status">{{exercise.mediaStatus}}</text>
       </view>
       <view class="media-card">
-        <image class="media-image" src="{{exercise.hasGif ? exercise.mediaUrl : exercise.coverUrl}}" mode="aspectFit" bindtap="previewMedia" />
-        <text class="media-note">{{exercise.hasGif ? '已同步动图，可点按放大查看' : '当前展示静态封面。后续同步 GIF / MP4 / WebM 后，这里会自动替换。'}}</text>
+        <video
+          wx:if="{{exercise.hasVideo}}"
+          class="media-video"
+          src="{{exercise.videoUrl}}"
+          poster="{{exercise.coverUrl}}"
+          controls
+          object-fit="contain"
+        />
+        <image wx:else class="media-image" src="{{exercise.hasGif ? exercise.mediaUrl : exercise.coverUrl}}" mode="aspectFit" bindtap="previewMedia" />
+        <text class="media-note">{{exercise.hasVideo ? '先直接看视频动作轨迹，再开始练。' : (exercise.hasGif ? '优先照着 GIF 轨迹练，不必先读长步骤。' : '当前还是静态封面。等云端同步 GIF 或视频后，这里会自动升级。')}}</text>
+      </view>
+    </view>
+
+    <view class="section">
+      <text class="section-title">内容状态</text>
+      <view class="fact-grid">
+        <view class="fact-card">
+          <text class="fact-label">当前来源</text>
+          <text class="fact-value">{{sourceLabel}}</text>
+        </view>
+        <view class="fact-card">
+          <text class="fact-label">同步状态</text>
+          <text class="fact-value">{{isRefreshing ? '正在尝试从云端刷新内容' : '当前内容已就绪'}}</text>
+        </view>
       </view>
     </view>
 
@@ -35,11 +66,17 @@
       </view>
     </view>
 
+    <view class="section" wx:if="{{exercise.overviewText}}">
+      <text class="section-title">动作概述</text>
+      <view class="info-card">
+        <text class="info-body">{{exercise.overviewText}}</text>
+      </view>
+    </view>
+
     <view class="section">
-      <text class="section-title">动作要领</text>
-      <view class="step-card" wx:for="{{exercise.instructionSteps}}" wx:key="label">
-        <text class="step-index">{{item.label}}</text>
-        <text class="step-text">{{item.text}}</text>
+      <text class="section-title">动作速记</text>
+      <view class="bullet-card" wx:for="{{exercise.instructions}}" wx:key="index">
+        <text class="bullet-text">{{item}}</text>
       </view>
     </view>
 

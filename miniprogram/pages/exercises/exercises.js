@@ -1,4 +1,9 @@
-const { getExerciseLibrary, CATEGORY_LABELS } = require('../../utils/exercise-library')
+const {
+  getExerciseLibrary,
+  loadExerciseLibrary,
+  getExerciseRuntimeMeta,
+  CATEGORY_LABELS
+} = require('../../utils/exercise-library')
 
 Page({
   data: {
@@ -10,11 +15,13 @@ Page({
     ],
     selectedCategory: 'all',
     keyword: '',
-    exercises: []
+    exercises: [],
+    isLoading: false,
+    librarySourceLabel: '内置种子库'
   },
 
-  onLoad() {
-    this.applyFilters()
+  async onLoad() {
+    await this.applyFilters()
   },
 
   onShow() {
@@ -24,26 +31,44 @@ Page({
     }
   },
 
-  applyFilters() {
-    const exercises = getExerciseLibrary({
+  async applyFilters() {
+    const filterOptions = {
       category: this.data.selectedCategory,
       keyword: this.data.keyword
+    }
+
+    const seededExercises = getExerciseLibrary(filterOptions)
+    this.setData({
+      exercises: seededExercises,
+      isLoading: true,
+      librarySourceLabel: '内置种子库'
     })
 
-    this.setData({ exercises })
+    const exercises = await loadExerciseLibrary(filterOptions)
+    const runtimeMeta = getExerciseRuntimeMeta()
+
+    this.setData({
+      exercises,
+      isLoading: false,
+      librarySourceLabel: runtimeMeta.sourceLabel || '自有动作库'
+    })
   },
 
   handleKeywordInput(e) {
     this.setData({
       keyword: e.detail.value || ''
-    }, () => this.applyFilters())
+    }, async () => {
+      await this.applyFilters()
+    })
   },
 
   selectCategory(e) {
     const category = e.currentTarget.dataset.category || 'all'
     this.setData({
       selectedCategory: category
-    }, () => this.applyFilters())
+    }, async () => {
+      await this.applyFilters()
+    })
   },
 
   openExerciseDetail(e) {

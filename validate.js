@@ -31,6 +31,10 @@ const createMockDatabase = () => ({
   collection: (name) => {
     console.log(`✅ 访问集合: ${name}`);
     return {
+      get: async () => {
+        console.log(`✅ 获取集合数据: ${name}`);
+        return { data: [] };
+      },
       where: (query) => ({
         get: async () => {
           console.log(`✅ 查询条件:`, query);
@@ -94,6 +98,9 @@ global.wx = {
       }
       if (name === 'unlockAchievement') {
         return { result: { success: true, unlocked: [], message: '暂无新成就' } };
+      }
+      if (name === 'getPlan') {
+        return { result: { success: true, weeklyPlan: [{ type: 'push', title: '推日', workout: [] }] } };
       }
       return { result: { success: true } };
     }
@@ -182,10 +189,12 @@ try {
   console.log('\n🔍 测试云函数模块...');
   
   const genPlanFunc = require('./cloudfunctions/genPlan/index.js');
+  const getPlanFunc = require('./cloudfunctions/getPlan/index.js');
   const saveFeedbackFunc = require('./cloudfunctions/saveFeedback/index.js');
   const unlockAchievementFunc = require('./cloudfunctions/unlockAchievement/index.js');
   
   console.log('✅ genPlan 云函数模块加载成功');
+  console.log('✅ getPlan 云函数模块加载成功');
   console.log('✅ saveFeedback 云函数模块加载成功');
   console.log('✅ unlockAchievement 云函数模块加载成功');
   
