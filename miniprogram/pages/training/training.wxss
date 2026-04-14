@@ -277,6 +277,13 @@
   font-size: 28rpx;
 }
 
+.timer-skip-exercise-btn {
+  margin-top: 16rpx;
+  background: rgba(255,255,255,0.08);
+  border: 2rpx solid rgba(255,255,255,0.16);
+  font-size: 26rpx;
+}
+
 .timer-skip-row {
   display: flex;
   gap: 18rpx;

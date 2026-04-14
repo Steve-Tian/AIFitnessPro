@@ -67,6 +67,7 @@
       <text class="timer-number">{{countdown}}</text>
       <text class="timer-label">{{prepStatusLabel}}</text>
       <button class="timer-skip-btn" bindtap="skipCurrentSet">{{setSkipButtonLabel}}</button>
+      <button class="timer-skip-btn timer-skip-exercise-btn" bindtap="skipCurrentExercise">跳过当前动作</button>
     </view>
 
     <view class="timer-area" wx:if="{{showRestTimer}}">
@@ -78,6 +79,7 @@
         <button class="timer-quick-btn" data-seconds="30" bindtap="shortenRestPeriod">-30 秒</button>
       </view>
       <button class="timer-skip-btn" bindtap="skipRestPeriod">{{restSkipButtonLabel}}</button>
+      <button class="timer-skip-btn timer-skip-exercise-btn" bindtap="skipCurrentExercise">跳过当前动作</button>
     </view>
 
     <view class="media-area" wx:if="{{showMediaArea}}">

@@ -774,25 +774,37 @@ Page({
       return
     }
 
+    this.clearTimers()
+    const nextState = {
+      ...this.data,
+      totalSets: exercise.sets || 3,
+      currentSet: 1,
+      countdown: PREP_COUNTDOWN_SECONDS,
+      exercise,
+      isCountingDown: true,
+      isResting: false,
+      loadError: '',
+      isLoading: false
+    }
     this.setData({
       totalSets: exercise.sets || 3,
       currentSet: 1,
       countdown: PREP_COUNTDOWN_SECONDS,
       exercise,
-      ...buildSessionUiState({
-        ...this.data,
-        totalSets: exercise.sets || 3,
-        currentSet: 1,
-        countdown: PREP_COUNTDOWN_SECONDS,
-        isCountingDown: false,
-        isResting: false,
-        loadError: '',
-        isLoading: false
-      })
+      isCountingDown: true,
+      isResting: false,
+      ...buildSessionUiState(nextState)
     })
 
-    // 开始倒计时
-    this.startCountdown()
+    this.countdownInterval = setInterval(() => {
+      this.setData({
+        countdown: this.data.countdown - 1
+      })
+
+      if (this.data.countdown <= 0) {
+        this.endCountdown()
+      }
+    }, 1000)
   },
 
   // 开始倒计时
@@ -946,7 +958,6 @@ Page({
         exercise: nextExercise,
         ...buildSessionUiState(nextState)
       })
-      this.startExercise()
     } else {
       // 训练完成
       this.clearTimers()

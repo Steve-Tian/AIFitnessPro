@@ -142,7 +142,7 @@ Page({
     }
 
     if (day.type === 'rest' || !Array.isArray(day.workout) || day.workout.length === 0) {
-      wx.showToast({ title: day.note || '休息日无需进入训练', icon: 'none' })
+      wx.showToast({ title: day.note || '当前无可用训练内容', icon: 'none' })
       return
     }
 

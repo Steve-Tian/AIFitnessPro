@@ -70,6 +70,19 @@
   background: #ccc;
 }
 
+.regenerate-btn {
+  background: transparent;
+  color: #667eea;
+  border: 2rpx solid #667eea;
+  font-size: 24rpx;
+}
+
+.regenerate-btn[disabled] {
+  color: #ccc;
+  border-color: #ccc;
+  background: transparent;
+}
+
 .plan-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300rpx, 1fr));

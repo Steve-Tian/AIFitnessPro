@@ -21,6 +21,14 @@
       >
         {{generatingPlan ? '生成中...' : '生成本周计划'}}
       </button>
+      <button 
+        class="generate-btn regenerate-btn" 
+        bindtap="generatePlan" 
+        disabled="{{generatingPlan}}"
+        wx:if="{{weeklyPlan}}"
+      >
+        {{generatingPlan ? '生成中...' : '重新生成计划'}}
+      </button>
     </view>
 
     <!-- 计划详情 -->
