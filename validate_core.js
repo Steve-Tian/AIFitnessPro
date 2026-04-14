@@ -5,12 +5,15 @@
  * 验证不需要Page对象的核心功能
  */
 
+const Module = require('module')
+
 console.log('🧪 AIFitnessPro - 核心模块验证');
 
 // 保存原始console方法
 const originalLog = console.log;
 const originalError = console.error;
 const originalWarn = console.warn;
+const originalRequire = Module.prototype.require;
 
 // 模拟微信环境
 global.console = {
@@ -19,42 +22,67 @@ global.console = {
   warn: (...args) => originalWarn('[WARN]', ...args)
 };
 
+global.Page = (config) => config;
+global.Component = (config) => config;
+
+const createMockDatabase = () => ({
+  command: {},
+  serverDate: () => new Date(),
+  collection: (name) => {
+    originalLog(`✅ 访问集合: ${name}`);
+    return {
+      where: (query) => ({
+        get: async () => {
+          originalLog(`✅ 查询条件:`, query);
+          return { data: [] };
+        },
+        update: async () => {
+          originalLog(`✅ 更新 ${name} 数据`);
+          return { stats: { updated: 1 } };
+        }
+      }),
+      add: async (payload) => {
+        originalLog(`✅ 添加数据到 ${name}:`, Object.keys(payload.data || {}).slice(0, 3));
+        return { _id: 'mock-id-' + Date.now() };
+      },
+      doc: (id) => ({
+        get: async () => {
+          originalLog(`✅ 获取文档: ${id}`);
+          return { data: {} };
+        },
+        update: async () => {
+          originalLog(`✅ 更新文档: ${id}`);
+          return { stats: { updated: 1 } };
+        }
+      })
+    };
+  }
+});
+
+const mockWxServerSdk = {
+  DYNAMIC_CURRENT_ENV: 'mock-env',
+  init: () => {},
+  getWXContext: () => ({
+    OPENID: 'test-user-id',
+    APPID: 'test-appid',
+    UNIONID: 'test-unionid'
+  }),
+  database: createMockDatabase
+};
+
+Module.prototype.require = function patchedRequire(request) {
+  if (request === 'wx-server-sdk') {
+    return mockWxServerSdk;
+  }
+  return originalRequire.apply(this, arguments);
+};
+
 // 模拟微信云开发API
 global.wx = {
   cloud: {
     database: () => {
       originalLog('✅ 云数据库连接模拟成功');
-      return {
-        collection: (name) => {
-          originalLog(`✅ 访问集合: ${name}`);
-          return {
-            where: (query) => ({
-              get: async () => {
-                originalLog(`✅ 查询条件:`, query);
-                return { data: [] };
-              },
-              add: async (data) => {
-                originalLog(`✅ 添加数据到 ${name}:`, Object.keys(data.data || {}).slice(0, 3));
-                return { _id: 'mock-id-' + Date.now() };
-              },
-              update: async (updateData) => {
-                originalLog(`✅ 更新 ${name} 数据`);
-                return {};
-              }
-            }),
-            doc: (id) => ({
-              get: async () => {
-                originalLog(`✅ 获取文档: ${id}`);
-                return { data: {} };
-              },
-              update: async (updateData) => {
-                originalLog(`✅ 更新文档: ${id}`);
-                return {};
-              }
-            })
-          };
-        }
-      };
+      return createMockDatabase();
     },
     callFunction: async ({ name, data }) => {
       originalLog(`✅ 调用云函数: ${name}`, data ? `(参数: ${Object.keys(data)})` : '');

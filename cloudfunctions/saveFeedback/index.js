@@ -2,17 +2,28 @@ const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 const db = cloud.database()
-const _ = db.command
+
+function padNumber(value) {
+  return String(value).padStart(2, '0')
+}
+
+function formatDateKey(input) {
+  if (!input) return ''
+  const date = input instanceof Date ? input : new Date(input)
+  if (Number.isNaN(date.getTime())) return ''
+
+  return `${date.getFullYear()}-${padNumber(date.getMonth() + 1)}-${padNumber(date.getDate())}`
+}
 
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   const { OPENID } = wxContext
 
   try {
-    const { planId, exerciseIndex, rpe, completedAt } = event
+    const { planId, exerciseIndex, rpe, completedAt, dayType, workoutDate } = event
 
     // 验证参数
-    if (!planId || typeof exerciseIndex !== 'number' || !rpe) {
+    if (!planId || typeof exerciseIndex !== 'number' || exerciseIndex < 0 || !rpe) {
       return { success: false, message: '参数不完整' }
     }
 
@@ -30,6 +41,9 @@ exports.main = async (event, context) => {
 
     const plan = planDoc.data
     const user = userDoc.data[0]
+    if (plan.userId !== OPENID) {
+      return { success: false, message: '无权操作该训练计划' }
+    }
 
     // 计算下次训练强度调整
     let intensityAdjustment = 0
@@ -42,6 +56,10 @@ exports.main = async (event, context) => {
     }
     // RPE 8：刚好，保持不变
 
+    const completedAtDate = completedAt ? new Date(completedAt) : new Date()
+    const normalizedCompletedAt = Number.isNaN(completedAtDate.getTime()) ? new Date() : completedAtDate
+    const normalizedWorkoutDate = workoutDate || formatDateKey(normalizedCompletedAt)
+
     // 记录本次训练反馈
     const feedbackRecord = {
       _id: `feedback_${Date.now()}_${OPENID}`,
@@ -49,7 +67,9 @@ exports.main = async (event, context) => {
       userId: OPENID,
       exerciseIndex,
       rpe,
-      completedAt: completedAt || db.serverDate(),
+      completedAt: normalizedCompletedAt,
+      dayType: dayType || '',
+      workoutDate: normalizedWorkoutDate,
       intensityAdjustment
     }
 
@@ -59,8 +79,8 @@ exports.main = async (event, context) => {
     })
 
     // 更新用户连续打卡天数
-    const today = new Date().toDateString()
-    const lastTrainingDate = user.last_training_date ? new Date(user.last_training_date).toDateString() : null
+    const today = formatDateKey(normalizedCompletedAt)
+    const lastTrainingDate = formatDateKey(user.last_training_date)
     
     let newStreak = user.streak_days || 0
     if (lastTrainingDate !== today) {
@@ -71,7 +91,7 @@ exports.main = async (event, context) => {
     await db.collection('users').where({ _openid: OPENID }).update({
       data: {
         streak_days: newStreak,
-        last_training_date: db.serverDate(),
+        last_training_date: normalizedCompletedAt,
         updated_at: db.serverDate()
       }
     })

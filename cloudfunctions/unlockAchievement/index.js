@@ -2,7 +2,22 @@ const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 const db = cloud.database()
-const _ = db.command
+
+function padNumber(value) {
+  return String(value).padStart(2, '0')
+}
+
+function formatDateKey(input) {
+  if (!input) return ''
+  if (typeof input === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(input)) {
+    return input
+  }
+
+  const date = input instanceof Date ? input : new Date(input)
+  if (Number.isNaN(date.getTime())) return ''
+
+  return `${date.getFullYear()}-${padNumber(date.getMonth() + 1)}-${padNumber(date.getDate())}`
+}
 
 // 成就定义
 const ACHIEVEMENTS = {
@@ -66,21 +81,46 @@ const ACHIEVEMENTS = {
       }).get()
       
       const categories = new Set()
+      const planCache = new Map()
       for (const feedback of feedbacks.data) {
-        // 从计划中获取动作分类
-        if (feedback.planId) {
-          const plan = await db.collection('plans').doc(feedback.planId).get()
-          if (plan.data && plan.data.weeklyPlan) {
-            for (const day of plan.data.weeklyPlan) {
-              if (day.type && day.type !== 'rest') {
-                categories.add(day.type)
-              }
-            }
-          }
+        if (feedback.dayType && feedback.dayType !== 'rest') {
+          categories.add(feedback.dayType)
+          continue
+        }
+
+        if (!feedback.planId) {
+          continue
+        }
+
+        let plan = planCache.get(feedback.planId)
+        if (!plan) {
+          const planDoc = await db.collection('plans').doc(feedback.planId).get()
+          plan = planDoc.data || null
+          planCache.set(feedback.planId, plan)
+        }
+
+        if (!plan || !Array.isArray(plan.weeklyPlan)) {
+          continue
+        }
+
+        const completedDate = feedback.workoutDate || formatDateKey(feedback.completedAt)
+        if (!completedDate) {
+          continue
+        }
+
+        const matchedDay = plan.weeklyPlan.find(day => (
+          day &&
+          day.type &&
+          day.type !== 'rest' &&
+          day.date === completedDate
+        ))
+
+        if (matchedDay) {
+          categories.add(matchedDay.type)
         }
       }
       
-      return categories.size >= 3 // push, pull, legs
+      return ['push', 'pull', 'legs'].every(type => categories.has(type))
     }
   },
   'early_bird': {
@@ -156,7 +196,7 @@ exports.main = async (event, context) => {
       // 更新用户成就列表
       await db.collection('users').where({ _openid: OPENID }).update({
         data: {
-          achievements: _.addToSet(...newAchievementIds),
+          achievements: Array.from(new Set(userAchievements.concat(newAchievementIds))),
           total_points: (user.total_points || 0) + unlockedAchievements.reduce((sum, a) => sum + a.points, 0),
           updated_at: db.serverDate()
         }

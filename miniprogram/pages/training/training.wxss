@@ -41,6 +41,7 @@
   flex-direction: column;
   padding: 30rpx;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .exercise-info {
@@ -62,6 +63,13 @@
 .exercise-alias {
   font-size: 28rpx;
   color: #666;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.exercise-summary {
+  font-size: 26rpx;
+  color: #667eea;
   display: block;
   margin-bottom: 25rpx;
 }
@@ -107,25 +115,175 @@
 }
 
 .media-area {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  margin: 20rpx 0;
+  gap: 24rpx;
+}
+
+.visual-card,
+.muscle-card,
+.instructions {
   background: white;
   border-radius: 20rpx;
   padding: 30rpx;
-  margin: 20rpx 0;
   box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.section-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-tag {
+  font-size: 22rpx;
+  color: #4f46e5;
+  background: rgba(102,126,234,0.12);
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+}
+
+.detail-jump {
+  font-size: 22rpx;
+  color: #fff;
+  background: linear-gradient(135deg, #6c5ce7 0%, #4f46e5 100%);
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
 }
 
 .exercise-gif {
   width: 100%;
-  height: 400rpx;
+  height: 320rpx;
   border-radius: 15rpx;
-  margin-bottom: 30rpx;
+  background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
+}
+
+.motion-diagram {
+  border-radius: 18rpx;
+  background: linear-gradient(160deg, #f8fafc 0%, #eef2ff 100%);
+  border: 1rpx solid rgba(102,126,234,0.12);
+  padding: 24rpx;
+}
+
+.diagram-hero {
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid rgba(102,126,234,0.12);
+}
+
+.diagram-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1f2937;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.diagram-subtitle {
+  font-size: 26rpx;
+  color: #475467;
+  display: block;
+  line-height: 1.6;
+}
+
+.diagram-columns {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 22rpx;
+}
+
+.diagram-column {
+  flex: 1;
+  background: rgba(255,255,255,0.82);
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+
+.diagram-column-title {
+  font-size: 24rpx;
+  color: #475467;
+  display: block;
+  margin-bottom: 14rpx;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.muscle-chip {
+  font-size: 24rpx;
+  line-height: 1.4;
+  padding: 10rpx 16rpx;
+  border-radius: 999rpx;
+}
+
+.muscle-chip.primary {
+  background: rgba(239,68,68,0.12);
+  color: #b42318;
+}
+
+.muscle-chip.secondary {
+  background: rgba(59,130,246,0.12);
+  color: #175cd3;
+}
+
+.fallback-note {
+  font-size: 24rpx;
+  color: #667085;
+  display: block;
+  line-height: 1.6;
+}
+
+.diagram-flow {
+  margin-top: 22rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  background: rgba(255,255,255,0.85);
+  border-radius: 16rpx;
+  padding: 18rpx 20rpx;
+}
+
+.flow-badge {
+  min-width: 96rpx;
+  font-size: 22rpx;
+  color: #4f46e5;
+  background: rgba(102,126,234,0.12);
+  border-radius: 999rpx;
+  text-align: center;
+  padding: 8rpx 0;
+}
+
+.flow-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: #344054;
+  line-height: 1.6;
 }
 
 .instructions {
-  margin-top: 20rpx;
+  margin-top: 0;
 }
 
 .subtitle {
@@ -136,18 +294,117 @@
   margin-bottom: 20rpx;
 }
 
-.instruction {
-  font-size: 28rpx;
-  color: #666;
+.muscle-group {
+  margin-bottom: 18rpx;
+}
+
+.muscle-group-label {
+  font-size: 24rpx;
+  color: #475467;
   display: block;
-  margin-bottom: 15rpx;
+  margin-bottom: 12rpx;
+}
+
+.muscle-summary {
+  font-size: 26rpx;
+  color: #344054;
+  display: block;
   line-height: 1.6;
+}
+
+.fact-grid {
+  display: flex;
+  gap: 18rpx;
+  margin-top: 24rpx;
+}
+
+.fact-card {
+  flex: 1;
+  background: #f8fafc;
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+
+.fact-label {
+  font-size: 22rpx;
+  color: #667085;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.fact-value {
+  font-size: 26rpx;
+  color: #1f2937;
+  display: block;
+  line-height: 1.5;
+}
+
+.instruction-card {
+  display: flex;
+  gap: 16rpx;
+  padding: 20rpx;
+  border-radius: 18rpx;
+  background: #f8fafc;
+  margin-bottom: 14rpx;
+}
+
+.instruction-badge {
+  min-width: 96rpx;
+  font-size: 22rpx;
+  color: #4f46e5;
+  background: rgba(102,126,234,0.12);
+  border-radius: 999rpx;
+  text-align: center;
+  padding: 8rpx 0;
+  align-self: flex-start;
+}
+
+.instruction-body {
+  flex: 1;
+  font-size: 28rpx;
+  color: #344054;
+  line-height: 1.7;
+}
+
+.tips {
+  margin-top: 24rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.tips-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.tip {
+  font-size: 26rpx;
+  color: #667085;
+  display: block;
+  line-height: 1.6;
+}
+
+.tip-card,
+.mistake-card {
+  background: #f8fafc;
+  border-radius: 16rpx;
+  padding: 18rpx 20rpx;
+  margin-bottom: 12rpx;
+}
+
+.mistakes {
+  margin-top: 24rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
 }
 
 .controls {
   display: flex;
   justify-content: space-between;
-  padding: 30rpx 0;
+  padding: 30rpx 0 10rpx;
 }
 
 .control-btn {

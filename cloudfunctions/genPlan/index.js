@@ -2,7 +2,14 @@ const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 const db = cloud.database()
-const _ = db.command
+
+function padNumber(value) {
+  return String(value).padStart(2, '0')
+}
+
+function formatDateKey(date) {
+  return `${date.getFullYear()}-${padNumber(date.getMonth() + 1)}-${padNumber(date.getDate())}`
+}
 
 // 训练动作库（按肌群分类）
 const EXERCISE_LIBRARY = {
@@ -12,6 +19,8 @@ const EXERCISE_LIBRARY = {
     { name: '肩推', alias: ['杠铃肩推', '哑铃肩推'], equipment: ['full_gym', 'barbell_bench', 'dumbbell_only'], muscle: 'shoulders' },
     { name: '侧平举', alias: ['哑铃侧平举'], equipment: ['dumbbell_only'], muscle: 'shoulders' },
     { name: '俯卧撑', alias: ['宽距俯卧撑'], equipment: ['bodyweight'], muscle: 'chest' },
+    { name: '钻石俯卧撑', alias: ['窄距俯卧撑'], equipment: ['bodyweight'], muscle: 'triceps' },
+    { name: '派克俯卧撑', alias: ['Pike Push-up'], equipment: ['bodyweight'], muscle: 'shoulders' },
     { name: '臂屈伸', alias: ['双杠臂屈伸'], equipment: ['full_gym'], muscle: 'triceps' }
   ],
   pull: [
@@ -20,7 +29,10 @@ const EXERCISE_LIBRARY = {
     { name: '哑铃划船', alias: ['单臂哑铃划船'], equipment: ['dumbbell_only'], muscle: 'back' },
     { name: '面拉', alias: ['绳索面拉'], equipment: ['full_gym', 'cable'], muscle: 'rear_delts' },
     { name: '杠铃弯举', alias: ['弯举'], equipment: ['barbell_bench'], muscle: 'biceps' },
-    { name: '哑铃锤式弯举', alias: ['锤式弯举'], equipment: ['dumbbell_only'], muscle: 'biceps' }
+    { name: '哑铃锤式弯举', alias: ['锤式弯举'], equipment: ['dumbbell_only'], muscle: 'biceps' },
+    { name: '超人挺身', alias: ['Superman'], equipment: ['bodyweight'], muscle: 'back' },
+    { name: '俯身Y-T-W', alias: ['YTW'], equipment: ['bodyweight'], muscle: 'rear_delts' },
+    { name: '毛巾弯举', alias: ['自阻弯举'], equipment: ['bodyweight'], muscle: 'biceps' }
   ],
   legs: [
     { name: '深蹲', alias: ['杠铃深蹲'], equipment: ['full_gym', 'barbell_bench'], muscle: 'quads' },
@@ -28,20 +40,36 @@ const EXERCISE_LIBRARY = {
     { name: '保加利亚分腿蹲', alias: ['分腿蹲'], equipment: ['dumbbell_only'], muscle: 'quads' },
     { name: '臀桥', alias: ['杠铃臀桥'], equipment: ['full_gym', 'barbell_bench'], muscle: 'glutes' },
     { name: '弓步蹲', alias: ['哑铃弓步'], equipment: ['dumbbell_only'], muscle: 'quads' },
-    { name: '小腿提踵', alias: ['提踵'], equipment: ['dumbbell_only'], muscle: 'calves' }
+    { name: '小腿提踵', alias: ['提踵'], equipment: ['dumbbell_only'], muscle: 'calves' },
+    { name: '徒手深蹲', alias: ['自重深蹲'], equipment: ['bodyweight'], muscle: 'quads' },
+    { name: '反向弓步蹲', alias: ['后撤箭步蹲'], equipment: ['bodyweight'], muscle: 'glutes' },
+    { name: '站姿提踵', alias: ['自重提踵'], equipment: ['bodyweight'], muscle: 'calves' }
   ]
 }
 
 // 根据用户设备筛选可用动作
 function filterExercisesByEquipment(exercises, userEquipment) {
-  return exercises.filter(ex => ex.equipment.some(eq => userEquipment.includes(eq)))
+  const equipment = Array.isArray(userEquipment) ? userEquipment : []
+  return exercises.filter(ex => ex.equipment.some(eq => equipment.includes(eq)))
+}
+
+function buildWeeklySchedule(daysPerWeek) {
+  const normalizedDays = Math.max(3, Math.min(Number(daysPerWeek) || 4, 5))
+  const schedules = {
+    3: ['push', 'rest', 'pull', 'rest', 'legs', 'rest', 'rest'],
+    4: ['push', 'rest', 'pull', 'rest', 'legs', 'push', 'rest'],
+    5: ['push', 'pull', 'legs', 'rest', 'push', 'pull', 'rest']
+  }
+
+  return schedules[normalizedDays]
 }
 
 // 生成单日训练计划
 function generateDayWorkout(dayType, userEquipment, dayIndex) {
+  const equipment = Array.isArray(userEquipment) ? userEquipment : []
   const availableExercises = filterExercisesByEquipment(EXERCISE_LIBRARY[dayType], userEquipment)
-  if (availableExercises.length < 2) {
-    throw new Error(`设备 ${userEquipment.join(',')} 无法满足${dayType}日训练需求`)
+  if (availableExercises.length < 1) {
+    throw new Error(`设备 ${equipment.join(',') || '未配置'} 无法满足${dayType}日训练需求`)
   }
 
   // 随机选取动作
@@ -57,6 +85,7 @@ function generateDayWorkout(dayType, userEquipment, dayIndex) {
       selectedExercises.push({
         name: ex.name,
         alias: ex.alias[0],
+        muscle: ex.muscle,
         sets: 3 + dayIndex % 2, // 渐进超负荷：奇数天增加组数
         reps: 8 + (dayIndex % 3) * 2, // 渐进超负荷：循环递增次数
         rest: 90 + (dayIndex % 2) * 30 // 休息时间微调
@@ -70,6 +99,7 @@ function generateDayWorkout(dayType, userEquipment, dayIndex) {
     selectedExercises.push({
       name: firstExercise.name,
       alias: firstExercise.alias[0],
+      muscle: firstExercise.muscle,
       sets: 3 + dayIndex % 2,
       reps: 8 + (dayIndex % 3) * 2,
       rest: 90 + (dayIndex % 2) * 30
@@ -94,17 +124,23 @@ exports.main = async (event, context) => {
     }
 
     const profile = userDoc.data[0].profile
-    
+    if (!profile || !Array.isArray(profile.equipment) || profile.equipment.length === 0) {
+      return { success: false, message: '用户器械信息不完整，请重新完成问卷' }
+    }
+
     // 生成7天计划（3天Push/Pull/Legs循环 + 休息日）
     const weeklyPlan = []
-    const schedule = ['push', 'pull', 'legs', 'rest', 'push', 'pull', 'rest']
+    const schedule = buildWeeklySchedule(profile.days_per_week)
+    const startDate = new Date()
     
     for (let i = 0; i < 7; i++) {
       const dayType = schedule[i]
+      const currentDate = new Date(startDate)
+      currentDate.setDate(currentDate.getDate() + i)
       
       if (dayType === 'rest') {
         weeklyPlan.push({
-          date: new Date(Date.now() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          date: formatDateKey(currentDate),
           type: 'rest',
           title: '休息日',
           note: '充分恢复，为下周训练储备能量'
@@ -112,49 +148,37 @@ exports.main = async (event, context) => {
       } else {
         const workout = generateDayWorkout(dayType, profile.equipment, i)
         weeklyPlan.push({
-          date: new Date(Date.now() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          date: formatDateKey(currentDate),
           type: dayType,
           title: `${dayType === 'push' ? '推' : dayType === 'pull' ? '拉' : '腿'}日`,
           workout,
-          focus_muscles: Array.from(new Set(workout.map(w => w.name.includes('胸') ? 'chest' : w.name.includes('背') ? 'back' : 'legs')))
+          focus_muscles: Array.from(new Set(workout.map(w => w.muscle).filter(Boolean)))
         })
       }
     }
 
     // 存储到数据库
     const planId = `plan_${Date.now()}_${OPENID.substring(0, 8)}`
-    console.log('准备创建计划文档，ID:', planId)
-    
-    try {
-      await db.collection('plans').add({
-        data: {
-          _id: planId,
-          userId: OPENID,
-          startDate: new Date(),
-          endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          weeklyPlan,
-          createdAt: db.serverDate()
-        }
-      })
-      console.log('计划文档创建成功')
-    } catch (addErr) {
-      console.error('创建计划文档失败:', addErr)
-      throw addErr
-    }
+    await db.collection('plans').add({
+      data: {
+        _id: planId,
+        userId: OPENID,
+        startDate: new Date(),
+        endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        daysPerWeek: Number(profile.days_per_week) || 4,
+        schedule,
+        weeklyPlan,
+        createdAt: db.serverDate()
+      }
+    })
 
     // 更新用户当前计划
-    try {
-      const updateResult = await db.collection('users').where({ _openid: OPENID }).update({
-        data: {
-          current_plan_id: planId,
-          updated_at: db.serverDate()
-        }
-      })
-      console.log('用户文档更新成功，影响行数:', updateResult.stats.updated)
-    } catch (updateErr) {
-      console.error('更新用户文档失败:', updateErr)
-      // 即使更新用户失败，计划已创建，仍可返回成功
-    }
+    await db.collection('users').where({ _openid: OPENID }).update({
+      data: {
+        current_plan_id: planId,
+        updated_at: db.serverDate()
+      }
+    })
 
     return {
       success: true,

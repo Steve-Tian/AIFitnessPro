@@ -12,7 +12,8 @@
     <!-- 动作信息 -->
     <view class="exercise-info">
       <text class="exercise-name">{{exercise.name}}</text>
-      <text class="exercise-alias">别名：{{exercise.alias}}</text>
+      <text class="exercise-alias" wx:if="{{exercise.alias}}">别名：{{exercise.alias}}</text>
+      <text class="exercise-summary">{{exercise.summary}}</text>
       <view class="set-progress">
         <text class="set-text">第 {{currentSet}}/{{totalSets}} 组</text>
         <progress percent="{{(currentSet / totalSets) * 100}}" activeColor="#667eea" />
@@ -35,15 +36,98 @@
 
     <!-- 动作GIF/图片展示区 -->
     <view class="media-area" wx:else>
-      <image 
-        src="{{exercise.gifUrl || '/images/default_exercise.png'}}" 
-        class="exercise-gif" 
-        mode="aspectFit"
-        lazy-load="true"
-      />
+      <view class="visual-card">
+        <view class="section-head">
+          <text class="section-name">动作示意</text>
+          <view class="section-actions">
+            <text class="section-tag" wx:if="{{exercise.categoryLabel}}">{{exercise.categoryLabel}}</text>
+            <text class="detail-jump" bindtap="openExerciseDetail">动作详情</text>
+          </view>
+        </view>
+
+        <image 
+          wx:if="{{exercise.hasMedia}}"
+          src="{{exercise.mediaUrl}}" 
+          class="exercise-gif" 
+          mode="aspectFit"
+          lazy-load="true"
+          binderror="handleMediaError"
+        />
+
+        <view class="motion-diagram" wx:else>
+          <view class="diagram-hero">
+            <text class="diagram-title">{{exercise.name}}</text>
+            <text class="diagram-subtitle">{{exercise.targetSummary}}</text>
+          </view>
+
+          <view class="diagram-columns">
+            <view class="diagram-column">
+              <text class="diagram-column-title">主练肌群</text>
+              <view class="tag-row">
+                <text class="muscle-chip primary" wx:for="{{exercise.primaryMuscles}}" wx:key="index">{{item}}</text>
+              </view>
+            </view>
+
+            <view class="diagram-column">
+              <text class="diagram-column-title">辅助肌群</text>
+              <view class="tag-row" wx:if="{{exercise.secondaryMuscles && exercise.secondaryMuscles.length}}">
+                <text class="muscle-chip secondary" wx:for="{{exercise.secondaryMuscles}}" wx:key="index">{{item}}</text>
+              </view>
+              <text class="fallback-note" wx:else>核心稳定 / 关节控制</text>
+            </view>
+          </view>
+
+          <view class="diagram-flow">
+            <view class="flow-step" wx:for="{{exercise.instructionSteps}}" wx:key="label">
+              <text class="flow-badge">{{item.label}}</text>
+              <text class="flow-text">{{item.text}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="muscle-card">
+        <text class="subtitle">发力肌群</text>
+        <view class="muscle-group">
+          <text class="muscle-group-label">主练</text>
+          <view class="tag-row">
+            <text class="muscle-chip primary" wx:for="{{exercise.primaryMuscles}}" wx:key="index">{{item}}</text>
+          </view>
+        </view>
+        <view class="muscle-group">
+          <text class="muscle-group-label">辅助</text>
+          <text class="muscle-summary">{{exercise.secondaryMusclesText}}</text>
+        </view>
+        <view class="fact-grid">
+          <view class="fact-card">
+            <text class="fact-label">器械</text>
+            <text class="fact-value">{{exercise.equipmentText}}</text>
+          </view>
+          <view class="fact-card">
+            <text class="fact-label">难度</text>
+            <text class="fact-value">{{exercise.difficultyLabel}}</text>
+          </view>
+        </view>
+      </view>
+
       <view class="instructions">
-        <text class="subtitle">动作要领：</text>
-        <text class="instruction" wx:for="{{exercise.instructions}}" wx:key="index">{{item}}</text>
+        <text class="subtitle">动作要领</text>
+        <view class="instruction-card" wx:for="{{exercise.instructionSteps}}" wx:key="label">
+          <text class="instruction-badge">{{item.label}}</text>
+          <text class="instruction-body">{{item.text}}</text>
+        </view>
+        <view class="tips" wx:if="{{exercise.tips && exercise.tips.length}}">
+          <text class="tips-title">训练提示</text>
+          <view class="tip-card" wx:for="{{exercise.tips}}" wx:key="index">
+            <text class="tip">{{item}}</text>
+          </view>
+        </view>
+        <view class="mistakes" wx:if="{{exercise.commonMistakes && exercise.commonMistakes.length}}">
+          <text class="tips-title">常见错误</text>
+          <view class="mistake-card" wx:for="{{exercise.commonMistakes}}" wx:key="index">
+            <text class="tip">{{item}}</text>
+          </view>
+        </view>
       </view>
     </view>
 

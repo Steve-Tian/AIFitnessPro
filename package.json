@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "test": "jest --runInBand",
+    "validate": "node validate.js",
+    "validate:core": "node validate_core.js",
+    "exercise:sync": "node scripts/sync_exercise_catalog.js"
+  },
   "devDependencies": {
     "jest": "^30.3.0"
   }

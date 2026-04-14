@@ -5,12 +5,15 @@
  * 验证关键模块的基本功能
  */
 
+const Module = require('module')
+
 console.log('🧪 AIFitnessPro - 简化功能验证');
 
 // 保存原始console方法
 const originalLog = console.log;
 const originalError = console.error;
 const originalWarn = console.warn;
+const originalRequire = Module.prototype.require;
 
 // 模拟微信环境
 global.console = {
@@ -19,42 +22,67 @@ global.console = {
   warn: (...args) => originalWarn('[WARN]', ...args)
 };
 
+global.Page = (config) => config;
+global.Component = (config) => config;
+
+const createMockDatabase = () => ({
+  command: {},
+  serverDate: () => new Date(),
+  collection: (name) => {
+    console.log(`✅ 访问集合: ${name}`);
+    return {
+      where: (query) => ({
+        get: async () => {
+          console.log(`✅ 查询条件:`, query);
+          return { data: [] };
+        },
+        update: async () => {
+          console.log(`✅ 更新 ${name} 数据`);
+          return { stats: { updated: 1 } };
+        }
+      }),
+      add: async (payload) => {
+        console.log(`✅ 添加数据到 ${name}:`, Object.keys(payload.data || {}).slice(0, 3));
+        return { _id: 'mock-id-' + Date.now() };
+      },
+      doc: (id) => ({
+        get: async () => {
+          console.log(`✅ 获取文档: ${id}`);
+          return { data: {} };
+        },
+        update: async () => {
+          console.log(`✅ 更新文档: ${id}`);
+          return { stats: { updated: 1 } };
+        }
+      })
+    };
+  }
+});
+
+const mockWxServerSdk = {
+  DYNAMIC_CURRENT_ENV: 'mock-env',
+  init: () => {},
+  getWXContext: () => ({
+    OPENID: 'test-user-id',
+    APPID: 'test-appid',
+    UNIONID: 'test-unionid'
+  }),
+  database: createMockDatabase
+};
+
+Module.prototype.require = function patchedRequire(request) {
+  if (request === 'wx-server-sdk') {
+    return mockWxServerSdk;
+  }
+  return originalRequire.apply(this, arguments);
+};
+
 // 模拟微信云开发API
 global.wx = {
   cloud: {
     database: () => {
       console.log('✅ 云数据库连接模拟成功');
-      return {
-        collection: (name) => {
-          console.log(`✅ 访问集合: ${name}`);
-          return {
-            where: (query) => ({
-              get: async () => {
-                console.log(`✅ 查询条件:`, query);
-                return { data: [] };
-              },
-              add: async (data) => {
-                console.log(`✅ 添加数据到 ${name}:`, Object.keys(data.data || {}).slice(0, 3));
-                return { _id: 'mock-id-' + Date.now() };
-              },
-              update: async (updateData) => {
-                console.log(`✅ 更新 ${name} 数据`);
-                return {};
-              }
-            }),
-            doc: (id) => ({
-              get: async () => {
-                console.log(`✅ 获取文档: ${id}`);
-                return { data: {} };
-              },
-              update: async (updateData) => {
-                console.log(`✅ 更新文档: ${id}`);
-                return {};
-              }
-            })
-          };
-        }
-      };
+      return createMockDatabase();
     },
     callFunction: async ({ name, data }) => {
       console.log(`✅ 调用云函数: ${name}`, data ? `(参数: ${Object.keys(data)})` : '');
@@ -72,7 +100,8 @@ global.wx = {
   },
   showToast: (opts) => console.log(`📱 弹窗提示: ${opts.title}`),
   navigateTo: (opts) => console.log(`🧭 跳转页面: ${opts.url}`),
-  reLaunch: (opts) => console.log(`🔄 重启应用: ${opts.url}`)
+  reLaunch: (opts) => console.log(`🔄 重启应用: ${opts.url}`),
+  clearStorageSync: () => console.log('✅ 清理本地缓存')
 };
 
 global.getApp = () => {

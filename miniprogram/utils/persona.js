@@ -5,7 +5,7 @@
 
 class PersonaEngine {
   constructor(personaStyle = 'coach') {
-    this.style = personaStyle
+    this.style = this.normalizeStyle(personaStyle)
     this.templates = {
       coach: {
         warmup: [
@@ -128,6 +128,15 @@ class PersonaEngine {
         ]
       }
     }
+  }
+
+  normalizeStyle(personaStyle) {
+    const styleAliases = {
+      bro: 'buddy',
+      roast: 'comedian'
+    }
+
+    return styleAliases[personaStyle] || personaStyle || 'coach'
   }
 
   /**

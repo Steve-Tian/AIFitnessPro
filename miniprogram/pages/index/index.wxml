@@ -2,7 +2,7 @@
 <view class="container">
   <!-- 用户信息区 -->
   <view class="user-card" wx:if="{{userInfo}}">
-    <text class="username">欢迎回来，{{userInfo.profile.persona === 'beauty_coach' ? '美女教练' : userInfo.profile.persona || '健身伙伴'}}！</text>
+    <text class="username">欢迎回来，{{welcomeLabel}}！</text>
     <view class="streak">
       <text class="streak-num">{{streakDays}}</text>
       <text class="streak-label">连续打卡天数</text>
@@ -24,21 +24,29 @@
     </view>
 
     <!-- 计划详情 -->
-    <view class="plan-grid" wx:if="{{weeklyPlan}}">
+    <view class="plan-grid" wx:if="{{weeklyPlan && weeklyPlan.length}}">
       <view 
-        class="day-card {{day.type === 'rest' ? 'rest-day' : day.type}}" 
+        class="day-card {{item.type === 'rest' ? 'rest-day' : item.type}} {{item.workout && item.workout.length ? 'clickable' : ''}}" 
         wx:for="{{weeklyPlan}}" 
         wx:key="date"
+        wx:for-item="item"
+        bindtap="openPlanDay"
+        data-index="{{index}}"
       >
-        <text class="day-date">{{day.date}}</text>
-        <text class="day-type">{{day.title}}</text>
-        <view class="workout-list" wx:if="{{day.workout && day.workout.length > 0}}">
-          <view class="exercise-item" wx:for="{{day.workout}}" wx:key="name">
-            <text class="exercise-name">{{item.name}}</text>
-            <text class="exercise-meta">{{item.sets}}组 × {{item.reps}}次 | 休息{{item.rest}}秒</text>
+        <text class="day-date">{{item.date}}</text>
+        <text class="day-type">{{item.title}}</text>
+        <view class="workout-list" wx:if="{{item.workout && item.workout.length > 0}}">
+          <view class="exercise-item" wx:for="{{item.workout}}" wx:key="name" wx:for-item="exercise">
+            <text class="exercise-name">{{exercise.name}}</text>
+            <text class="exercise-meta">{{exercise.sets}}组 × {{exercise.reps}}次 | 休息{{exercise.rest}}秒</text>
+            <view class="exercise-details" wx:if="{{exercise.instructions && exercise.instructions.length > 0}}">
+              <text class="exercise-detail-title">动作要领:</text>
+              <text class="exercise-instruction" wx:for="{{exercise.instructions}}" wx:key="index">• {{item}}</text>
+            </view>
           </view>
+          <text class="tap-hint">点击开始本日训练</text>
         </view>
-        <text class="rest-note" wx:else>{{day.note}}</text>
+        <text class="rest-note" wx:else>{{item.note}}</text>
       </view>
     </view>
 

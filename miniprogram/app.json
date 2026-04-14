@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/training/training",
     "pages/exercises/exercises",
+    "pages/exercise-detail/exercise-detail",
     "pages/diet/diet",
     "pages/profile/profile",
     "pages/onboarding/onboarding"

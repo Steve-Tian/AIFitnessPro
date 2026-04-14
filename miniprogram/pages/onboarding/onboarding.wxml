@@ -303,8 +303,8 @@
           </view>
         </view>
         <view
-          class="option-card horizontal persona {{formData.persona === 'bro' ? 'selected' : ''}}"
-          bindtap="onSelect" data-field="persona" data-value="bro"
+          class="option-card horizontal persona {{formData.persona === 'buddy' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="persona" data-value="buddy"
         >
           <view class="persona-avatar bro-bg">
             <text class="persona-icon">😎</text>
@@ -315,8 +315,8 @@
           </view>
         </view>
         <view
-          class="option-card horizontal persona {{formData.persona === 'roast' ? 'selected' : ''}}"
-          bindtap="onSelect" data-field="persona" data-value="roast"
+          class="option-card horizontal persona {{formData.persona === 'comedian' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="persona" data-value="comedian"
         >
           <view class="persona-avatar roast-bg">
             <text class="persona-icon">😈</text>

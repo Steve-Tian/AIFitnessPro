@@ -81,6 +81,15 @@
   border-radius: 15rpx;
   padding: 25rpx;
   position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.day-card.clickable {
+  box-shadow: 0 8rpx 20rpx rgba(102, 126, 234, 0.08);
+}
+
+.day-card.clickable:active {
+  transform: scale(0.98);
 }
 
 .day-card.push {
@@ -139,6 +148,13 @@
   color: #888;
 }
 
+.tap-hint {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: #667eea;
+}
+
 .rest-note {
   font-style: italic;
   color: #666;
@@ -155,4 +171,29 @@
 .empty-state text {
   display: block;
   margin-bottom: 20rpx;
+}
+
+/* 练习详情 */
+.exercise-details {
+  margin-top: 10rpx;
+  padding: 15rpx;
+  background-color: #f8f9fa;
+  border-radius: 10rpx;
+  border-left: 6rpx solid #667eea;
+}
+
+.exercise-detail-title {
+  font-size: 24rpx;
+  color: #555;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.exercise-instruction {
+  font-size: 24rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 6rpx;
+  line-height: 1.4;
 }

@@ -10,6 +10,18 @@ class NutritionEngine {
     this.foodDatabase = this.initializeFoodDatabase()
   }
 
+  normalizeGoal(goal) {
+    const goalAlias = {
+      muscle_gain: 'muscle_gain',
+      bulk: 'muscle_gain',
+      fat_loss: 'fat_loss',
+      cut: 'fat_loss',
+      strength: 'strength'
+    }
+
+    return goalAlias[goal] || goal
+  }
+
   /**
    * 计算基础代谢率 (BMR) - Mifflin-St Jeor 公式
    * @returns {number} BMR值
@@ -53,7 +65,7 @@ class NutritionEngine {
     let carbRatio = 0.50    // 50% 碳水
 
     // 根据目标调整热量和宏量比例
-    switch (this.profile.goal) {
+    switch (this.normalizeGoal(this.profile.goal)) {
       case 'muscle_gain':
         targetCalories *= 1.15 // 增肌：15%热量盈余
         proteinRatio = 0.30    // 增加蛋白质比例

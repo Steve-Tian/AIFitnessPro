@@ -13,11 +13,20 @@ const EXP_LABEL = {
   advanced: '规律训练两年+'
 }
 
+const PERSONA_AVATAR = {
+  coach: '教',
+  buddy: '兄',
+  bro: '兄',
+  comedian: '趣',
+  roast: '趣',
+  beauty_coach: '美'
+}
+
 function personaFirstChar(profile) {
   if (!profile || !profile.persona) return '我'
   const p = String(profile.persona)
   if (!p.length) return '我'
-  return p.charAt(0).toUpperCase()
+  return PERSONA_AVATAR[p] || '我'
 }
 
 function formatProfile(userDoc) {

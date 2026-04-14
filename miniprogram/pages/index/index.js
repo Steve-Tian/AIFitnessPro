@@ -1,14 +1,29 @@
 const app = getApp()
 
+const PERSONA_LABEL = {
+  coach: '硬核教练',
+  buddy: '暖男兄弟',
+  bro: '暖男兄弟',
+  comedian: '幽默毒舌',
+  roast: '幽默毒舌',
+  beauty_coach: '美女教练'
+}
+
+function getWelcomeLabel(user) {
+  const persona = user && user.profile ? user.profile.persona : ''
+  return PERSONA_LABEL[persona] || '健身伙伴'
+}
+
 Page({
   data: {
     userInfo: null,
+    streakDays: 0,
+    welcomeLabel: '健身伙伴',
     weeklyPlan: null,
     generatingPlan: false
   },
 
   onLoad() {
-    console.log('Index page loaded')
     if (app.globalData.userInfo) {
       this.applyUser(app.globalData.userInfo)
       this.loadWeeklyPlan()
@@ -21,7 +36,6 @@ Page({
   },
 
   onShow() {
-    console.log('Index page shown')
     if (app.globalData.userInfo) {
       this.applyUser(app.globalData.userInfo)
       this.loadWeeklyPlan()
@@ -36,32 +50,25 @@ Page({
     const streak = user && typeof user.streak_days === 'number' ? user.streak_days : 0
     this.setData({
       userInfo: user || null,
-      streakDays: streak
+      streakDays: streak,
+      welcomeLabel: getWelcomeLabel(user)
     })
-    console.log('User applied:', user)
   },
 
   async loadWeeklyPlan() {
     try {
-      console.log('Loading weekly plan...')
       const db = wx.cloud.database()
       
       if (!app.globalData.userInfo?.current_plan_id) {
-        console.log('No current_plan_id found')
         this.setData({ weeklyPlan: null })
         return
       }
-
-      console.log('Plan ID:', app.globalData.userInfo.current_plan_id)
       
       const result = await db.collection('plans').doc(app.globalData.userInfo.current_plan_id).get()
-      console.log('DB result:', result)
       
       if (result.data && result.data.weeklyPlan) {
-        console.log('Weekly plan loaded:', result.data.weeklyPlan)
         this.setData({ weeklyPlan: result.data.weeklyPlan })
       } else {
-        console.log('No plan data found')
         this.setData({ weeklyPlan: null })
       }
     } catch (err) {
@@ -71,13 +78,11 @@ Page({
   },
 
   async generatePlan() {
-    console.log('Generate plan clicked')
     if (this.data.generatingPlan) return
     this.setData({ generatingPlan: true })
 
     try {
       const { result } = await wx.cloud.callFunction({ name: 'genPlan' })
-      console.log('GenPlan result:', result)
       
       if (result.success) {
         wx.showToast({ title: '计划生成成功！', icon: 'success' })
@@ -97,5 +102,30 @@ Page({
       wx.showToast({ title: '网络错误，请重试', icon: 'none' })
       this.setData({ generatingPlan: false })
     }
+  },
+
+  openPlanDay(e) {
+    const { index } = e.currentTarget.dataset
+    const weeklyPlan = Array.isArray(this.data.weeklyPlan) ? this.data.weeklyPlan : []
+    const day = weeklyPlan[index]
+
+    if (!day) {
+      wx.showToast({ title: '训练计划加载中，请稍后重试', icon: 'none' })
+      return
+    }
+
+    if (day.type === 'rest' || !Array.isArray(day.workout) || day.workout.length === 0) {
+      wx.showToast({ title: day.note || '休息日无需进入训练', icon: 'none' })
+      return
+    }
+
+    app.globalData.selectedWorkoutDay = {
+      date: day.date,
+      type: day.type,
+      title: day.title,
+      workout: day.workout
+    }
+
+    wx.switchTab({ url: '/pages/training/training' })
   }
 })

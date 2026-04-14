@@ -1,315 +1,305 @@
-/**
- * AIFitnessPro - 集成测试套件
- * 测试完整的用户旅程（问卷→计划→训练→反馈→成就）
- */
+const path = require('path')
 
-// Mock 微信小程序环境
-global.wx = {
-  cloud: {
-    database: () => ({
-      collection: (name) => ({
-        where: (query) => ({
-          get: () => {
-            if (name === 'users') {
-              return Promise.resolve({ 
-                data: [{ 
-                  _openid: 'test-user', 
-                  profile: { 
-                    gender: 'male', 
-                    age: 25, 
-                    height: 175, 
-                    weight: 70, 
-                    goal: 'muscle_gain', 
-                    days_per_week: 4,
-                    equipment: ['full_gym', 'barbell_bench'],
-                    persona: 'coach'
-                  },
-                  streak_days: 3,
-                  current_plan_id: 'plan-test'
-                }] 
-              })
-            }
-            if (name === 'plans') {
-              return Promise.resolve({ 
-                data: [{
-                  _id: 'plan-test',
-                  weeklyPlan: [
-                    {
-                      date: new Date(),
-                      type: 'push',
-                      title: '推日',
-                      workout: [
-                        { name: '卧推', alias: '杠铃卧推', sets: 3, reps: 8, rest: 90 }
-                      ]
-                    }
-                  ]
-                }] 
-              })
-            }
-            if (name === 'feedback') {
-              return Promise.resolve({ data: [] })
-            }
-            if (name === 'achievement_logs') {
-              return Promise.resolve({ data: [] })
-            }
-            return Promise.resolve({ data: [] })
-          },
-          add: (data) => {
-            if (name === 'feedback') {
-              return Promise.resolve({ _id: 'feedback-test' })
-            }
-            if (name === 'achievement_logs') {
-              return Promise.resolve({ _id: 'log-test' })
-            }
-            return Promise.resolve({ _id: 'test-id' })
-          },
-          update: () => Promise.resolve({})
-        }),
-        doc: (id) => ({
-          get: () => {
-            if (name === 'plans' && id === 'plan-test') {
-              return Promise.resolve({ 
-                data: {
-                  _id: 'plan-test',
-                  weeklyPlan: [
-                    {
-                      date: new Date(),
-                      type: 'push',
-                      title: '推日',
-                      workout: [
-                        { name: '卧推', alias: '杠铃卧推', sets: 3, reps: 8, rest: 90 }
-                      ]
-                    }
-                  ]
-                } 
-              })
-            }
-            return Promise.resolve({ data: {} })
-          },
-          update: () => Promise.resolve({})
-        })
-      })
-    }),
-    callFunction: ({ name, data }) => {
-      if (name === 'genPlan') {
-        return Promise.resolve({ 
-          result: { 
-            success: true, 
-            planId: 'new-plan',
-            weeklyPlan: [
-              { date: new Date(), type: 'push', title: '推日', workout: [] }
-            ],
-            message: '计划生成成功'
-          } 
-        })
-      }
-      if (name === 'saveFeedback') {
-        return Promise.resolve({ 
-          result: { 
-            success: true, 
-            message: '反馈提交成功',
-            adjustment: 0.05,
-            newStreak: 4
-          } 
-        })
-      }
-      if (name === 'unlockAchievement') {
-        return Promise.resolve({ 
-          result: { 
-            success: true, 
-            unlocked: [],
-            message: '暂无新成就解锁'
-          } 
-        })
-      }
-      return Promise.resolve({ result: {} })
-    }
-  },
-  showToast: jest.fn(),
-  navigateTo: jest.fn(),
-  navigateBack: jest.fn(),
-  reLaunch: jest.fn(),
-  getSystemInfoSync: () => ({
-    SDKVersion: '3.0.0',
-    version: '8.0.0'
-  })
-}
-
-global.getApp = () => ({
-  globalData: {
-    openid: 'test-user',
-    userInfo: { 
-      _openid: 'test-user',
-      profile: { 
-        gender: 'male', 
-        age: 25, 
-        height: 175, 
-        weight: 70, 
-        goal: 'muscle_gain', 
-        days_per_week: 4,
-        equipment: ['full_gym', 'barbell_bench'],
-        persona: 'coach'
-      },
-      streak_days: 3,
-      current_plan_id: 'plan-test'
-    }
-  }
-})
+const trainingPagePath = path.resolve(__dirname, '../../miniprogram/pages/training/training.js')
+const indexPagePath = path.resolve(__dirname, '../../miniprogram/pages/index/index.js')
+const achievementsPagePath = path.resolve(__dirname, '../../miniprogram/pages/achievements/achievements.js')
+const exercisesPagePath = path.resolve(__dirname, '../../miniprogram/pages/exercises/exercises.js')
+const exerciseDetailPagePath = path.resolve(__dirname, '../../miniprogram/pages/exercise-detail/exercise-detail.js')
+const personaModulePath = path.resolve(__dirname, '../../miniprogram/utils/persona.js')
 
 describe('AIFitnessPro - Integration Tests', () => {
-  describe('End-to-End User Journey', () => {
-    test('should complete full workout session flow', async () => {
-      // 模拟训练页面加载
-      const TrainingPage = require('../miniprogram/pages/training/training.js')
-      const pageInstance = new (require('jest-mock-constructor')(Page))()
-      
-      // 初始化训练页面
-      pageInstance.onLoad({ plan: JSON.stringify([
-        { name: '卧推', alias: '杠铃卧推', sets: 3, reps: 8, rest: 90 }
-      ]) })
-      
-      // 验证初始状态
-      expect(pageInstance.data.currentExerciseIndex).toBe(0)
-      expect(pageInstance.data.currentSet).toBe(1)
-      expect(pageInstance.data.totalSets).toBe(3)
-      
-      // 模拟开始训练
-      pageInstance.startExercise()
-      
-      // 验证倒计时开始
-      expect(pageInstance.data.isCountingDown).toBe(true)
-      
-      // 模拟完成训练并提交反馈
-      pageInstance.setData({ showRPESelector: true, rpeValue: 8 })
-      await pageInstance.submitFeedback()
-      
-      // 验证反馈成功提交
-      expect(global.wx.showToast).toHaveBeenCalledWith(
-        expect.objectContaining({ title: '训练完成！' })
-      )
-    })
+  test('training page can complete countdown flow and sync streak from saveFeedback', async () => {
+    jest.useFakeTimers()
 
-    test('should generate personalized plan from user profile', async () => {
-      // 模拟首页加载
-      const IndexPage = require('../miniprogram/pages/index/index.js')
-      const pageInstance = new (require('jest-mock-constructor')(Page))()
-      
-      // 模拟生成计划
-      await pageInstance.generatePlan()
-      
-      // 验证计划生成成功
-      expect(pageInstance.data.generatingPlan).toBe(false)
-      expect(global.wx.showToast).toHaveBeenCalledWith(
-        expect.objectContaining({ title: '计划生成成功！' })
-      )
-      expect(pageInstance.data.weeklyPlan).toBeDefined()
-    })
-
-    test('should calculate nutrition based on user profile', () => {
-      const { NutritionEngine } = require('../miniprogram/utils/nutrition.js')
-      
-      const profile = {
-        gender: 'male',
-        age: 25,
-        height: 175,
-        weight: 70,
-        goal: 'muscle_gain',
-        days_per_week: 4
+    setAppMock({
+      globalData: {
+        openid: 'test-user',
+        userInfo: {
+          _openid: 'test-user',
+          current_plan_id: 'plan-test',
+          streak_days: 3,
+          profile: {
+            persona: 'coach'
+          }
+        }
       }
-      
-      const engine = new NutritionEngine(profile)
-      const advice = engine.generateAdvice()
-      
-      // 验证生成了建议文本
-      expect(advice).toContain('【饮食建议】')
-      expect(advice).toContain('目标热量')
-      expect(advice).toContain('蛋白质')
-      expect(advice).toContain('碳水化合物')
-      expect(advice).toContain('脂肪')
     })
 
-    test('should handle achievement unlocking flow', async () => {
-      // 模拟成就页面加载
-      const AchievementsPage = require('../miniprogram/pages/achievements/achievements.js')
-      const pageInstance = new (require('jest-mock-constructor')(Page))()
-      
-      // 模拟检查新成就
-      await pageInstance.checkNewAchievements()
-      
-      // 验证调用了成就检查云函数
-      expect(global.wx.cloud.callFunction).toHaveBeenCalledWith(
-        expect.objectContaining({ name: 'unlockAchievement' })
-      )
+    setCallFunctionHandlers({
+      saveFeedback: async ({ data }) => ({
+        result: {
+          success: true,
+          newStreak: 4,
+          echoedDate: data.workoutDate
+        }
+      })
     })
 
-    test('should maintain consistent persona messaging', () => {
-      const { PersonaEngine } = require('../miniprogram/utils/persona.js')
-      
-      const coach = new PersonaEngine('coach')
-      const buddy = new PersonaEngine('buddy')
-      
-      // 验证不同风格的消息差异
-      const coachWarmup = coach.getRandomMessage('warmup')
-      const buddyWarmup = buddy.getRandomMessage('warmup')
-      
-      expect(coachWarmup).not.toBe(buddyWarmup)
-      
-      // 验证相同风格的消息一致性
-      const coachMsg1 = coach.getRandomMessage('during')
-      const coachMsg2 = coach.getRandomMessage('during')
-      
-      // 虽然是随机的，但都应该非空
-      expect(coachMsg1).toBeTruthy()
-      expect(coachMsg2).toBeTruthy()
+    const page = createMiniProgramPage(trainingPagePath)
+    page.onLoad({
+      plan: JSON.stringify([
+        { name: '卧推', alias: '杠铃卧推', sets: 2, reps: 8, rest: 60 }
+      ]),
+      dayType: 'push',
+      date: '2026-04-13'
+    })
+
+    page.startExercise()
+    expect(page.data.isCountingDown).toBe(true)
+    expect(page.data.exercise.instructions.length).toBeGreaterThan(0)
+    expect(page.data.exercise.instructionSteps.length).toBeGreaterThan(0)
+    expect(page.data.exercise.summary).toContain('2 组 × 8 次')
+    expect(page.data.exercise.mediaUrl).toBe('/images/default_exercise.png')
+    expect(page.data.exercise.primaryMuscles).toContain('胸肌')
+    expect(page.data.exercise.equipmentText).toContain('杠铃/卧推架')
+
+    page.endCountdown()
+    expect(page.data.isResting).toBe(true)
+    expect(page.data.countdown).toBe(60)
+
+    await page.submitFeedback()
+    jest.advanceTimersByTime(1500)
+
+    expect(getAppMock().globalData.userInfo.streak_days).toBe(4)
+    expect(wx.cloud.callFunction).toHaveBeenCalledWith(expect.objectContaining({
+      name: 'saveFeedback',
+      data: expect.objectContaining({
+        dayType: 'push',
+        workoutDate: '2026-04-13'
+      })
+    }))
+    expect(wx.showToast).toHaveBeenCalledWith(expect.objectContaining({ title: '训练完成！' }))
+    expect(wx.switchTab).toHaveBeenCalledWith({ url: '/pages/index/index' })
+
+    page.onUnload()
+  })
+
+  test('index page stores the newly generated plan in page and global state', async () => {
+    setAppMock({
+      globalData: {
+        openid: 'test-user',
+        userInfo: {
+          _openid: 'test-user',
+          current_plan_id: null,
+          streak_days: 2
+        }
+      }
+    })
+
+    setCallFunctionHandlers({
+      genPlan: async () => ({
+        result: {
+          success: true,
+          planId: 'new-plan',
+          weeklyPlan: [
+            { date: '2026-04-13', type: 'push', title: '推日', workout: [] }
+          ]
+        }
+      })
+    })
+
+    const page = createMiniProgramPage(indexPagePath)
+    await page.generatePlan()
+
+    expect(page.data.generatingPlan).toBe(false)
+    expect(page.data.weeklyPlan).toHaveLength(1)
+    expect(getAppMock().globalData.userInfo.current_plan_id).toBe('new-plan')
+    expect(wx.showToast).toHaveBeenCalledWith(expect.objectContaining({ title: '计划生成成功！' }))
+  })
+
+  test('index page maps stored persona values to friendly welcome text', () => {
+    setAppMock({
+      globalData: {
+        openid: 'test-user',
+        userInfo: {
+          _openid: 'test-user',
+          streak_days: 2,
+          profile: {
+            persona: 'bro'
+          }
+        }
+      }
+    })
+
+    const page = createMiniProgramPage(indexPagePath)
+    page.onLoad()
+
+    expect(page.data.welcomeLabel).toBe('暖男兄弟')
+  })
+
+  test('index page can open a selected training day through the tab page', () => {
+    setAppMock({
+      globalData: {
+        openid: 'test-user',
+        userInfo: {
+          _openid: 'test-user',
+          current_plan_id: 'plan-test'
+        }
+      }
+    })
+
+    const page = createMiniProgramPage(indexPagePath)
+    page.setData({
+      weeklyPlan: [
+        {
+          date: '2026-04-13',
+          type: 'push',
+          title: '推日',
+          workout: [
+            { name: '卧推', alias: '杠铃卧推', sets: 3, reps: 8, rest: 90 }
+          ]
+        }
+      ]
+    })
+
+    page.openPlanDay({
+      currentTarget: {
+        dataset: { index: 0 }
+      }
+    })
+
+    expect(getAppMock().globalData.selectedWorkoutDay).toEqual(expect.objectContaining({
+      date: '2026-04-13',
+      type: 'push'
+    }))
+    expect(wx.switchTab).toHaveBeenCalledWith({ url: '/pages/training/training' })
+  })
+
+  test('training page can consume a selected workout day from global state', () => {
+    setAppMock({
+      globalData: {
+        openid: 'test-user',
+        userInfo: {
+          _openid: 'test-user',
+          current_plan_id: 'plan-test',
+          streak_days: 1
+        },
+        selectedWorkoutDay: {
+          date: '2026-04-15',
+          type: 'legs',
+          title: '腿日',
+          workout: [
+            { name: '徒手深蹲', alias: '自重深蹲', sets: 4, reps: 12, rest: 60 }
+          ]
+        }
+      }
+    })
+
+    const page = createMiniProgramPage(trainingPagePath)
+    page.onShow()
+
+    expect(page.data.currentDayType).toBe('legs')
+    expect(page.data.currentWorkoutDate).toBe('2026-04-15')
+    expect(page.data.exercise.name).toBe('徒手深蹲')
+    expect(page.data.exercise.instructions.length).toBeGreaterThan(0)
+    expect(page.data.exercise.instructionSteps.length).toBeGreaterThan(0)
+    expect(page.data.exercise.tips.length).toBeGreaterThan(0)
+    expect(page.data.exercise.commonMistakes.length).toBeGreaterThan(0)
+    expect(page.data.exercise.mediaUrl).toBe('/images/default_exercise.png')
+    expect(page.data.exercise.primaryMuscles).toContain('股四头肌')
+    expect(getAppMock().globalData.selectedWorkoutDay).toBeNull()
+  })
+
+  test('training page back action returns to the index tab', () => {
+    const page = createMiniProgramPage(trainingPagePath)
+    page.goBack()
+
+    expect(wx.switchTab).toHaveBeenCalledWith({ url: '/pages/index/index' })
+  })
+
+  test('training page can jump to exercise detail', () => {
+    const page = createMiniProgramPage(trainingPagePath)
+    page.setData({
+      exercise: {
+        id: 'bench_press',
+        name: '卧推'
+      }
+    })
+
+    page.openExerciseDetail()
+
+    expect(wx.navigateTo).toHaveBeenCalledWith({
+      url: '/pages/exercise-detail/exercise-detail?id=bench_press'
     })
   })
 
-  describe('Data Flow Validation', () => {
-    test('should persist user data through cloud database', async () => {
-      const db = global.wx.cloud.database()
-      
-      // 模拟用户数据写入
-      const userCollection = db.collection('users')
-      const whereClause = userCollection.where({ _openid: 'test-user' })
-      
-      const result = await whereClause.get()
-      
-      // 验证用户数据结构
-      expect(result.data).toHaveLength(1)
-      expect(result.data[0]).toHaveProperty('profile')
-      expect(result.data[0]).toHaveProperty('streak_days')
-      expect(result.data[0]).toHaveProperty('current_plan_id')
-    })
+  test('exercise library page loads exercises and opens detail page', () => {
+    const page = createMiniProgramPage(exercisesPagePath)
+    page.onLoad()
 
-    test('should track feedback and adjust training', async () => {
-      const FeedbackFunction = require('../cloudfunctions/saveFeedback/index.js').main
-      
-      const eventData = {
-        planId: 'plan-test',
-        exerciseIndex: 0,
-        rpe: 9, // 高RPE应触发强度下调
-        completedAt: new Date()
+    expect(page.data.exercises.length).toBeGreaterThan(10)
+    expect(page.data.exercises[0].coverUrl).toBe('/images/default_exercise.png')
+
+    page.openExerciseDetail({
+      currentTarget: {
+        dataset: {
+          id: 'bench_press'
+        }
       }
-      
-      const result = await FeedbackFunction(eventData, {})
-      
-      // 验证反馈处理成功
-      expect(result.success).toBe(true)
-      expect(result.adjustment).toBeLessThan(0) // 高RPE应返回负调整值
     })
 
-    test('should validate plan generation rules', async () => {
-      const PlanFunction = require('../cloudfunctions/genPlan/index.js').main
-      
-      const result = await PlanFunction({}, {})
-      
-      // 验证计划生成成功
-      expect(result.success).toBe(true)
-      expect(result.weeklyPlan).toHaveLength(7)
-      
-      // 验证包含休息日
-      const restDays = result.weeklyPlan.filter(day => day.type === 'rest')
-      expect(restDays).toHaveLength(2) // 7天中应该有2天休息
+    expect(wx.navigateTo).toHaveBeenCalledWith({
+      url: '/pages/exercise-detail/exercise-detail?id=bench_press'
     })
+  })
+
+  test('exercise detail page loads structured content package', () => {
+    const page = createMiniProgramPage(exerciseDetailPagePath)
+    page.onLoad({ id: 'bench_press' })
+
+    expect(page.data.exercise.name_cn).toBe('杠铃卧推')
+    expect(page.data.exercise.primaryMuscles).toContain('胸肌')
+    expect(page.data.exercise.instructionSteps.length).toBeGreaterThan(0)
+    expect(wx.setNavigationBarTitle).toHaveBeenCalledWith({ title: '杠铃卧推' })
+  })
+
+  test('achievements page loads unlocked count and can trigger cloud refresh', async () => {
+    setAppMock({
+      globalData: {
+        openid: 'test-user',
+        userInfo: {
+          _openid: 'test-user'
+        }
+      }
+    })
+
+    setMockCollections({
+      users: [{
+        _id: 'user-1',
+        _openid: 'test-user',
+        achievements: ['first_workout', 'early_bird'],
+        total_points: 30
+      }]
+    })
+
+    const page = createMiniProgramPage(achievementsPagePath)
+    await page.loadAchievements()
+
+    expect(page.data.unlockedAchievementCount).toBe(2)
+    expect(page.data.totalPoints).toBe(30)
+
+    setCallFunctionHandlers({
+      unlockAchievement: async () => ({
+        result: {
+          success: true,
+          unlocked: []
+        }
+      })
+    })
+
+    await page.checkNewAchievements()
+
+    expect(wx.cloud.callFunction).toHaveBeenCalledWith(expect.objectContaining({ name: 'unlockAchievement' }))
+  })
+
+  test('persona engine still differentiates message styles', () => {
+    const { PersonaEngine } = freshRequire(personaModulePath)
+
+    const coach = new PersonaEngine('coach')
+    const buddy = new PersonaEngine('buddy')
+
+    expect(coach.getRandomMessage('warmup')).toBeTruthy()
+    expect(buddy.getRandomMessage('warmup')).toBeTruthy()
+    expect(coach.getRandomMessage('during')).not.toEqual(buddy.getRandomMessage('during'))
   })
 })
