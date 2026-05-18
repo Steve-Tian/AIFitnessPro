@@ -33,7 +33,7 @@
     </view>
 
     <view class="exercise-list" wx:if="{{exercises.length}}">
-      <view class="exercise-card" wx:for="{{exercises}}" wx:key="exercise_id" data-id="{{item.exercise_id}}" bindtap="openExerciseDetail">
+      <view class="exercise-card" wx:for="{{exercises}}" wx:key="exercise_id" data-id="{{item.exercise_id}}" data-name="{{item.name_cn}}" bindtap="openExerciseDetail">
         <image class="exercise-cover" src="{{item.coverUrl}}" mode="aspectFill" />
         <view class="exercise-content">
           <view class="exercise-head">

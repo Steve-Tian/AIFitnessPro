@@ -1,429 +1,41 @@
 const app = getApp()
 
-const PREP_COUNTDOWN_SECONDS = 10
-const DEFAULT_EXERCISE_IMAGE = '/images/default_exercise.png'
-const DEFAULT_EXERCISE_INSTRUCTIONS = [
-  '先用轻重量或徒手完成起始姿势，确认关节和身体排列稳定',
-  '按推荐节奏完成动作全程，保持核心收紧和目标肌群主动发力',
-  '每次还原都控制速度，若出现明显疼痛或动作变形请立即降强度'
-]
-const MUSCLE_LABELS = {
-  chest: '胸肌',
-  triceps: '肱三头肌',
-  front_delts: '前三角',
-  shoulders: '三角肌',
-  rear_delts: '后三角',
-  back: '背阔肌',
-  rhomboids: '菱形肌',
-  biceps: '肱二头肌',
-  forearms: '前臂',
-  quads: '股四头肌',
-  hamstrings: '腘绳肌',
-  glutes: '臀大肌',
-  calves: '小腿',
-  core: '核心'
-}
-const EQUIPMENT_LABELS = {
-  full_gym: '综合器械',
-  barbell_bench: '杠铃/卧推架',
-  dumbbell_only: '哑铃',
-  bodyweight: '徒手',
-  cable: '绳索器械'
-}
-const DIFFICULTY_LABELS = {
-  beginner: '入门',
-  intermediate: '中级',
-  advanced: '进阶'
-}
-const CATEGORY_LABELS = {
-  push: '推日',
-  pull: '拉日',
-  legs: '腿日'
-}
+const {
+  PREP_COUNTDOWN_SECONDS,
+  DEFAULT_EXERCISE_IMAGE,
+  FALLBACK_EXERCISE_DETAILS,
+  pickEncouragement
+} = require('./training-constants')
 
-const FALLBACK_EXERCISE_DETAILS = {
-  '钻石俯卧撑': {
-    alias: ['窄距俯卧撑'],
-    muscle: ['triceps', 'chest', 'front_delts'],
-    equipment: ['bodyweight'],
-    difficulty: 'intermediate',
-    instructions: [
-      '双手放在胸前下方，拇指与食指靠近呈钻石形',
-      '身体保持一条直线，缓慢下放至胸部接近手背',
-      '手掌发力推起，顶端收紧胸肌和三头肌'
-    ],
-    tips: ['肘部自然贴近身体两侧', '全程收紧核心，避免塌腰'],
-    commonMistakes: ['手掌位置过宽，导致胸肌发力分散', '下放时塌腰或耸肩']
-  },
-  '派克俯卧撑': {
-    alias: ['Pike Push-up'],
-    muscle: ['shoulders', 'triceps', 'core'],
-    equipment: ['bodyweight'],
-    difficulty: 'intermediate',
-    instructions: [
-      '双手撑地，臀部抬高形成倒 V 字',
-      '屈肘让头部向地面下方移动',
-      '肩部发力推回起始位置'
-    ],
-    tips: ['重心略向前，让肩部更多发力', '动作全程避免耸肩'],
-    commonMistakes: ['臀部塌陷，变成普通俯卧撑轨迹', '手肘外翻过大导致肩部不稳']
-  },
-  '超人挺身': {
-    alias: ['Superman'],
-    muscle: ['back', 'glutes', 'hamstrings'],
-    equipment: ['bodyweight'],
-    difficulty: 'beginner',
-    instructions: [
-      '俯卧趴地，双手向前伸直',
-      '同时抬起双臂和双腿，感受背部发力',
-      '顶峰停顿 1 秒后缓慢放下'
-    ],
-    tips: ['动作幅度不必过大，重在控制', '颈部保持自然，不要抬头过度'],
-    commonMistakes: ['抬头过高导致颈部受压', '依靠甩腿而不是背部主动发力']
-  },
-  '俯身Y-T-W': {
-    alias: ['YTW'],
-    muscle: ['rear_delts', 'rhomboids', 'back'],
-    equipment: ['bodyweight'],
-    difficulty: 'beginner',
-    instructions: [
-      '微屈髋俯身，核心收紧',
-      '双臂依次做 Y、T、W 三个轨迹抬举',
-      '每个轨迹顶峰停顿后缓慢回到起始位置'
-    ],
-    tips: ['全程小重量或徒手控制', '肩胛骨主动后缩下沉'],
-    commonMistakes: ['动作太快，肩后束无法充分收缩', '耸肩代偿导致斜方肌抢力']
-  },
-  '毛巾弯举': {
-    alias: ['自阻弯举'],
-    muscle: ['biceps', 'forearms'],
-    equipment: ['bodyweight'],
-    difficulty: 'beginner',
-    instructions: [
-      '双手握住毛巾两端，一侧向上弯举，另一侧提供阻力',
-      '弯举至手肘完全屈曲，顶峰停顿',
-      '缓慢下放并换边重复'
-    ],
-    tips: ['阻力保持均匀，不要突然放松', '肘部尽量固定在身体两侧'],
-    commonMistakes: ['阻力忽大忽小，导致动作节奏失控', '身体后仰借力']
-  },
-  '徒手深蹲': {
-    alias: ['自重深蹲'],
-    muscle: ['quads', 'glutes', 'core'],
-    equipment: ['bodyweight'],
-    difficulty: 'beginner',
-    instructions: [
-      '双脚与肩同宽站立，脚尖略向外',
-      '屈髋屈膝下蹲至大腿接近平行地面',
-      '脚跟发力站起，回到起始姿势'
-    ],
-    tips: ['膝盖方向与脚尖一致', '保持胸口打开，避免塌腰'],
-    commonMistakes: ['膝盖内扣', '下蹲时脚跟离地']
-  },
-  '反向弓步蹲': {
-    alias: ['后撤箭步蹲'],
-    muscle: ['glutes', 'quads', 'hamstrings'],
-    equipment: ['bodyweight'],
-    difficulty: 'beginner',
-    instructions: [
-      '站立姿势开始，单腿向后撤一步',
-      '前腿屈膝下蹲，后膝接近地面',
-      '前脚发力回到起始位置，再换边'
-    ],
-    tips: ['前脚脚跟持续发力', '躯干保持稳定直立'],
-    commonMistakes: ['步幅过小导致膝盖压力过大', '躯干前倾过多']
-  },
-  '站姿提踵': {
-    alias: ['自重提踵'],
-    muscle: ['calves'],
-    equipment: ['bodyweight'],
-    difficulty: 'beginner',
-    instructions: [
-      '双脚与肩同宽站立，脚掌踩稳地面',
-      '脚尖发力将脚跟抬至最高点',
-      '缓慢下放，感受小腿拉伸'
-    ],
-    tips: ['顶峰停顿 1 秒', '下降过程尽量放慢'],
-    commonMistakes: ['动作反弹过快', '身体左右摇晃']
-  }
-}
+const {
+  getExerciseLibrary,
+  resolveExerciseDetails,
+  enrichWorkoutPlan,
+  buildTrainingExercise,
+  buildSupportPlanItems,
+  buildAdaptiveNotes,
+  formatDateKey,
+  resolveWorkoutDayFromPlan
+} = require('./training-exercise')
 
-let cachedExerciseLibrary = null
+const {
+  buildSessionUiState,
+  isResumeSnapshotUsable,
+  cloudDocToResumeSnapshot,
+  pickNewerResumeSnapshot
+} = require('./training-resume')
 
-function getExerciseLibrary() {
-  if (cachedExerciseLibrary) {
-    return cachedExerciseLibrary
-  }
-
-  try {
-    cachedExerciseLibrary = require('../../utils/exercise-library')
-  } catch (error) {
-    console.error('动作内容库加载失败：', error)
-    cachedExerciseLibrary = null
-  }
-
-  return cachedExerciseLibrary
-}
-
-function sanitizeGifUrl(url) {
-  if (!url || typeof url !== 'string') return ''
-  if (url.includes('example.com')) return ''
-  return url
-}
-
-function buildExerciseDetailIndex() {
-  const index = {}
-  const exercises = []
-
-  exercises.forEach((exercise) => {
-    index[exercise.name] = exercise
-    ;(exercise.alias || []).forEach((alias) => {
-      index[alias] = exercise
-    })
-  })
-
-  Object.keys(FALLBACK_EXERCISE_DETAILS).forEach((name) => {
-    const detail = FALLBACK_EXERCISE_DETAILS[name]
-    index[name] = {
-      name,
-      ...detail
-    }
-    ;(detail.alias || []).forEach((alias) => {
-      index[alias] = {
-        name,
-        ...detail
-      }
-    })
-  })
-
-  return index
-}
-
-const EXERCISE_DETAIL_INDEX = buildExerciseDetailIndex()
-
-function padNumber(value) {
-  return String(value).padStart(2, '0')
-}
-
-function formatDateKey(input) {
-  if (!input) return ''
-  if (typeof input === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(input)) {
-    return input
-  }
-
-  const date = input instanceof Date ? input : new Date(input)
-  if (Number.isNaN(date.getTime())) return ''
-
-  return `${date.getFullYear()}-${padNumber(date.getMonth() + 1)}-${padNumber(date.getDate())}`
-}
-
-function normalizeList(value) {
-  if (Array.isArray(value)) {
-    return value.filter(Boolean)
-  }
-  if (value) {
-    return [value]
-  }
-  return []
-}
-
-function translateLabels(values, dictionary) {
-  return normalizeList(values).map((value) => dictionary[value] || value)
-}
-
-function buildInstructionSteps(instructions) {
-  return normalizeList(instructions).map((text, index) => ({
-    label: `步骤 ${index + 1}`,
-    text
-  }))
-}
-
-function buildSupportPlanItems(items) {
-  return normalizeList(items).map((item) => {
-    const instructions = normalizeList(item && item.instructions)
-    return {
-      name: item && item.name ? item.name : '辅助动作',
-      duration: item && item.duration ? item.duration : '',
-      focusText: item && (item.focusText || item.targetText) ? (item.focusText || item.targetText) : '',
-      instructionSteps: buildInstructionSteps(instructions)
-    }
-  })
-}
-
-function buildAdaptiveNotes(items) {
-  return normalizeList(items).map((item) => ({
-    exerciseName: item && item.exerciseName ? item.exerciseName : '动作',
-    note: item && item.note ? item.note : ''
-  })).filter((item) => item.note)
-}
-
-function resolveExerciseDetails(exercise) {
-  if (!exercise) return {}
-
-  const candidates = []
-  if (exercise.name) {
-    candidates.push(exercise.name)
-  }
-  if (Array.isArray(exercise.alias)) {
-    exercise.alias.forEach((alias) => {
-      if (alias) {
-        candidates.push(alias)
-      }
-    })
-  } else if (exercise.alias) {
-    candidates.push(exercise.alias)
-  }
-  const detail = candidates
-    .map((key) => EXERCISE_DETAIL_INDEX[key])
-    .find(Boolean) || {}
-
-  const alias = typeof exercise.alias === 'string'
-    ? exercise.alias
-    : Array.isArray(detail.alias) && detail.alias.length
-      ? detail.alias[0]
-      : ''
-  const rawMuscles = normalizeList(detail.muscle && detail.muscle.length ? detail.muscle : exercise.muscle)
-  const muscleLabels = translateLabels(rawMuscles, MUSCLE_LABELS)
-  const primaryMuscles = muscleLabels.slice(0, 2)
-  const secondaryMuscles = muscleLabels.slice(2)
-  const equipmentLabels = translateLabels(detail.equipment || exercise.equipment, EQUIPMENT_LABELS)
-  const instructions = Array.isArray(exercise.instructions) && exercise.instructions.length
-    ? exercise.instructions
-    : Array.isArray(detail.instructions) && detail.instructions.length
-      ? detail.instructions
-      : DEFAULT_EXERCISE_INSTRUCTIONS
-  const instructionSteps = buildInstructionSteps(instructions)
-  const commonMistakes = Array.isArray(detail.commonMistakes) ? detail.commonMistakes : []
-  const category = detail.category || exercise.category || ''
-  const hasMedia = Boolean(sanitizeGifUrl(exercise.gifUrl || detail.gifUrl))
-
-  return {
-    ...detail,
-    ...exercise,
-    alias,
-    gifUrl: hasMedia ? sanitizeGifUrl(exercise.gifUrl || detail.gifUrl) : '',
-    mediaUrl: hasMedia ? sanitizeGifUrl(exercise.gifUrl || detail.gifUrl) : DEFAULT_EXERCISE_IMAGE,
-    hasMedia,
-    instructions,
-    instructionSteps,
-    tips: Array.isArray(detail.tips) ? detail.tips : [],
-    commonMistakes,
-    muscleLabels,
-    primaryMuscles,
-    secondaryMuscles,
-    primaryMusclesText: primaryMuscles.join(' / ') || '全身协调发力',
-    secondaryMusclesText: secondaryMuscles.join(' / ') || '核心稳定与关节控制',
-    targetSummary: muscleLabels.length
-      ? `主练 ${primaryMuscles.join('、')}${secondaryMuscles.length ? `，辅助 ${secondaryMuscles.join('、')}` : ''}`
-      : '重点关注动作轨迹、核心稳定和离心控制',
-    equipmentLabels,
-    equipmentText: equipmentLabels.join(' / ') || '按现有器械完成',
-    difficultyLabel: DIFFICULTY_LABELS[detail.difficulty || exercise.difficulty] || '常规难度',
-    categoryLabel: CATEGORY_LABELS[category] || CATEGORY_LABELS[exercise.category] || '',
-    summary: `${exercise.sets || 3} 组 × ${exercise.reps || 8} 次 · 休息 ${exercise.rest || 90} 秒`
-  }
-}
-
-function enrichWorkoutPlan(workout) {
-  return (Array.isArray(workout) ? workout : []).map((exercise) => resolveExerciseDetails(exercise))
-}
-
-function clampProgress(currentSet, totalSets) {
-  if (!totalSets || totalSets < 1) return 0
-  const safeCurrent = currentSet < 0 ? 0 : currentSet
-  const percent = Math.round((safeCurrent / totalSets) * 100)
-  if (percent < 0) return 0
-  if (percent > 100) return 100
-  return percent
-}
-
-function buildSessionUiState(input) {
-  const currentSet = typeof input.currentSet === 'number' ? input.currentSet : 1
-  const totalSets = typeof input.totalSets === 'number' && input.totalSets > 0 ? input.totalSets : 3
-  const isCountingDown = Boolean(input.isCountingDown)
-  const isResting = Boolean(input.isResting)
-  const hasLoadError = Boolean(input.loadError)
-  const isLoading = Boolean(input.isLoading)
-
-  return {
-    progressPercent: clampProgress(currentSet, totalSets),
-    prepStatusLabel: isResting ? '休息中' : '准备开始',
-    actionButtonLabel: currentSet > totalSets ? '完成' : '开始',
-    disabledButtonLabel: isCountingDown ? '进行中...' : '休息中...',
-    skipButtonLabel: '跳过当前动作',
-    setSkipButtonLabel: '跳过本组',
-    restSkipButtonLabel: '跳过休息',
-    showTrainingBody: !isLoading && !hasLoadError,
-    showRestTimer: !isCountingDown && isResting,
-    showMediaArea: !isCountingDown && !isResting
-  }
-}
-
-function buildRpeOptions(selectedValue) {
-  return [6, 7, 8, 9, 10].map((value) => ({
-    value,
-    active: value === selectedValue,
-    className: value === selectedValue ? 'rpe-btn active' : 'rpe-btn'
-  }))
-}
-
-function buildTrainingExercise(exercise) {
-  const nextExercise = exercise || {}
-  const secondaryMuscles = Array.isArray(nextExercise.secondaryMuscles) ? nextExercise.secondaryMuscles : []
-  const tips = Array.isArray(nextExercise.tips) ? nextExercise.tips : []
-  const commonMistakes = Array.isArray(nextExercise.commonMistakes) ? nextExercise.commonMistakes : []
-  const equipment = Array.isArray(nextExercise.equipment) ? nextExercise.equipment : []
-
-  return {
-    ...nextExercise,
-    secondaryMuscles,
-    tips,
-    commonMistakes,
-    equipment,
-    hasSecondaryMuscles: secondaryMuscles.length > 0,
-    hasTips: tips.length > 0,
-    hasCommonMistakes: commonMistakes.length > 0,
-    hasAdaptiveNote: Boolean(nextExercise.adaptiveNote)
-  }
-}
-
-function resolveWorkoutDayFromPlan(weeklyPlan, preferredDate) {
-  const days = Array.isArray(weeklyPlan) ? weeklyPlan : []
-  if (!days.length) return null
-
-  const normalizedPreferredDate = formatDateKey(preferredDate)
-  if (normalizedPreferredDate) {
-    const matchedDay = days.find((day) => {
-      return formatDateKey(day && day.date) === normalizedPreferredDate
-        && Array.isArray(day.workout)
-        && day.workout.length > 0
-    })
-
-    if (matchedDay) {
-      return matchedDay
-    }
-  }
-
-  const todayKey = formatDateKey(new Date())
-  const todayWorkout = days.find((day) => {
-    return formatDateKey(day && day.date) === todayKey
-      && Array.isArray(day.workout)
-      && day.workout.length > 0
-  })
-
-  if (todayWorkout) {
-    return todayWorkout
-  }
-
-  return days.find((day) => Array.isArray(day.workout) && day.workout.length > 0) || null
-}
+const {
+  buildRpeOptions,
+  buildTrainingSummary
+} = require('./training-feedback')
 
 Page({
   data: {
     currentExerciseIndex: 0,
     currentSet: 1,
     totalSets: 3,
-    countdown: PREP_COUNTDOWN_SECONDS, // 倒计时秒数
+    countdown: PREP_COUNTDOWN_SECONDS,
     isCountingDown: false,
     isResting: false,
     exercise: {
@@ -451,7 +63,7 @@ Page({
     warmup: [],
     cooldown: [],
     adaptiveNotes: [],
-    rpeValue: 6, // RPE评分（6-10）
+    rpeValue: 6,
     showRPESelector: false,
     exerciseFeedbackDrafts: [],
     exerciseFeedbackValue: 8,
@@ -480,16 +92,32 @@ Page({
     showTrainingBody: false,
     showRestTimer: false,
     showMediaArea: false,
-    rpeOptions: buildRpeOptions(6)
+    rpeOptions: buildRpeOptions(6),
+    encouragementText: '',
+    showEncouragement: false,
+    stepChecks: [],
+    stepCheckCount: 0,
+    allStepsChecked: false,
+    isDemoMode: false,
+    minimalMode: false
   },
 
   async onLoad(options = {}) {
+    wx.setKeepScreenOn({ keepScreenOn: true })
+
+    this.setData({ minimalMode: this.getFeedbackMode() === 'minimal' })
+
     const tabBar = this.getTabBar && this.getTabBar()
     if (tabBar) {
       tabBar.setData({ selected: 1 })
     }
 
-    // 从首页传入的计划数据
+    await this.checkUnfinishedSession()
+
+    if (this.pendingResumeSnapshot && this.pendingResumeSnapshot.workoutDate) {
+      app.globalData.pendingWorkoutDate = this.pendingResumeSnapshot.workoutDate
+    }
+
     if (options.plan) {
       try {
         const nextState = {
@@ -502,10 +130,11 @@ Page({
           loadError: '',
           ...buildSessionUiState(nextState)
         })
+        const resumeDate = (this.pendingResumeSnapshot && this.pendingResumeSnapshot.workoutDate) || ''
         await this.applySelectedWorkoutDay({
           workout: JSON.parse(options.plan),
           type: options.dayType || '',
-          date: options.date || formatDateKey(new Date())
+          date: resumeDate || options.date || formatDateKey(new Date())
         })
       } catch (error) {
         console.error('初始化训练页失败：', error)
@@ -520,7 +149,6 @@ Page({
         })
       }
     } else {
-      // 如果没有传入计划，尝试获取当前用户的计划
       await this.loadCurrentPlan()
     }
   },
@@ -568,23 +196,32 @@ Page({
   },
 
   async applySelectedWorkoutDay(day) {
+    console.log('[training] applySelectedWorkoutDay called, exercises count:', Array.isArray(day.workout) ? day.workout.length : 0)
     let workout = []
     const exerciseLibrary = getExerciseLibrary()
 
     if (exerciseLibrary && typeof exerciseLibrary.enrichWorkoutExercises === 'function') {
       try {
         workout = await exerciseLibrary.enrichWorkoutExercises(day.workout)
+        console.log('[training] enrichWorkoutExercises OK, count:', workout.length)
+        if (workout.length > 0) {
+          console.log('[training] first exercise motto:', workout[0].motto, 'detailedStepCards:', workout[0].detailedStepCards ? workout[0].detailedStepCards.length : 0)
+        }
       } catch (error) {
-        console.error('动作内容增强失败，使用本地兜底：', error)
+        console.error('[training] enrichWorkoutExercises 失败：', error)
       }
+    } else {
+      console.warn('[training] exercise-library 不可用，走本地兜底')
     }
 
     if (!Array.isArray(workout) || workout.length === 0) {
+      console.log('[training] 使用本地 enrichWorkoutPlan 兜底')
       workout = enrichWorkoutPlan(day.workout)
     }
 
     workout = workout.map((exercise) => buildTrainingExercise(exercise))
     const firstExercise = workout.length > 0 ? workout[0] : {}
+    console.log('[training] 最终首个动作:', firstExercise.name, 'hasMotto:', firstExercise.hasMotto, 'motto:', firstExercise.motto, 'detailedStepCards:', firstExercise.detailedStepCards ? firstExercise.detailedStepCards.length : 0)
     const adaptiveNotesSource = Array.isArray(day.adaptive_notes) && day.adaptive_notes.length
       ? day.adaptive_notes
       : workout
@@ -631,6 +268,80 @@ Page({
       ...nextState,
       ...buildSessionUiState(nextState)
     })
+
+    if (this.pendingResumeSnapshot) {
+      this.resumeFromSnapshot()
+    }
+  },
+
+  startDemoSession() {
+    const exerciseLibrary = getExerciseLibrary()
+    let demoExercises = []
+
+    if (exerciseLibrary && typeof exerciseLibrary.getExerciseLibrary === 'function') {
+      demoExercises = exerciseLibrary.getExerciseLibrary().slice(0, 3)
+    }
+
+    if (!demoExercises.length) {
+      demoExercises = Object.keys(FALLBACK_EXERCISE_DETAILS).slice(0, 3).map((name) => {
+        const detail = FALLBACK_EXERCISE_DETAILS[name]
+        return resolveExerciseDetails({
+          name,
+          ...detail,
+          sets: 3,
+          reps: 10,
+          rest: 60
+        })
+      })
+    }
+
+    const workout = demoExercises.map((exercise) => {
+      const merged = typeof exercise.exercise_id === 'string'
+        ? resolveExerciseDetails({ name: exercise.name_cn || exercise.name, sets: 3, reps: 10, rest: 60 })
+        : exercise
+      return buildTrainingExercise(merged)
+    })
+
+    const firstExercise = workout[0] || {}
+    this.clearTimers()
+    const nextState = {
+      currentExerciseIndex: 0,
+      currentSet: 1,
+      totalSets: firstExercise.sets || 3,
+      countdown: PREP_COUNTDOWN_SECONDS,
+      isCountingDown: false,
+      isResting: false,
+      plan: workout,
+      warmup: [],
+      cooldown: [],
+      adaptiveNotes: [],
+      exercise: firstExercise,
+      rpeValue: 6,
+      showRPESelector: false,
+      exerciseFeedbackDrafts: [],
+      exerciseFeedbackValue: 8,
+      showExerciseFeedbackSelector: false,
+      exerciseFeedbackTarget: {
+        exerciseIndex: -1,
+        exerciseName: '',
+        exerciseAlias: '',
+        sets: 0,
+        reps: 0,
+        rest: 0,
+        equipment: []
+      },
+      rpeOptions: buildRpeOptions(6),
+      exerciseFeedbackOptions: buildRpeOptions(8),
+      currentDayType: 'demo',
+      currentWorkoutDate: formatDateKey(new Date()),
+      isLoading: false,
+      loadError: '',
+      isDemoMode: true
+    }
+    this.setData({
+      ...nextState,
+      ...buildSessionUiState(nextState)
+    })
   },
 
   async loadCurrentPlan() {
@@ -647,16 +358,7 @@ Page({
       })
       const currentUser = app.globalData.userInfo
       if (!currentUser || !currentUser.current_plan_id) {
-        const nextState = {
-          ...this.data,
-          isLoading: false,
-          loadError: '请先生成训练计划'
-        }
-        this.setData({
-          isLoading: false,
-          loadError: '请先生成训练计划',
-          ...buildSessionUiState(nextState)
-        })
+        this.startDemoSession()
         return
       }
 
@@ -755,6 +457,259 @@ Page({
     return plan[currentExerciseIndex] || null
   },
 
+  // ==================== 断点恢复机制 ====================
+
+  async saveSessionCheckpoint(status = 'in_progress') {
+    if (this.data.isDemoMode) return
+    const openid = app.globalData.openid
+    if (!openid) return
+
+    const snapshot = {
+      status,
+      currentExerciseIndex: this.data.currentExerciseIndex,
+      currentSet: this.data.currentSet,
+      totalSets: this.data.totalSets,
+      isResting: this.data.isResting,
+      isCountingDown: this.data.isCountingDown,
+      countdown: this.data.countdown,
+      workoutDate: this.data.currentWorkoutDate,
+      dayType: this.data.currentDayType,
+      exerciseFeedbackDrafts: this.data.exerciseFeedbackDrafts || [],
+      planLength: Array.isArray(this.data.plan) ? this.data.plan.length : 0,
+      savedAt: Date.now()
+    }
+
+    app.setUserStorage('training_session_snapshot', snapshot)
+
+    if (status === 'completed' || status === 'abandoned' ||
+        (this.data.currentSet % 2 === 0)) {
+      try {
+        const db = wx.cloud.database()
+        const _ = db.command
+        const planId = app.globalData.userInfo && app.globalData.userInfo.current_plan_id || ''
+        const docId = `${openid}_${snapshot.workoutDate}`
+        await db.collection('training_logs').doc(docId).set({
+          data: {
+            _id: docId,
+            userId: openid,
+            planId,
+            workoutDate: snapshot.workoutDate,
+            dayType: snapshot.dayType,
+            status: snapshot.status,
+            clientSavedAt: snapshot.savedAt,
+            resumePoint: {
+              exerciseIndex: snapshot.currentExerciseIndex,
+              set: snapshot.currentSet,
+              totalSets: snapshot.totalSets,
+              isResting: snapshot.isResting,
+              isCountingDown: snapshot.isCountingDown,
+              countdown: snapshot.countdown,
+              planLength: snapshot.planLength
+            },
+            exerciseFeedbackDrafts: snapshot.exerciseFeedbackDrafts,
+            updatedAt: db.serverDate()
+          }
+        }).catch(async (err) => {
+          if ((err && err.errCode === -502005) || (err && /not exist/i.test(String(err.errMsg || '')))) {
+            await db.collection('training_logs').add({
+              data: {
+                _id: docId,
+                userId: openid,
+                planId,
+                workoutDate: snapshot.workoutDate,
+                dayType: snapshot.dayType,
+                status: snapshot.status,
+                clientSavedAt: snapshot.savedAt,
+                resumePoint: {
+                  exerciseIndex: snapshot.currentExerciseIndex,
+                  set: snapshot.currentSet,
+                  totalSets: snapshot.totalSets,
+                  isResting: snapshot.isResting,
+                  isCountingDown: snapshot.isCountingDown,
+                  countdown: snapshot.countdown,
+                  planLength: snapshot.planLength
+                },
+                exerciseFeedbackDrafts: snapshot.exerciseFeedbackDrafts,
+                createdAt: db.serverDate(),
+                updatedAt: db.serverDate()
+              }
+            })
+          } else {
+            throw err
+          }
+        })
+      } catch (err) {
+        console.warn('[training] 云端断点保存失败（本地已保存）：', err)
+      }
+    }
+  },
+
+  clearSessionCheckpoint() {
+    app.setUserStorage('training_session_snapshot', null)
+  },
+
+  async ensureOpenidReady(maxWaitMs = 4000) {
+    const start = Date.now()
+    while (!app.globalData.openid && Date.now() - start < maxWaitMs) {
+      await new Promise((resolve) => setTimeout(resolve, 120))
+    }
+  },
+
+  async fetchCloudResumeSnapshot(localSnap) {
+    const openid = app.globalData.openid
+    if (!openid || !wx.cloud) return null
+    const db = wx.cloud.database()
+    let cloudDoc = null
+    try {
+      if (localSnap && localSnap.workoutDate) {
+        const docId = `${openid}_${localSnap.workoutDate}`
+        try {
+          const res = await db.collection('training_logs').doc(docId).get()
+          cloudDoc = res && res.data ? res.data : null
+        } catch (e) {
+          /* 文档不存在或无权访问 */
+        }
+      }
+      if (!cloudDoc) {
+        const { data: rows } = await db.collection('training_logs').where({
+          userId: openid,
+          status: 'in_progress'
+        }).limit(20).get()
+        if (rows && rows.length) {
+          cloudDoc = rows.reduce((best, cur) =>
+            (Number(cur.clientSavedAt || 0) > Number(best.clientSavedAt || 0) ? cur : best), rows[0])
+        }
+      }
+    } catch (err) {
+      console.warn('[training] 读取云端断点失败：', err)
+      return null
+    }
+    return cloudDocToResumeSnapshot(cloudDoc)
+  },
+
+  async checkUnfinishedSession() {
+    await this.ensureOpenidReady()
+
+    const localSnap = app.getUserStorage('training_session_snapshot')
+    const remoteSnap = await this.fetchCloudResumeSnapshot(localSnap)
+    const merged = pickNewerResumeSnapshot(localSnap, remoteSnap)
+
+    if (!merged) {
+      return
+    }
+
+    if (remoteSnap && merged === remoteSnap) {
+      app.setUserStorage('training_session_snapshot', {
+        ...merged,
+        savedAt: merged.savedAt || Date.now()
+      })
+    }
+
+    const snapshot = merged
+
+    if (!snapshot || snapshot.status === 'completed' || snapshot.status === 'abandoned') {
+      return
+    }
+
+    if (Date.now() - (snapshot.savedAt || 0) > 24 * 3600 * 1000) {
+      this.clearSessionCheckpoint()
+      return
+    }
+
+    if (typeof snapshot.currentExerciseIndex === 'number' &&
+        snapshot.planLength > 0 &&
+        snapshot.currentExerciseIndex >= snapshot.planLength) {
+      this.clearSessionCheckpoint()
+      return
+    }
+
+    return new Promise((resolve) => {
+      wx.showModal({
+        title: '检测到未完成训练',
+        content: `上次训练到第 ${Number(snapshot.currentExerciseIndex) + 1} 个动作第 ${snapshot.currentSet} 组，是否继续？`,
+        confirmText: '继续',
+        cancelText: '重新开始',
+        success: (res) => {
+          if (res.confirm) {
+            this.pendingResumeSnapshot = snapshot
+          } else {
+            this.clearSessionCheckpoint()
+          }
+          resolve()
+        },
+        fail: () => resolve()
+      })
+    })
+  },
+
+  resumeFromSnapshot() {
+    const snapshot = this.pendingResumeSnapshot
+    if (!snapshot) return false
+    this.pendingResumeSnapshot = null
+
+    const plan = this.data.plan || []
+    const safeIndex = Math.min(Math.max(0, Number(snapshot.currentExerciseIndex) || 0), Math.max(0, plan.length - 1))
+    const targetExercise = plan[safeIndex] || {}
+    const safeSet = Math.min(Math.max(1, Number(snapshot.currentSet) || 1), Number(targetExercise.sets) || 3)
+
+    const isResting = Boolean(snapshot.isResting)
+    const isCountingDown = Boolean(snapshot.isCountingDown)
+    let countdown = typeof snapshot.countdown === 'number' ? snapshot.countdown : PREP_COUNTDOWN_SECONDS
+    if (isResting || isCountingDown) {
+      countdown = Math.max(0, Math.floor(countdown))
+    }
+
+    const stepChecks = this.buildStepChecks(targetExercise)
+    const nextState = {
+      ...this.data,
+      currentExerciseIndex: safeIndex,
+      currentSet: safeSet,
+      totalSets: targetExercise.sets || 3,
+      exercise: targetExercise,
+      exerciseFeedbackDrafts: Array.isArray(snapshot.exerciseFeedbackDrafts) ? snapshot.exerciseFeedbackDrafts : [],
+      currentDayType: snapshot.dayType || this.data.currentDayType,
+      currentWorkoutDate: snapshot.workoutDate || this.data.currentWorkoutDate,
+      isResting,
+      isCountingDown,
+      countdown,
+      stepChecks,
+      stepCheckCount: 0,
+      allStepsChecked: false,
+      loadError: '',
+      isLoading: false
+    }
+
+    this.clearTimers()
+
+    this.setData({
+      currentExerciseIndex: safeIndex,
+      currentSet: safeSet,
+      totalSets: targetExercise.sets || 3,
+      exercise: targetExercise,
+      exerciseFeedbackDrafts: nextState.exerciseFeedbackDrafts,
+      currentDayType: nextState.currentDayType,
+      currentWorkoutDate: nextState.currentWorkoutDate,
+      isResting,
+      isCountingDown,
+      countdown,
+      stepChecks,
+      stepCheckCount: 0,
+      allStepsChecked: false,
+      loadError: '',
+      isLoading: false,
+      ...buildSessionUiState(nextState)
+    })
+
+    if (isResting && countdown > 0) {
+      this.startRestTimer(countdown)
+    } else if (isCountingDown && countdown > 0) {
+      this.startCountdown(countdown)
+    }
+
+    wx.showToast({ title: '已恢复上次进度', icon: 'none' })
+    return true
+  },
+
   clearTimers() {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval)
@@ -764,9 +719,56 @@ Page({
       clearInterval(this.restInterval)
       this.restInterval = null
     }
+    if (this.encouragementTimer) {
+      clearTimeout(this.encouragementTimer)
+      this.encouragementTimer = null
+    }
   },
 
-  // 开始当前动作
+  showEncouragementMessage(category) {
+    const text = pickEncouragement(category)
+    this.setData({
+      encouragementText: text,
+      showEncouragement: true
+    })
+    if (this.encouragementTimer) {
+      clearTimeout(this.encouragementTimer)
+    }
+    this.encouragementTimer = setTimeout(() => {
+      this.setData({ showEncouragement: false })
+      this.encouragementTimer = null
+    }, 3000)
+  },
+
+  buildStepChecks(exercise) {
+    const steps = Array.isArray(exercise.detailedStepCards) ? exercise.detailedStepCards : []
+    return steps.filter((s) => s.isMotto).map((step, index) => ({
+      index,
+      label: step.label,
+      checked: false
+    }))
+  },
+
+  toggleStepCheck(e) {
+    const idx = Number(e.currentTarget.dataset.idx)
+    const checks = this.data.stepChecks.slice()
+    if (checks[idx]) {
+      checks[idx] = { ...checks[idx], checked: !checks[idx].checked }
+    }
+    const count = checks.filter((c) => c.checked).length
+    const allChecked = count === checks.length && checks.length > 0
+    this.setData({
+      stepChecks: checks,
+      stepCheckCount: count,
+      allStepsChecked: allChecked
+    })
+    if (allChecked) {
+      this.showEncouragementMessage('consistentGood')
+    }
+  },
+
+  // ==================== 计时器与动作流程 ====================
+
   startExercise() {
     const exercise = this.getCurrentExercise()
     if (!exercise || !exercise.name) {
@@ -774,7 +776,13 @@ Page({
       return
     }
 
+    if (!this.sessionStartedAt) {
+      this.sessionStartedAt = Date.now()
+    }
+
     this.clearTimers()
+    this.showEncouragementMessage('exerciseStart')
+    const stepChecks = this.buildStepChecks(exercise)
     const nextState = {
       ...this.data,
       totalSets: exercise.sets || 3,
@@ -793,6 +801,9 @@ Page({
       exercise,
       isCountingDown: true,
       isResting: false,
+      stepChecks,
+      stepCheckCount: 0,
+      allStepsChecked: false,
       ...buildSessionUiState(nextState)
     })
 
@@ -807,22 +818,24 @@ Page({
     }, 1000)
   },
 
-  // 开始倒计时
-  startCountdown() {
+  startCountdown(overrideSeconds) {
     const exercise = this.getCurrentExercise()
     if (!exercise || !exercise.name) return
 
     this.clearTimers()
+    const initial = typeof overrideSeconds === 'number'
+      ? Math.max(0, Math.floor(overrideSeconds))
+      : PREP_COUNTDOWN_SECONDS
     const nextState = {
       ...this.data,
       isCountingDown: true,
       isResting: false,
-      countdown: PREP_COUNTDOWN_SECONDS
+      countdown: initial
     }
     this.setData({
       isCountingDown: true,
       isResting: false,
-      countdown: PREP_COUNTDOWN_SECONDS,
+      countdown: initial,
       ...buildSessionUiState(nextState)
     })
     this.countdownInterval = setInterval(() => {
@@ -836,7 +849,6 @@ Page({
     }, 1000)
   },
 
-  // 结束倒计时
   endCountdown() {
     const exercise = this.getCurrentExercise()
     if (!exercise || !exercise.name) {
@@ -859,24 +871,28 @@ Page({
       ...buildSessionUiState(nextState)
     })
 
-    // 开始休息倒计时
     this.startRestTimer()
   },
 
-  // 休息倒计时
-  startRestTimer() {
+  startRestTimer(overrideSeconds) {
     if (this.restInterval) {
       clearInterval(this.restInterval)
       this.restInterval = null
     }
+    this.showEncouragementMessage('setComplete')
+    const seconds = typeof overrideSeconds === 'number'
+      ? Math.max(0, Math.floor(overrideSeconds))
+      : this.data.countdown
     const nextState = {
       ...this.data,
       isResting: true,
-      isCountingDown: false
+      isCountingDown: false,
+      countdown: seconds
     }
     this.setData({
       isResting: true,
       isCountingDown: false,
+      countdown: seconds,
       ...buildSessionUiState(nextState)
     })
     this.restInterval = setInterval(() => {
@@ -890,7 +906,6 @@ Page({
     }, 1000)
   },
 
-  // 结束休息
   endRest() {
     if (this.restInterval) {
       clearInterval(this.restInterval)
@@ -911,35 +926,52 @@ Page({
       ...buildSessionUiState(nextState)
     })
 
-    // 检查是否完成当前动作的所有组数
+    this.saveSessionCheckpoint('in_progress').catch(() => {})
+
     if (nextSet > this.data.totalSets) {
       this.nextExercise()
     } else {
-      // 继续下一组
       this.startCountdown()
     }
   },
 
-  // 进入下一动作
+  // ==================== 反馈与动作切换 ====================
+
+  getFeedbackMode() {
+    const user = app.globalData.userInfo
+    return (user && user.feedback_mode) || 'standard'
+  },
+
   nextExercise(options = {}) {
     const nextIndex = typeof options.nextIndex === 'number'
       ? options.nextIndex
       : this.data.currentExerciseIndex + 1
 
-    if (!options.skipFeedback) {
+    const feedbackMode = this.getFeedbackMode()
+
+    if (!options.skipFeedback && feedbackMode !== 'minimal') {
       const completedExercise = this.getCurrentExercise()
       if (completedExercise && completedExercise.name) {
+        if (feedbackMode === 'rpe') {
+          // RPE 模式：跳过单动作反馈，直接到整体 RPE 评分
+          this.setData({ showRPESelector: true })
+          return
+        }
+        // 标准模式：弹出单动作反馈选择器
         this.openExerciseFeedbackSelector(completedExercise, this.data.currentExerciseIndex, nextIndex)
         return
       }
     }
 
-    this.advanceToExercise(nextIndex)
+    this.advanceToExercise(nextIndex, { autoStart: Boolean(options.autoStart) })
   },
 
-  advanceToExercise(nextIndex) {
+  advanceToExercise(nextIndex, options = {}) {
     if (nextIndex < this.data.plan.length) {
       const nextExercise = this.data.plan[nextIndex] || {}
+      const shouldAutoStart = Boolean(options.autoStart)
+      const stepChecks = this.buildStepChecks(nextExercise)
+      this.showEncouragementMessage(nextIndex > 0 ? 'exerciseComplete' : 'exerciseStart')
       const nextState = {
         ...this.data,
         currentExerciseIndex: nextIndex,
@@ -947,7 +979,7 @@ Page({
         totalSets: nextExercise.sets || 3,
         countdown: PREP_COUNTDOWN_SECONDS,
         exercise: nextExercise,
-        isCountingDown: false,
+        isCountingDown: shouldAutoStart,
         isResting: false
       }
       this.setData({
@@ -956,12 +988,29 @@ Page({
         totalSets: nextExercise.sets || 3,
         countdown: PREP_COUNTDOWN_SECONDS,
         exercise: nextExercise,
+        isCountingDown: shouldAutoStart,
+        stepChecks,
+        stepCheckCount: 0,
+        allStepsChecked: false,
         ...buildSessionUiState(nextState)
       })
+      if (shouldAutoStart) {
+        this.countdownInterval = setInterval(() => {
+          this.setData({ countdown: this.data.countdown - 1 })
+          if (this.data.countdown <= 0) {
+            this.endCountdown()
+          }
+        }, 1000)
+      }
     } else {
-      // 训练完成
       this.clearTimers()
-      this.showRPESelection()
+      this.showEncouragementMessage('workoutComplete')
+      if (this.data.minimalMode) {
+        this.setData({ rpeValue: 7 })
+        this.submitFeedback()
+      } else {
+        this.showRPESelection()
+      }
     }
   },
 
@@ -984,17 +1033,14 @@ Page({
     })
   },
 
-  // 显示RPE选择器
   showRPESelection() {
     this.setData({ showRPESelector: true })
   },
 
-  // 隐藏RPE选择器
   hideRPESelector() {
     this.setData({ showRPESelector: false })
   },
 
-  // 选择RPE评分
   selectRPE(e) {
     const rpe = parseInt(e.currentTarget.dataset.rpe)
     this.setData({
@@ -1041,9 +1087,16 @@ Page({
     this.advanceToExercise(nextIndex)
   },
 
-  // 提交训练反馈
   async submitFeedback() {
     this.setData({ showRPESelector: false })
+
+    if (this.data.isDemoMode) {
+      wx.showToast({ title: '演示完成！', icon: 'success' })
+      setTimeout(() => {
+        wx.switchTab({ url: '/pages/index/index' })
+      }, 1500)
+      return
+    }
 
     try {
       const { result } = await wx.cloud.callFunction({
@@ -1061,8 +1114,10 @@ Page({
 
       if (result.success) {
         wx.showToast({ title: '训练完成！', icon: 'success' })
-        
-        // 更新连续打卡天数
+
+        await this.saveSessionCheckpoint('completed').catch(() => {})
+        this.clearSessionCheckpoint()
+
         const newStreak = typeof result.newStreak === 'number'
           ? result.newStreak
           : (app.globalData.userInfo.streak_days || 0)
@@ -1070,9 +1125,17 @@ Page({
         if (Array.isArray(result.updatedWeeklyPlan)) {
           app.globalData.currentWeeklyPlan = result.updatedWeeklyPlan
         }
-        
+
+        const summaryData = buildTrainingSummary(this.data, this.sessionStartedAt, result)
+        app.globalData.lastTrainingSummary = summaryData
+
         setTimeout(() => {
-          wx.switchTab({ url: '/pages/index/index' })
+          wx.redirectTo({
+            url: '/pages/training-summary/training-summary',
+            fail: () => {
+              wx.switchTab({ url: '/pages/index/index' })
+            }
+          })
         }, 1500)
       } else {
         wx.showToast({ title: result.message || '提交失败', icon: 'none' })
@@ -1083,7 +1146,8 @@ Page({
     }
   },
 
-  // 跳过当前动作
+  // ==================== 跳过与辅助 ====================
+
   skipCurrentExercise() {
     const exercise = this.getCurrentExercise()
 
@@ -1093,7 +1157,7 @@ Page({
     }
 
     this.clearTimers()
-    this.nextExercise({ skipFeedback: true })
+    this.nextExercise({ skipFeedback: true, autoStart: true })
   },
 
   skipRestPeriod() {
@@ -1164,22 +1228,28 @@ Page({
     const exercise = this.data.exercise || {}
     if (!exercise.name) return
 
-    const query = exercise.id
-      ? `id=${exercise.id}`
-      : `name=${encodeURIComponent(exercise.name)}`
+    const parts = []
+    if (exercise.id || exercise.exercise_id) {
+      parts.push(`id=${exercise.id || exercise.exercise_id}`)
+    }
+    parts.push(`name=${encodeURIComponent(exercise.name)}`)
 
     wx.navigateTo({
-      url: `/pages/exercise-detail/exercise-detail?${query}`
+      url: `/pages/exercise-detail/exercise-detail?${parts.join('&')}`
     })
   },
 
-  // 返回
   goBack() {
     wx.switchTab({ url: '/pages/index/index' })
   },
 
   onUnload() {
-    // 清理定时器
     this.clearTimers()
+    wx.setKeepScreenOn({ keepScreenOn: false })
+    if (this.data.plan && this.data.plan.length > 0 && !this.data.isDemoMode) {
+      this.saveSessionCheckpoint('abandoned').catch((err) => {
+        console.warn('[training] 保存断点失败：', err)
+      })
+    }
   }
 })

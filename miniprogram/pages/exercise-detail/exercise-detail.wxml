@@ -1,111 +1,150 @@
-<view class="page" wx:if="{{exercise}}">
-  <scroll-view class="scroll" scroll-y>
-    <view class="hero-card">
-      <video
-        wx:if="{{exercise.hasVideo}}"
-        class="hero-image"
-        src="{{exercise.videoUrl}}"
-        poster="{{exercise.coverUrl}}"
-        controls
-        object-fit="cover"
-      />
-      <image wx:else class="hero-image" src="{{exercise.hasGif ? exercise.mediaUrl : exercise.coverUrl}}" mode="aspectFill" bindtap="previewMedia" />
-      <view class="hero-overlay">
-        <text class="hero-name">{{exercise.name_cn}}</text>
-        <text class="hero-en">{{exercise.name_en}}</text>
-        <view class="hero-tags">
-          <text class="hero-pill">{{exercise.categoryLabel}}</text>
-          <text class="hero-pill">{{exercise.difficultyLabel}}</text>
-          <text class="hero-pill">{{exercise.hasVideo ? '视频示范' : (exercise.hasGif ? 'GIF 示范' : '封面待升级')}}</text>
+<view class="page">
+  <view class="state-card" wx:if="{{isLoading && !exercise}}">
+    <text class="state-title">动作详情加载中</text>
+    <text class="state-desc">正在同步 GIF / 视频与动作说明</text>
+  </view>
+
+  <view class="state-card error" wx:if="{{!isLoading && loadError && !exercise}}">
+    <text class="state-title">{{loadError}}</text>
+    <text class="state-desc">如果刚同步了新动作，稍后再试一次会更稳</text>
+  </view>
+
+  <view class="page-content" wx:if="{{exercise}}">
+    <scroll-view class="scroll" scroll-y>
+      <view class="hero-card">
+        <block wx:if="{{exercise.hasVideo}}">
+          <video
+            class="hero-image"
+            src="{{exercise.videoUrl}}"
+            poster="{{exercise.coverUrl}}"
+            controls
+            object-fit="cover"
+          ></video>
+        </block>
+        <block wx:elif="{{exercise.hasGif}}">
+          <image
+            class="hero-image"
+            src="{{exercise.mediaUrl}}"
+            mode="aspectFill"
+            bindtap="previewMedia"
+          ></image>
+        </block>
+        <block wx:else>
+          <view class="hero-placeholder">
+            <text class="hero-placeholder-name">{{exercise.name_cn}}</text>
+            <text class="hero-placeholder-hint">动图同步中，请先参考下方口诀和步骤</text>
+          </view>
+        </block>
+
+        <view class="hero-overlay">
+          <view class="hero-topline">
+            <text class="hero-chip">{{sourceLabel}}</text>
+            <text class="hero-chip">{{exercise.mediaLabel}}</text>
+          </view>
+
+          <text class="hero-name">{{exercise.name_cn}}</text>
+          <text class="hero-en">{{exercise.name_en}}</text>
+
+          <view class="hero-motto" wx:if="{{exercise.motto}}">
+            <text class="hero-motto-text">{{exercise.motto}}</text>
+          </view>
+
+          <view class="hero-tags">
+            <text class="hero-pill">{{exercise.categoryLabel}}</text>
+            <text class="hero-pill">{{exercise.difficultyLabel}}</text>
+            <text class="hero-pill">{{exercise.equipmentText}}</text>
+          </view>
+
+          <view class="hero-highlight-list" wx:if="{{exercise.heroHighlights && exercise.heroHighlights.length}}">
+            <view class="hero-highlight" wx:for="{{exercise.heroHighlights}}" wx:key="index">
+              <text class="hero-highlight-text">{{item}}</text>
+            </view>
+          </view>
         </view>
       </view>
-    </view>
 
-    <view class="section">
-      <view class="section-head">
-        <text class="section-title">动作示范</text>
-        <text class="section-status">{{exercise.mediaStatus}}</text>
-      </view>
-      <view class="media-card">
-        <video
-          wx:if="{{exercise.hasVideo}}"
-          class="media-video"
-          src="{{exercise.videoUrl}}"
-          poster="{{exercise.coverUrl}}"
-          controls
-          object-fit="contain"
-        />
-        <image wx:else class="media-image" src="{{exercise.hasGif ? exercise.mediaUrl : exercise.coverUrl}}" mode="aspectFit" bindtap="previewMedia" />
-        <text class="media-note">{{exercise.hasVideo ? '先直接看视频动作轨迹，再开始练。' : (exercise.hasGif ? '优先照着 GIF 轨迹练，不必先读长步骤。' : '当前还是静态封面。等云端同步 GIF 或视频后，这里会自动升级。')}}</text>
-      </view>
-    </view>
-
-    <view class="section">
-      <text class="section-title">内容状态</text>
-      <view class="fact-grid">
-        <view class="fact-card">
-          <text class="fact-label">当前来源</text>
-          <text class="fact-value">{{sourceLabel}}</text>
-        </view>
-        <view class="fact-card">
-          <text class="fact-label">同步状态</text>
-          <text class="fact-value">{{isRefreshing ? '正在尝试从云端刷新内容' : '当前内容已就绪'}}</text>
+      <view class="section" wx:if="{{exercise.motto}}">
+        <view class="motto-card">
+          <text class="motto-card-label">动作口诀</text>
+          <text class="motto-card-text">{{exercise.motto}}</text>
+          <text class="motto-card-hint">记住口诀，训练时心中默念</text>
         </view>
       </view>
-    </view>
 
-    <view class="section">
-      <text class="section-title">发力肌群</text>
-      <view class="info-card">
-        <text class="info-label">主练</text>
-        <view class="tag-row">
-          <text class="tag primary" wx:for="{{exercise.primaryMuscles}}" wx:key="index">{{item}}</text>
+      <view class="section">
+        <view class="section-head">
+          <text class="section-title">动作示范</text>
+          <text class="section-status">{{exercise.mediaStatus}}</text>
         </view>
-        <text class="info-label">辅助</text>
-        <text class="info-body">{{exercise.secondaryText}}</text>
-      </view>
-    </view>
+        <view class="media-card">
+          <view class="media-layout">
+            <view class="media-panel">
+              <block wx:if="{{exercise.hasVideo}}">
+                <video
+                  class="media-video"
+                  src="{{exercise.videoUrl}}"
+                  poster="{{exercise.coverUrl}}"
+                  controls
+                  object-fit="contain"
+                ></video>
+              </block>
+              <block wx:elif="{{exercise.hasGif}}">
+                <image
+                  class="media-image"
+                  src="{{exercise.mediaUrl}}"
+                  mode="aspectFit"
+                  bindtap="previewMedia"
+                ></image>
+              </block>
+              <block wx:else>
+                <view class="media-placeholder">
+                  <text class="media-placeholder-title">{{exercise.motto || exercise.name_cn}}</text>
+                  <text class="media-placeholder-desc">动图正在同步中，请参考下方详细步骤</text>
+                </view>
+              </block>
+            </view>
 
-    <view class="section" wx:if="{{exercise.overviewText}}">
-      <text class="section-title">动作概述</text>
-      <view class="info-card">
-        <text class="info-body">{{exercise.overviewText}}</text>
-      </view>
-    </view>
+            <view class="media-note">
+              <text class="media-note-text">{{exercise.mediaNoteText}}</text>
+            </view>
 
-    <view class="section">
-      <text class="section-title">动作速记</text>
-      <view class="bullet-card" wx:for="{{exercise.instructions}}" wx:key="index">
-        <text class="bullet-text">{{item}}</text>
-      </view>
-    </view>
+            <view class="muscle-panel">
+              <text class="panel-title">训练部位</text>
+              <image wx:if="{{exercise.muscleMapUrl}}" class="muscle-map" src="{{exercise.muscleMapUrl}}" mode="aspectFit" />
+              <view class="tag-row">
+                <text class="tag primary" wx:for="{{exercise.primaryMuscles}}" wx:key="index">{{item}}</text>
+              </view>
 
-    <view class="section" wx:if="{{exercise.exercise_tips && exercise.exercise_tips.length}}">
-      <text class="section-title">训练提示</text>
-      <view class="bullet-card" wx:for="{{exercise.exercise_tips}}" wx:key="index">
-        <text class="bullet-text">{{item}}</text>
-      </view>
-    </view>
+              <view class="muscle-note">
+                <text class="muscle-note-label">辅助发力</text>
+                <text class="muscle-note-text">{{exercise.secondaryText}}</text>
+              </view>
 
-    <view class="section" wx:if="{{exercise.common_mistakes && exercise.common_mistakes.length}}">
-      <text class="section-title">常见错误</text>
-      <view class="bullet-card warning" wx:for="{{exercise.common_mistakes}}" wx:key="index">
-        <text class="bullet-text">{{item}}</text>
-      </view>
-    </view>
-
-    <view class="section">
-      <text class="section-title">内容包字段</text>
-      <view class="fact-grid">
-        <view class="fact-card">
-          <text class="fact-label">动作 ID</text>
-          <text class="fact-value">{{exercise.exercise_id}}</text>
+              <view class="muscle-note" wx:if="{{exercise.overviewText}}">
+                <text class="muscle-note-label">动作重点</text>
+                <text class="muscle-note-text">{{exercise.overviewText}}</text>
+              </view>
+            </view>
+          </view>
         </view>
-        <view class="fact-card">
-          <text class="fact-label">器械</text>
-          <text class="fact-value">{{exercise.equipmentText}}</text>
+      </view>
+
+      <view class="section">
+        <text class="section-title">详细步骤</text>
+        <view class="step-card {{item.isMotto ? 'step-motto' : ''}} {{item.label === '避免' ? 'step-warning' : ''}}" wx:for="{{exercise.detailedStepCards}}" wx:key="index">
+          <text class="step-badge {{item.isMotto ? 'badge-motto' : ''}} {{item.label === '避免' ? 'badge-warning' : ''}}">{{item.label}}</text>
+          <text class="step-text">{{item.text}}</text>
         </view>
       </view>
-    </view>
-  </scroll-view>
+
+      <view class="section" wx:if="{{exercise.common_mistakes && exercise.common_mistakes.length}}">
+        <text class="section-title">重点提醒</text>
+        <view class="warning-grid">
+          <view class="warning-chip" wx:for="{{exercise.common_mistakes}}" wx:key="index">
+            <text class="warning-text">避免 {{item}}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
 </view>

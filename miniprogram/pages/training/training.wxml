@@ -18,6 +18,11 @@
   </view>
 
   <view class="training-body" wx:if="{{showTrainingBody}}">
+    <view class="demo-banner" wx:if="{{isDemoMode}}">
+      <text class="demo-banner-text">演示模式 · 体验完整训练流程</text>
+      <text class="demo-banner-hint">生成训练计划后将使用你的真实训练内容</text>
+    </view>
+
     <view class="support-card" wx:if="{{warmup.length}}">
       <view class="section-head">
         <text class="section-name">训练前热身</text>
@@ -36,10 +41,18 @@
       </view>
     </view>
 
-    <!-- 动作信息 -->
+    <view class="encouragement-bar {{showEncouragement ? 'visible' : ''}}">
+      <text class="encouragement-text">{{encouragementText}}</text>
+    </view>
+
     <view class="exercise-info">
       <text class="exercise-name">{{exercise.name}}</text>
       <text class="exercise-alias" wx:if="{{exercise.alias}}">别名：{{exercise.alias}}</text>
+
+      <view class="motto-banner" wx:if="{{exercise.hasMotto}}">
+        <text class="motto-text">{{exercise.motto}}</text>
+      </view>
+
       <text class="exercise-summary">{{exercise.summary}}</text>
       <view class="adaptive-banner" wx:if="{{exercise.hasAdaptiveNote}}">
         <text class="adaptive-title">自动调节建议</text>
@@ -74,6 +87,7 @@
       <text class="timer-text">休息时间</text>
       <text class="timer-number">{{countdown}}</text>
       <text class="timer-label">距离下一组</text>
+      <text class="rest-encouragement" wx:if="{{exercise.hasMotto}}">下一组记住：{{exercise.motto}}</text>
       <view class="timer-skip-row">
         <button class="timer-quick-btn" data-seconds="15" bindtap="shortenRestPeriod">-15 秒</button>
         <button class="timer-quick-btn" data-seconds="30" bindtap="shortenRestPeriod">-30 秒</button>
@@ -105,6 +119,7 @@
           <view class="diagram-hero">
             <text class="diagram-title">{{exercise.name}}</text>
             <text class="diagram-subtitle">{{exercise.targetSummary}}</text>
+            <text class="diagram-motto" wx:if="{{exercise.hasMotto}}">{{exercise.motto}}</text>
           </view>
 
           <view class="diagram-columns">
@@ -124,7 +139,13 @@
             </view>
           </view>
 
-          <view class="diagram-flow">
+          <view class="diagram-flow" wx:if="{{exercise.hasDetailedSteps}}">
+            <view class="flow-step {{item.isMotto ? 'motto-step' : ''}}" wx:for="{{exercise.detailedStepCards}}" wx:key="index">
+              <text class="flow-badge {{item.isMotto ? 'motto-badge' : ''}}">{{item.label}}</text>
+              <text class="flow-text">{{item.text}}</text>
+            </view>
+          </view>
+          <view class="diagram-flow" wx:else>
             <view class="flow-step" wx:for="{{exercise.instructionSteps}}" wx:key="label">
               <text class="flow-badge">{{item.label}}</text>
               <text class="flow-text">{{item.text}}</text>
@@ -158,18 +179,43 @@
       </view>
 
       <view class="instructions">
-        <text class="subtitle">动作要领</text>
-        <view class="instruction-card" wx:for="{{exercise.instructionSteps}}" wx:key="label">
-          <text class="instruction-badge">{{item.label}}</text>
-          <text class="instruction-body">{{item.text}}</text>
+        <view class="instructions-header">
+          <text class="subtitle">动作要领</text>
+          <text class="check-progress" wx:if="{{stepChecks.length}}">已确认 {{stepCheckCount}}/{{stepChecks.length}}</text>
         </view>
-        <view class="tips" wx:if="{{exercise.hasTips}}">
+
+        <view class="motto-highlight" wx:if="{{exercise.hasMotto}}">
+          <text class="motto-highlight-text">{{exercise.motto}}</text>
+        </view>
+
+        <view class="step-check-list" wx:if="{{stepChecks.length}}">
+          <view
+            class="step-check-item {{item.checked ? 'checked' : ''}}"
+            wx:for="{{stepChecks}}"
+            wx:key="index"
+            data-idx="{{index}}"
+            bindtap="toggleStepCheck"
+          >
+            <view class="step-check-box">
+              <text class="step-check-icon">{{item.checked ? '✓' : ''}}</text>
+            </view>
+            <text class="step-check-label">{{item.label}}</text>
+          </view>
+          <text class="step-check-hint" wx:if="{{allStepsChecked}}">所有要领已确认，开始训练吧！</text>
+        </view>
+
+        <view class="detailed-step-card {{item.isMotto ? 'motto-card' : ''}} {{item.label === '避免' ? 'warning-card' : ''}}" wx:for="{{exercise.hasDetailedSteps ? exercise.detailedStepCards : exercise.instructionSteps}}" wx:key="index">
+          <text class="detailed-step-badge {{item.isMotto ? 'motto-badge' : ''}} {{item.label === '避免' ? 'warning-badge' : ''}}">{{item.label}}</text>
+          <text class="detailed-step-body">{{item.text}}</text>
+        </view>
+
+        <view class="tips" wx:if="{{exercise.hasTips && !exercise.hasDetailedSteps}}">
           <text class="tips-title">训练提示</text>
           <view class="tip-card" wx:for="{{exercise.tips}}" wx:key="index">
             <text class="tip">{{item}}</text>
           </view>
         </view>
-        <view class="mistakes" wx:if="{{exercise.hasCommonMistakes}}">
+        <view class="mistakes" wx:if="{{exercise.hasCommonMistakes && !exercise.hasDetailedSteps}}">
           <text class="tips-title">常见错误</text>
           <view class="mistake-card" wx:for="{{exercise.commonMistakes}}" wx:key="index">
             <text class="tip">{{item}}</text>

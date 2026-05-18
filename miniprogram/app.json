@@ -6,7 +6,9 @@
     "pages/exercise-detail/exercise-detail",
     "pages/diet/diet",
     "pages/profile/profile",
-    "pages/onboarding/onboarding"
+    "pages/onboarding/onboarding",
+    "pages/training-summary/training-summary",
+    "pages/achievements/achievements"
   ],
   "window": {
     "backgroundColor": "#F5F6FA",
@@ -31,5 +33,10 @@
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.writePhotosAlbum": {
+      "desc": "用于将训练分享图保存到你的相册"
+    }
+  }
 }

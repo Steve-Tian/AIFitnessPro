@@ -2,21 +2,32 @@ const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 const db = cloud.database()
+const { formatDateKey } = require('../shared/date-utils')
 
-function padNumber(value) {
-  return String(value).padStart(2, '0')
+function ok(data = {}, message = 'OK') {
+  return { success: true, message, ...data }
+}
+function fail(message = 'Error') {
+  return { success: false, message }
 }
 
-function formatDateKey(input) {
-  if (!input) return ''
-  if (typeof input === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(input)) {
-    return input
+/**
+ * 分页查询云数据库集合（绕过 .get() 默认 20 条限制）
+ */
+async function queryAll(collection, where = {}, pageSize = 100) {
+  let offset = 0
+  let results = []
+  let hasNextPage = true
+
+  while (hasNextPage) {
+    const pageResult = await collection.where(where).skip(offset).limit(pageSize).get()
+    const pageData = Array.isArray(pageResult.data) ? pageResult.data : []
+    results = results.concat(pageData)
+    hasNextPage = pageData.length === pageSize
+    offset += pageSize
   }
 
-  const date = input instanceof Date ? input : new Date(input)
-  if (Number.isNaN(date.getTime())) return ''
-
-  return `${date.getFullYear()}-${padNumber(date.getMonth() + 1)}-${padNumber(date.getDate())}`
+  return results
 }
 
 // 成就定义
@@ -48,11 +59,8 @@ const ACHIEVEMENTS = {
     description: '单次训练RPE达到10分',
     points: 30,
     condition: async (userData, db) => {
-      const feedbacks = await db.collection('feedback').where({
-        userId: userData._openid,
-        rpe: 10
-      }).get()
-      return feedbacks.data.length > 0
+      const feedbacks = await queryAll(db.collection('feedback'), { userId: userData._openid })
+      return feedbacks.some((fb) => fb.rpe === 10)
     }
   },
   'heavy_lifter': {
@@ -61,12 +69,14 @@ const ACHIEVEMENTS = {
     description: '累计训练时长超过50小时',
     points: 100,
     condition: async (userData, db) => {
-      const feedbacks = await db.collection('feedback').where({
-        userId: userData._openid
-      }).get()
-      
-      // 简单估算：每次训练平均45分钟
-      const totalMinutes = feedbacks.data.length * 45
+      const feedbacks = await queryAll(db.collection('feedback'), { userId: userData._openid })
+      // 按每条反馈的实际完成时间累加（单次训练按 45 分钟估算，但限制每自然日只算一次）
+      const trainedDates = new Set()
+      feedbacks.forEach((fb) => {
+        const dateKey = formatDateKey(fb.completedAt) || fb.workoutDate
+        if (dateKey) trainedDates.add(dateKey)
+      })
+      const totalMinutes = trainedDates.size * 45
       return totalMinutes >= 50 * 60
     }
   },
@@ -76,47 +86,53 @@ const ACHIEVEMENTS = {
     description: '完成所有训练分类（推/拉/腿）',
     points: 80,
     condition: async (userData, db) => {
-      const feedbacks = await db.collection('feedback').where({
-        userId: userData._openid
-      }).get()
+      const feedbacks = await queryAll(db.collection('feedback'), { userId: userData._openid })
       
       const categories = new Set()
-      const planCache = new Map()
-      for (const feedback of feedbacks.data) {
+
+      // 第一遍：直接从 feedback.dayType 提取分类
+      const planIdsToFetch = new Set()
+      for (const feedback of feedbacks) {
         if (feedback.dayType && feedback.dayType !== 'rest') {
           categories.add(feedback.dayType)
-          continue
+        } else if (feedback.planId) {
+          planIdsToFetch.add(feedback.planId)
+        }
+      }
+
+      // 批量预取所有需要的 plan 文档（替代 N+1 串行查询）
+      if (planIdsToFetch.size > 0) {
+        const planCache = new Map()
+        // 云数据库批量查询用 _id in 方式，每次最多 20 条
+        const planIdArray = Array.from(planIdsToFetch)
+        for (let i = 0; i < planIdArray.length; i += 20) {
+          const batch = planIdArray.slice(i, i + 20)
+          const { data: planDocs } = await db.collection('plans').where({
+            _id: db.command.in(batch)
+          }).get()
+          planDocs.forEach((doc) => planCache.set(doc._id, doc))
         }
 
-        if (!feedback.planId) {
-          continue
-        }
+        // 第二遍：从预取的 plan 中匹配 dayType
+        for (const feedback of feedbacks) {
+          if ((feedback.dayType && feedback.dayType !== 'rest') || !feedback.planId) continue
 
-        let plan = planCache.get(feedback.planId)
-        if (!plan) {
-          const planDoc = await db.collection('plans').doc(feedback.planId).get()
-          plan = planDoc.data || null
-          planCache.set(feedback.planId, plan)
-        }
+          const plan = planCache.get(feedback.planId)
+          if (!plan || !Array.isArray(plan.weeklyPlan)) continue
 
-        if (!plan || !Array.isArray(plan.weeklyPlan)) {
-          continue
-        }
+          const completedDate = feedback.workoutDate || formatDateKey(feedback.completedAt)
+          if (!completedDate) continue
 
-        const completedDate = feedback.workoutDate || formatDateKey(feedback.completedAt)
-        if (!completedDate) {
-          continue
-        }
+          const matchedDay = plan.weeklyPlan.find(day => (
+            day &&
+            day.type &&
+            day.type !== 'rest' &&
+            day.date === completedDate
+          ))
 
-        const matchedDay = plan.weeklyPlan.find(day => (
-          day &&
-          day.type &&
-          day.type !== 'rest' &&
-          day.date === completedDate
-        ))
-
-        if (matchedDay) {
-          categories.add(matchedDay.type)
+          if (matchedDay) {
+            categories.add(matchedDay.type)
+          }
         }
       }
       
@@ -129,11 +145,9 @@ const ACHIEVEMENTS = {
     description: '早上6点前完成训练',
     points: 20,
     condition: async (userData, db) => {
-      const feedbacks = await db.collection('feedback').where({
-        userId: userData._openid
-      }).get()
+      const feedbacks = await queryAll(db.collection('feedback'), { userId: userData._openid })
       
-      for (const feedback of feedbacks.data) {
+      for (const feedback of feedbacks) {
         if (feedback.completedAt) {
           const hour = new Date(feedback.completedAt).getHours()
           if (hour < 6) return true
@@ -148,14 +162,17 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   const { OPENID } = wxContext
 
+  if (!OPENID) {
+    return fail('未获取到用户身份，请重新登录')
+  }
+
   try {
-    // 获取用户数据
     const userDoc = await db.collection('users').where({
       _openid: OPENID
     }).get()
 
     if (userDoc.data.length === 0) {
-      return { success: false, message: '用户不存在' }
+      return fail('用户不存在')
     }
 
     const user = userDoc.data[0]
@@ -214,23 +231,15 @@ exports.main = async (event, context) => {
         })
       }
 
-      return {
-        success: true,
-        unlocked: unlockedAchievements,
-        message: `恭喜解锁 ${unlockedAchievements.length} 个新成就！`
-      }
+      return ok(
+        { unlocked: unlockedAchievements },
+        `恭喜解锁 ${unlockedAchievements.length} 个新成就！`
+      )
     } else {
-      return {
-        success: true,
-        unlocked: [],
-        message: '暂无新成就解锁'
-      }
+      return ok({ unlocked: [] }, '暂无新成就解锁')
     }
   } catch (err) {
     console.error('检查成就失败：', err)
-    return {
-      success: false,
-      message: err.message || '检查成就失败，请稍后重试'
-    }
+    return fail(err.message || '检查成就失败，请稍后重试')
   }
 }

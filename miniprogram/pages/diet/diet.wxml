@@ -1,38 +1,92 @@
 <view class="page">
-  <view class="container">
-    <view class="target-row">
-      <text class="target-value">目标：<text class="dash">--</text> kcal</text>
-      <text class="target-hint text-hint">今日热量预算</text>
+  <view class="container" wx:if="{{!isLoading && hasProfile}}">
+    <!-- 日期与训练日切换 -->
+    <view class="day-toggle">
+      <text class="date-label">{{dateKey}}</text>
+      <view class="toggle-btn" bindtap="onToggleTrainingDay">
+        <text class="toggle-text">{{isTrainingDay ? '训练日' : '休息日'}}</text>
+      </view>
     </view>
 
+    <!-- 目标热量 -->
+    <view class="target-row">
+      <text class="target-value">{{target.calories}} kcal</text>
+      <text class="target-hint text-hint">今日目标（{{goalLabel}}·{{isTrainingDay ? '训练日' : '休息日'}}）</text>
+    </view>
+
+    <!-- 宏量进度 -->
     <view class="macros">
-      <text class="macros-title">三大营养素</text>
+      <text class="macros-title">已选摄入 {{intake.calories}} / {{target.calories}} kcal</text>
       <view class="macro-row">
         <text class="macro-name">蛋白质</text>
         <view class="macro-bar-wrap">
-          <view class="macro-bar macro-bar--protein" style="width: 0%;"></view>
+          <view class="macro-bar macro-bar--protein" style="width: {{intake.proteinPercent}}%;"></view>
         </view>
-        <text class="macro-pct text-hint">--</text>
+        <text class="macro-pct text-hint">{{intake.protein}} / {{target.protein}}g</text>
       </view>
       <view class="macro-row">
         <text class="macro-name">碳水</text>
         <view class="macro-bar-wrap">
-          <view class="macro-bar macro-bar--carb" style="width: 0%;"></view>
+          <view class="macro-bar macro-bar--carb" style="width: {{intake.carbPercent}}%;"></view>
         </view>
-        <text class="macro-pct text-hint">--</text>
+        <text class="macro-pct text-hint">{{intake.carbs}} / {{target.carbs}}g</text>
       </view>
       <view class="macro-row">
         <text class="macro-name">脂肪</text>
         <view class="macro-bar-wrap">
-          <view class="macro-bar macro-bar--fat" style="width: 0%;"></view>
+          <view class="macro-bar macro-bar--fat" style="width: {{intake.fatPercent}}%;"></view>
         </view>
-        <text class="macro-pct text-hint">--</text>
+        <text class="macro-pct text-hint">{{intake.fat}} / {{target.fat}}g</text>
       </view>
     </view>
 
-    <view class="card">
-      <text class="card-emoji">🥗</text>
-      <text class="placeholder text-secondary">饮食模块将在迭代 5 上线</text>
+    <!-- 各餐食谱选择 -->
+    <view class="meal-section" wx:for="{{meals}}" wx:key="mealType">
+      <view class="meal-header">
+        <text class="meal-label">{{item.mealLabel}}</text>
+        <text class="meal-target text-hint">目标 ~{{item.targetCalories}} kcal</text>
+      </view>
+      <view
+        class="recipe-card {{opt.isSelected ? 'selected' : ''}}"
+        wx:for="{{item.options}}"
+        wx:for-item="opt"
+        wx:key="id"
+        bindtap="onSelectRecipe"
+        data-meal-type="{{item.mealType}}"
+        data-recipe-id="{{opt.id}}"
+      >
+        <view class="recipe-top">
+          <text class="recipe-name">{{opt.name}}</text>
+          <text class="recipe-kcal">{{opt.calories}} kcal</text>
+        </view>
+        <text class="recipe-ingredients text-hint">{{opt.ingredientsText}}</text>
+        <view class="recipe-macros" wx:if="{{opt.macros}}">
+          <text class="recipe-macro">蛋白 {{opt.macros.protein}}g</text>
+          <text class="recipe-macro">碳水 {{opt.macros.carbs}}g</text>
+          <text class="recipe-macro">脂肪 {{opt.macros.fat}}g</text>
+        </view>
+        <text class="recipe-tip text-hint" wx:if="{{opt.cooking_tip}}">{{opt.cooking_tip}}</text>
+      </view>
+      <view class="no-recipe" wx:if="{{!item.options.length}}">
+        <text class="text-hint">暂无匹配食谱</text>
+      </view>
     </view>
+
+    <!-- 饮食小贴士 -->
+    <view class="tips-card" wx:if="{{tips.length}}">
+      <text class="tips-title">饮食小贴士</text>
+      <text class="tip-item" wx:for="{{tips}}" wx:key="*this">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- Loading -->
+  <view class="container center" wx:if="{{isLoading}}">
+    <text class="state-text">正在计算饮食方案...</text>
+  </view>
+
+  <!-- 无画像 -->
+  <view class="container center" wx:if="{{!isLoading && !hasProfile}}">
+    <text class="state-text">{{errorText}}</text>
+    <button class="onboard-btn" bindtap="onGoOnboarding">去填问卷</button>
   </view>
 </view>

@@ -3,10 +3,41 @@
   background: #f5f6fa;
 }
 
+.page-content {
+  min-height: 100vh;
+}
+
 .scroll {
   height: 100vh;
   box-sizing: border-box;
-  padding: 28rpx 28rpx calc(40rpx + env(safe-area-inset-bottom));
+  padding: 24rpx 24rpx calc(40rpx + env(safe-area-inset-bottom));
+}
+
+.state-card {
+  margin: 28rpx 24rpx;
+  padding: 36rpx 32rpx;
+  border-radius: 24rpx;
+  background: #fff;
+  box-shadow: 0 12rpx 32rpx rgba(15, 23, 42, 0.06);
+}
+
+.state-card.error {
+  border: 2rpx solid rgba(239, 68, 68, 0.14);
+}
+
+.state-title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 14rpx;
+}
+
+.state-desc {
+  display: block;
+  font-size: 26rpx;
+  line-height: 1.7;
+  color: #667085;
 }
 
 .hero-card {
@@ -20,12 +51,34 @@
 
 .hero-image {
   width: 100%;
-  height: 360rpx;
+  height: 520rpx;
+  display: block;
+  background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
 }
 
 .hero-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   padding: 28rpx;
-  background: linear-gradient(180deg, rgba(17,24,39,0) 0%, rgba(17,24,39,0.78) 100%);
+  background: linear-gradient(180deg, rgba(17,24,39,0.02) 0%, rgba(17,24,39,0.82) 100%);
+}
+
+.hero-topline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 18rpx;
+}
+
+.hero-chip,
+.hero-pill {
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255,255,255,0.16);
+  color: #fff;
+  font-size: 22rpx;
 }
 
 .hero-name {
@@ -39,7 +92,7 @@
 .hero-en {
   display: block;
   font-size: 26rpx;
-  color: rgba(255,255,255,0.82);
+  color: rgba(255,255,255,0.84);
   margin-bottom: 18rpx;
 }
 
@@ -47,14 +100,27 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12rpx;
+  margin-bottom: 18rpx;
 }
 
-.hero-pill {
-  padding: 10rpx 18rpx;
-  border-radius: 999rpx;
-  background: rgba(255,255,255,0.16);
+.hero-highlight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.hero-highlight {
+  padding: 12rpx 16rpx;
+  border-radius: 18rpx;
+  background: rgba(17,24,39,0.28);
+  backdrop-filter: blur(10rpx);
+}
+
+.hero-highlight-text {
+  display: block;
+  font-size: 24rpx;
   color: #fff;
-  font-size: 22rpx;
+  line-height: 1.5;
 }
 
 .section {
@@ -67,6 +133,10 @@
   justify-content: space-between;
   gap: 16rpx;
   margin-bottom: 16rpx;
+}
+
+.section-head .section-title {
+  margin-bottom: 0;
 }
 
 .section-title {
@@ -83,55 +153,69 @@
 }
 
 .media-card,
-.info-card,
-.step-card,
-.bullet-card,
-.fact-card {
+.step-card {
   background: #fff;
   border-radius: 24rpx;
   box-shadow: 0 10rpx 30rpx rgba(15, 23, 42, 0.05);
 }
 
-.media-card,
-.info-card {
+.media-card {
   padding: 24rpx;
 }
 
-.media-image {
-  width: 100%;
-  height: 320rpx;
-  border-radius: 20rpx;
-  background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
-  margin-bottom: 18rpx;
+.media-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
 }
 
+.media-panel,
+.muscle-panel {
+  border-radius: 20rpx;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.media-image,
 .media-video {
   width: 100%;
   height: 360rpx;
-  border-radius: 20rpx;
-  background: #000;
-  margin-bottom: 18rpx;
+  display: block;
+  background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
 }
 
 .media-note {
-  display: block;
-  font-size: 26rpx;
-  color: #667085;
-  line-height: 1.7;
+  padding: 16rpx 22rpx;
+  background: rgba(79,70,229,0.04);
+  border-radius: 16rpx;
 }
 
-.info-label {
+.media-note-text {
   display: block;
   font-size: 24rpx;
-  color: #475467;
-  margin-bottom: 12rpx;
+  color: #667085;
+  line-height: 1.6;
 }
 
-.info-body {
+.muscle-panel {
+  padding: 22rpx;
+}
+
+.muscle-map {
+  width: 100%;
+  height: 220rpx;
   display: block;
-  font-size: 28rpx;
-  color: #101828;
-  line-height: 1.7;
+  margin-bottom: 16rpx;
+  border-radius: 12rpx;
+  background: #eef2ff;
+}
+
+.panel-title {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 14rpx;
 }
 
 .tag-row {
@@ -148,58 +232,205 @@
 }
 
 .tag.primary {
-  background: rgba(239,68,68,0.12);
-  color: #b42318;
+  background: rgba(59,130,246,0.12);
+  color: #175cd3;
 }
 
-.step-card,
-.bullet-card {
+.muscle-note {
+  padding-top: 16rpx;
+  border-top: 1rpx solid #e5e7eb;
+  margin-top: 16rpx;
+}
+
+.muscle-note-label {
+  display: block;
+  font-size: 22rpx;
+  color: #667085;
+  margin-bottom: 8rpx;
+}
+
+.muscle-note-text {
+  display: block;
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: #344054;
+}
+
+.step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
   padding: 22rpx 24rpx;
   margin-bottom: 14rpx;
 }
 
-.step-index {
-  display: inline-block;
-  padding: 8rpx 16rpx;
+.step-badge {
+  min-width: 112rpx;
+  padding: 10rpx 12rpx;
   border-radius: 999rpx;
   background: rgba(79,70,229,0.12);
   color: #4f46e5;
   font-size: 22rpx;
-  margin-bottom: 14rpx;
+  text-align: center;
 }
 
-.step-text,
-.bullet-text {
+.step-text {
+  flex: 1;
   display: block;
   font-size: 28rpx;
   color: #344054;
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
-.bullet-card.warning {
-  border: 2rpx solid rgba(245,158,11,0.18);
-}
-
-.fact-grid {
+.warning-grid {
   display: flex;
-  flex-direction: column;
-  gap: 14rpx;
+  flex-wrap: wrap;
+  gap: 12rpx;
 }
 
-.fact-card {
-  padding: 22rpx 24rpx;
+.warning-chip {
+  padding: 14rpx 18rpx;
+  border-radius: 18rpx;
+  background: rgba(245,158,11,0.1);
+  border: 2rpx solid rgba(245,158,11,0.12);
 }
 
-.fact-label {
+.warning-text {
+  display: block;
+  font-size: 24rpx;
+  color: #b54708;
+  line-height: 1.5;
+}
+
+/* 口诀卡片 */
+.motto-card {
+  padding: 32rpx;
+  background: linear-gradient(135deg, rgba(79,70,229,0.08) 0%, rgba(168,85,247,0.06) 100%);
+  border-radius: 24rpx;
+  border: 2rpx solid rgba(79,70,229,0.12);
+  text-align: center;
+}
+
+.motto-card-label {
   display: block;
   font-size: 24rpx;
   color: #667085;
-  margin-bottom: 10rpx;
+  margin-bottom: 16rpx;
 }
 
-.fact-value {
+.motto-card-text {
   display: block;
-  font-size: 28rpx;
-  color: #111827;
-  line-height: 1.7;
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #4f46e5;
+  letter-spacing: 8rpx;
+  line-height: 1.6;
+  margin-bottom: 16rpx;
+}
+
+.motto-card-hint {
+  display: block;
+  font-size: 22rpx;
+  color: #667085;
+}
+
+/* Hero 区口诀 */
+.hero-motto {
+  margin: 14rpx 0;
+  padding: 14rpx 20rpx;
+  background: rgba(255,255,255,0.14);
+  border-radius: 14rpx;
+  backdrop-filter: blur(10rpx);
+}
+
+.hero-motto-text {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 6rpx;
+  text-align: center;
+}
+
+/* 无 GIF 时的占位展示 */
+.hero-placeholder {
+  width: 100%;
+  height: 520rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+}
+
+.hero-placeholder-icon {
+  font-size: 100rpx;
+  margin-bottom: 20rpx;
+}
+
+.hero-placeholder-name {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #4338ca;
+  margin-bottom: 12rpx;
+}
+
+.hero-placeholder-hint {
+  display: block;
+  font-size: 24rpx;
+  color: #6366f1;
+}
+
+.media-placeholder {
+  width: 100%;
+  height: 360rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #f8fafc 0%, #eef2ff 100%);
+  border-radius: 20rpx;
+}
+
+.media-placeholder-icon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}
+
+.media-placeholder-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #4338ca;
+  margin-bottom: 10rpx;
+  letter-spacing: 4rpx;
+}
+
+.media-placeholder-desc {
+  display: block;
+  font-size: 24rpx;
+  color: #6366f1;
+}
+
+/* 步骤口诀样式 */
+.step-card.step-motto {
+  background: rgba(79,70,229,0.04);
+  border: 1rpx solid rgba(79,70,229,0.1);
+}
+
+.step-card.step-warning {
+  background: rgba(245,158,11,0.06);
+  border: 1rpx solid rgba(245,158,11,0.12);
+}
+
+.step-badge.badge-motto {
+  background: linear-gradient(135deg, #6c5ce7 0%, #4f46e5 100%);
+  color: #fff;
+  font-weight: 600;
+}
+
+.step-badge.badge-warning {
+  background: rgba(245,158,11,0.15);
+  color: #b54708;
 }

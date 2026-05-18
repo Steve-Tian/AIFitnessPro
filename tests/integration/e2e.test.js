@@ -69,9 +69,12 @@ describe('AIFitnessPro - Integration Tests', () => {
       })
     }))
     expect(wx.showToast).toHaveBeenCalledWith(expect.objectContaining({ title: '训练完成！' }))
-    expect(wx.switchTab).toHaveBeenCalledWith({ url: '/pages/index/index' })
+    expect(wx.redirectTo).toHaveBeenCalledWith(expect.objectContaining({
+      url: '/pages/training-summary/training-summary'
+    }))
 
     page.onUnload()
+    jest.useRealTimers()
   })
 
   test('index page stores the newly generated plan in page and global state', async () => {
@@ -392,6 +395,10 @@ describe('AIFitnessPro - Integration Tests', () => {
         ]
       })
     }))
+    expect(wx.redirectTo).toHaveBeenCalledWith(expect.objectContaining({
+      url: '/pages/training-summary/training-summary'
+    }))
+    jest.useRealTimers()
   })
 
   test('training page can recover a chosen workout day from cached weekly plan', async () => {
@@ -451,7 +458,7 @@ describe('AIFitnessPro - Integration Tests', () => {
     page.openExerciseDetail()
 
     expect(wx.navigateTo).toHaveBeenCalledWith({
-      url: '/pages/exercise-detail/exercise-detail?id=bench_press'
+      url: expect.stringContaining('/pages/exercise-detail/exercise-detail?id=bench_press')
     })
   })
 
@@ -507,8 +514,48 @@ describe('AIFitnessPro - Integration Tests', () => {
     expect(page.data.exercise.name_cn).toBe('杠铃卧推')
     expect(page.data.exercise.primaryMuscles).toContain('胸肌')
     expect(page.data.exercise.instructionSteps.length).toBeGreaterThan(0)
+    expect(page.data.exercise.detailedStepCards.length).toBeGreaterThan(3)
+    expect(page.data.exercise.heroHighlights.length).toBeGreaterThan(0)
     expect(page.data.sourceLabel).toBe('内置种子库')
     expect(wx.setNavigationBarTitle).toHaveBeenCalledWith({ title: '杠铃卧推' })
+  })
+
+  test('exercise detail page can open a cloud-only exercise by id without blank state', async () => {
+    setMockCollections({
+      exercises: [{
+        _id: 'exercise-99',
+        exercise_id: 'incline_dumbbell_press',
+        name_cn: '上斜哑铃卧推',
+        name_en: 'Incline Dumbbell Press',
+        aliases: ['上斜推举'],
+        category: 'push',
+        equipment_required: ['dumbbell_only'],
+        primary_muscles: ['chest'],
+        secondary_muscles: ['front_delts', 'triceps'],
+        difficulty: 'intermediate',
+        media: {
+          gif_url: 'https://media.aifitnesspro.dev/incline_dumbbell_press.gif',
+          video_url: '',
+          thumbnail_url: '/images/default_exercise.png'
+        },
+        instructions: [
+          '将靠背调到约 30 度，双手持哑铃落在胸线两侧',
+          '肩胛后收下沉，推起时让哑铃朝胸线上方汇合',
+          '下放时保持前臂垂直地面，不要耸肩'
+        ],
+        exercise_tips: ['上胸主动发力，核心持续收紧'],
+        common_mistakes: ['避免耸肩', '避免顶端互撞哑铃']
+      }]
+    })
+
+    const page = createMiniProgramPage(exerciseDetailPagePath)
+    await page.onLoad({ id: 'incline_dumbbell_press' })
+
+    expect(page.data.exercise.name_cn).toBe('上斜哑铃卧推')
+    expect(page.data.exercise.hasGif).toBe(true)
+    expect(page.data.exercise.detailedStepCards.length).toBeGreaterThan(3)
+    expect(page.data.loadError).toBe('')
+    expect(page.data.sourceLabel).toBe('云端动作库')
   })
 
   test('exercise library page falls back to bundled exercises when cloud library is empty', async () => {

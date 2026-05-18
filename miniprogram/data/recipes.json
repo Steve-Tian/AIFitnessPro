@@ -1,0 +1,2289 @@
+{
+  "version": "1.0",
+  "note": "食谱库：150 条精选，覆盖 breakfast/lunch/pre_workout/post_workout/dinner/snack 与 bulk/cut/strength。",
+  "recipes": [
+    {
+      "id": "bk001",
+      "name": "鸡蛋 + 全麦面包 + 牛奶",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "鸡蛋", "amount": 2, "unit": "个" },
+        { "name": "全麦面包", "amount": 80, "unit": "g" },
+        { "name": "低脂牛奶", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 450,
+      "macros": { "protein": 28, "carbs": 45, "fat": 16 },
+      "cooking_tip": "鸡蛋水煮或少油煎；面包可烤 1 分钟。",
+      "tags": ["高蛋白", "快手", "家常"]
+    },
+    {
+      "id": "bk002",
+      "name": "燕麦 + 蛋白粉 + 香蕉",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "燕麦片", "amount": 60, "unit": "g" },
+        { "name": "乳清蛋白粉", "amount": 30, "unit": "g" },
+        { "name": "香蕉", "amount": 1, "unit": "根" }
+      ],
+      "calories": 530,
+      "macros": { "protein": 34, "carbs": 72, "fat": 8 },
+      "cooking_tip": "热水冲燕麦、蛋白粉后加香蕉片。",
+      "tags": ["高蛋白", "快手", "适合增肌"]
+    },
+    {
+      "id": "bk003",
+      "name": "鸡胸三明治 + 希腊酸奶",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 100, "unit": "g" },
+        { "name": "全麦面包", "amount": 60, "unit": "g" },
+        { "name": "希腊酸奶（无糖）", "amount": 150, "unit": "g" }
+      ],
+      "calories": 380,
+      "macros": { "protein": 42, "carbs": 38, "fat": 6 },
+      "cooking_tip": "鸡胸事先煎熟切片，搭配生菜和番茄夹面包。",
+      "tags": ["高蛋白", "低脂", "适合带饭"]
+    },
+    {
+      "id": "bk004",
+      "name": "豆浆 + 鸡蛋 + 小馒头",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "无糖豆浆", "amount": 300, "unit": "ml" },
+        { "name": "水煮蛋", "amount": 2, "unit": "个" },
+        { "name": "全麦小馒头", "amount": 80, "unit": "g" }
+      ],
+      "calories": 460,
+      "macros": { "protein": 26, "carbs": 52, "fat": 14 },
+      "cooking_tip": "豆浆不加糖；馒头可蒸热。",
+      "tags": ["中式", "家常"]
+    },
+    {
+      "id": "bk005",
+      "name": "鸡蛋饼 + 黄瓜 + 豆浆",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鸡蛋", "amount": 2, "unit": "个" },
+        { "name": "全麦面粉", "amount": 40, "unit": "g" },
+        { "name": "黄瓜", "amount": 100, "unit": "g" },
+        { "name": "无糖豆浆", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 390,
+      "macros": { "protein": 24, "carbs": 36, "fat": 14 },
+      "cooking_tip": "鸡蛋打散加面粉和少量水摊饼，少油。",
+      "tags": ["低脂", "中式"]
+    },
+    {
+      "id": "bk006",
+      "name": "蒸红薯 + 鸡蛋 + 牛奶",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "红薯", "amount": 200, "unit": "g" },
+        { "name": "水煮蛋", "amount": 2, "unit": "个" },
+        { "name": "牛奶", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 430,
+      "macros": { "protein": 22, "carbs": 58, "fat": 12 },
+      "cooking_tip": "红薯蒸 20 分钟；鸡蛋冷水下锅煮 8 分钟。",
+      "tags": ["慢碳", "家常", "适合早练前"]
+    },
+    {
+      "id": "bk007",
+      "name": "藜麦水果碗 + 无糖酸奶",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "藜麦", "amount": 60, "unit": "g" },
+        { "name": "蓝莓", "amount": 60, "unit": "g" },
+        { "name": "无糖酸奶", "amount": 200, "unit": "g" }
+      ],
+      "calories": 370,
+      "macros": { "protein": 20, "carbs": 52, "fat": 6 },
+      "cooking_tip": "藜麦提前煮熟冷藏，食用时混合酸奶和蓝莓。",
+      "tags": ["低脂", "快手", "减脂友好"]
+    },
+    {
+      "id": "bk008",
+      "name": "鸡胸肉炒饭 + 紫菜蛋花汤",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 100, "unit": "g" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" },
+        { "name": "紫菜", "amount": 5, "unit": "g" },
+        { "name": "鸡蛋", "amount": 1, "unit": "个" }
+      ],
+      "calories": 520,
+      "macros": { "protein": 36, "carbs": 64, "fat": 10 },
+      "cooking_tip": "少油炒鸡胸粒和糙米饭；汤里滴几滴香油。",
+      "tags": ["中式", "增肌友好"]
+    },
+
+    {
+      "id": "lc001",
+      "name": "鸡胸肉糙米饭 + 西兰花",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 150, "unit": "g" },
+        { "name": "糙米饭", "amount": 180, "unit": "g" },
+        { "name": "西兰花", "amount": 150, "unit": "g" },
+        { "name": "橄榄油", "amount": 5, "unit": "ml" }
+      ],
+      "calories": 560,
+      "macros": { "protein": 48, "carbs": 64, "fat": 10 },
+      "cooking_tip": "鸡胸煎烤或蒸；西兰花清水焯 2 分钟后拌橄榄油。",
+      "tags": ["高蛋白", "家常", "适合带饭"]
+    },
+    {
+      "id": "lc002",
+      "name": "牛肉洋葱炒饭",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "瘦牛肉", "amount": 120, "unit": "g" },
+        { "name": "糙米饭", "amount": 200, "unit": "g" },
+        { "name": "洋葱", "amount": 80, "unit": "g" },
+        { "name": "青椒", "amount": 60, "unit": "g" }
+      ],
+      "calories": 640,
+      "macros": { "protein": 42, "carbs": 80, "fat": 14 },
+      "cooking_tip": "牛肉切丝用少量料酒、酱油腌 10 分钟；热锅快炒。",
+      "tags": ["中式", "补铁", "增肌"]
+    },
+    {
+      "id": "lc003",
+      "name": "三文鱼藜麦沙拉",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "三文鱼", "amount": 120, "unit": "g" },
+        { "name": "藜麦", "amount": 80, "unit": "g" },
+        { "name": "菠菜", "amount": 100, "unit": "g" },
+        { "name": "牛油果", "amount": 50, "unit": "g" }
+      ],
+      "calories": 590,
+      "macros": { "protein": 38, "carbs": 42, "fat": 28 },
+      "cooking_tip": "三文鱼平底锅煎 3 分钟一面；藜麦提前煮好。",
+      "tags": ["高Omega3", "减脂", "健康脂肪"]
+    },
+    {
+      "id": "lc004",
+      "name": "鸡腿肉荞麦面",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "去皮鸡腿肉", "amount": 130, "unit": "g" },
+        { "name": "荞麦面", "amount": 100, "unit": "g" },
+        { "name": "豆芽", "amount": 80, "unit": "g" }
+      ],
+      "calories": 580,
+      "macros": { "protein": 40, "carbs": 66, "fat": 14 },
+      "cooking_tip": "鸡腿去皮煎熟切片；荞麦面煮 5 分钟过凉水。",
+      "tags": ["中式", "饱腹"]
+    },
+    {
+      "id": "lc005",
+      "name": "虾仁豆腐番茄煲 + 糙米饭",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "虾仁", "amount": 120, "unit": "g" },
+        { "name": "北豆腐", "amount": 150, "unit": "g" },
+        { "name": "番茄", "amount": 100, "unit": "g" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" }
+      ],
+      "calories": 490,
+      "macros": { "protein": 44, "carbs": 52, "fat": 10 },
+      "cooking_tip": "番茄去皮炒出汁后下豆腐虾仁小火焖 5 分钟。",
+      "tags": ["低脂", "高蛋白", "家常"]
+    },
+    {
+      "id": "lc006",
+      "name": "鸡胸沙拉卷（墨西哥卷）",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 130, "unit": "g" },
+        { "name": "全麦卷饼", "amount": 1, "unit": "张" },
+        { "name": "生菜", "amount": 60, "unit": "g" },
+        { "name": "番茄", "amount": 80, "unit": "g" }
+      ],
+      "calories": 420,
+      "macros": { "protein": 40, "carbs": 44, "fat": 8 },
+      "cooking_tip": "鸡胸撕丝拌少量希腊酸奶+黑胡椒，包进卷饼。",
+      "tags": ["低脂", "便携", "减脂"]
+    },
+    {
+      "id": "lc007",
+      "name": "猪里脊青椒炒意面",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "猪里脊", "amount": 130, "unit": "g" },
+        { "name": "意大利面", "amount": 90, "unit": "g" },
+        { "name": "青椒", "amount": 80, "unit": "g" },
+        { "name": "番茄酱", "amount": 30, "unit": "g" }
+      ],
+      "calories": 600,
+      "macros": { "protein": 40, "carbs": 70, "fat": 14 },
+      "cooking_tip": "意面煮 8 分钟沥干；猪里脊切丝腌 10 分钟快炒。",
+      "tags": ["饱腹", "增肌"]
+    },
+    {
+      "id": "lc008",
+      "name": "金枪鱼紫菜饭团 + 味噌汤",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "金枪鱼罐头（水浸）", "amount": 100, "unit": "g" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" },
+        { "name": "紫菜", "amount": 5, "unit": "g" },
+        { "name": "味噌", "amount": 10, "unit": "g" }
+      ],
+      "calories": 440,
+      "macros": { "protein": 36, "carbs": 58, "fat": 6 },
+      "cooking_tip": "金枪鱼沥干水分拌入糙米饭，紫菜包裹成团。",
+      "tags": ["低脂", "便携"]
+    },
+    {
+      "id": "lc009",
+      "name": "香煎鳕鱼 + 红薯 + 芦笋",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鳕鱼", "amount": 150, "unit": "g" },
+        { "name": "红薯", "amount": 200, "unit": "g" },
+        { "name": "芦笋", "amount": 100, "unit": "g" }
+      ],
+      "calories": 470,
+      "macros": { "protein": 38, "carbs": 52, "fat": 10 },
+      "cooking_tip": "鳕鱼用黑胡椒+柠檬汁腌；红薯蒸熟；芦笋焯水。",
+      "tags": ["低脂", "健康脂肪"]
+    },
+
+    {
+      "id": "pr001",
+      "name": "香蕉 + 乳清蛋白粉",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "香蕉", "amount": 1, "unit": "根" },
+        { "name": "乳清蛋白粉", "amount": 25, "unit": "g" }
+      ],
+      "calories": 210,
+      "macros": { "protein": 22, "carbs": 27, "fat": 2 },
+      "cooking_tip": "训练前 30-45 分钟吃，搭配 300ml 温水。",
+      "tags": ["训练前", "快速供能"]
+    },
+    {
+      "id": "pr002",
+      "name": "燕麦能量球",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "燕麦片", "amount": 40, "unit": "g" },
+        { "name": "花生酱", "amount": 15, "unit": "g" },
+        { "name": "蜂蜜", "amount": 10, "unit": "g" }
+      ],
+      "calories": 260,
+      "macros": { "protein": 8, "carbs": 36, "fat": 10 },
+      "cooking_tip": "混合搓成球冷藏，训练前 45 分钟吃 2 个。",
+      "tags": ["训练前", "慢释能量"]
+    },
+    {
+      "id": "pr003",
+      "name": "全麦面包 + 蜂蜜 + 浓缩咖啡",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["strength", "bulk"],
+      "ingredients": [
+        { "name": "全麦面包", "amount": 60, "unit": "g" },
+        { "name": "蜂蜜", "amount": 10, "unit": "g" },
+        { "name": "黑咖啡", "amount": 200, "unit": "ml" }
+      ],
+      "calories": 220,
+      "macros": { "protein": 8, "carbs": 40, "fat": 3 },
+      "cooking_tip": "咖啡可提升力量输出；训练前 45 分钟饮用。",
+      "tags": ["训练前", "力量训练"]
+    },
+    {
+      "id": "pr004",
+      "name": "苹果 + 原味杏仁",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "苹果", "amount": 1, "unit": "个" },
+        { "name": "原味杏仁", "amount": 15, "unit": "g" }
+      ],
+      "calories": 190,
+      "macros": { "protein": 4, "carbs": 28, "fat": 8 },
+      "cooking_tip": "适合训练前 60 分钟，不饱胀。",
+      "tags": ["训练前", "减脂"]
+    },
+
+    {
+      "id": "po001",
+      "name": "乳清蛋白奶昔 + 香蕉",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "乳清蛋白粉", "amount": 30, "unit": "g" },
+        { "name": "香蕉", "amount": 1, "unit": "根" },
+        { "name": "低脂牛奶", "amount": 300, "unit": "ml" }
+      ],
+      "calories": 330,
+      "macros": { "protein": 34, "carbs": 36, "fat": 4 },
+      "cooking_tip": "训练后 30 分钟内喝，吸收最快。",
+      "tags": ["训练后", "快碳+蛋白"]
+    },
+    {
+      "id": "po002",
+      "name": "鸡蛋白饼 + 全麦吐司",
+      "meal_type": "post_workout",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "蛋白", "amount": 4, "unit": "个" },
+        { "name": "全麦吐司", "amount": 60, "unit": "g" },
+        { "name": "番茄", "amount": 80, "unit": "g" }
+      ],
+      "calories": 280,
+      "macros": { "protein": 24, "carbs": 34, "fat": 4 },
+      "cooking_tip": "不粘锅不放油摊蛋白饼，搭配烤面包。",
+      "tags": ["训练后", "低脂"]
+    },
+    {
+      "id": "po003",
+      "name": "金枪鱼米饭",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "金枪鱼罐头（水浸）", "amount": 100, "unit": "g" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" },
+        { "name": "海苔碎", "amount": 3, "unit": "g" }
+      ],
+      "calories": 340,
+      "macros": { "protein": 28, "carbs": 50, "fat": 4 },
+      "cooking_tip": "金枪鱼沥干水分拌米饭，撒海苔碎。",
+      "tags": ["训练后", "便携"]
+    },
+    {
+      "id": "po004",
+      "name": "鸡胸肉紫薯碗",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 120, "unit": "g" },
+        { "name": "紫薯", "amount": 150, "unit": "g" }
+      ],
+      "calories": 310,
+      "macros": { "protein": 32, "carbs": 44, "fat": 4 },
+      "cooking_tip": "鸡胸煮熟撕丝，紫薯蒸熟。",
+      "tags": ["训练后", "增肌", "减脂"]
+    },
+
+    {
+      "id": "dn001",
+      "name": "香煎三文鱼 + 糙米 + 西兰花",
+      "meal_type": "dinner",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "三文鱼", "amount": 130, "unit": "g" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" },
+        { "name": "西兰花", "amount": 150, "unit": "g" }
+      ],
+      "calories": 520,
+      "macros": { "protein": 36, "carbs": 52, "fat": 18 },
+      "cooking_tip": "三文鱼皮朝下少油中火 3 分钟一面。",
+      "tags": ["高Omega3", "家常"]
+    },
+    {
+      "id": "dn002",
+      "name": "清蒸鲈鱼 + 南瓜 + 菠菜",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鲈鱼", "amount": 150, "unit": "g" },
+        { "name": "南瓜", "amount": 200, "unit": "g" },
+        { "name": "菠菜", "amount": 100, "unit": "g" }
+      ],
+      "calories": 370,
+      "macros": { "protein": 32, "carbs": 42, "fat": 6 },
+      "cooking_tip": "鲈鱼切花刀大火蒸 8 分钟，淋蒸鱼豉油。",
+      "tags": ["低脂", "清淡"]
+    },
+    {
+      "id": "dn003",
+      "name": "番茄牛腩 + 糙米饭",
+      "meal_type": "dinner",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "牛腩", "amount": 130, "unit": "g" },
+        { "name": "番茄", "amount": 150, "unit": "g" },
+        { "name": "糙米饭", "amount": 180, "unit": "g" }
+      ],
+      "calories": 640,
+      "macros": { "protein": 38, "carbs": 70, "fat": 20 },
+      "cooking_tip": "牛腩焯水后加番茄慢炖 45 分钟。",
+      "tags": ["中式", "家常", "增肌"]
+    },
+    {
+      "id": "dn004",
+      "name": "虾仁豆腐蒸蛋 + 紫菜汤",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "虾仁", "amount": 100, "unit": "g" },
+        { "name": "北豆腐", "amount": 150, "unit": "g" },
+        { "name": "鸡蛋", "amount": 1, "unit": "个" },
+        { "name": "紫菜", "amount": 5, "unit": "g" }
+      ],
+      "calories": 340,
+      "macros": { "protein": 36, "carbs": 12, "fat": 16 },
+      "cooking_tip": "鸡蛋液加 1.5 倍温水蒸 10 分钟，再摆虾仁续蒸 2 分钟。",
+      "tags": ["低脂", "清淡", "助睡眠"]
+    },
+    {
+      "id": "dn005",
+      "name": "香菇鸡腿肉盖饭",
+      "meal_type": "dinner",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "去皮鸡腿肉", "amount": 150, "unit": "g" },
+        { "name": "香菇", "amount": 80, "unit": "g" },
+        { "name": "糙米饭", "amount": 180, "unit": "g" }
+      ],
+      "calories": 590,
+      "macros": { "protein": 40, "carbs": 68, "fat": 16 },
+      "cooking_tip": "鸡腿肉切块与香菇焖煮 15 分钟浇饭上。",
+      "tags": ["中式", "饱腹"]
+    },
+    {
+      "id": "dn006",
+      "name": "瘦牛肉西兰花炒意面",
+      "meal_type": "dinner",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "瘦牛肉", "amount": 130, "unit": "g" },
+        { "name": "意大利面", "amount": 80, "unit": "g" },
+        { "name": "西兰花", "amount": 120, "unit": "g" }
+      ],
+      "calories": 560,
+      "macros": { "protein": 42, "carbs": 62, "fat": 14 },
+      "cooking_tip": "面煮 8 分钟；牛肉快炒后加面和西兰花炒匀。",
+      "tags": ["高蛋白", "增肌"]
+    },
+    {
+      "id": "dn007",
+      "name": "鸡胸蔬菜沙拉 + 烤红薯",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 150, "unit": "g" },
+        { "name": "红薯", "amount": 150, "unit": "g" },
+        { "name": "生菜/番茄/黄瓜混合", "amount": 200, "unit": "g" }
+      ],
+      "calories": 420,
+      "macros": { "protein": 42, "carbs": 48, "fat": 6 },
+      "cooking_tip": "鸡胸烤熟切片，蔬菜淋少量橄榄油和柠檬汁。",
+      "tags": ["低脂", "减脂", "清淡"]
+    },
+    {
+      "id": "dn008",
+      "name": "豆腐虾球煲 + 青菜 + 小米粥",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "北豆腐", "amount": 150, "unit": "g" },
+        { "name": "虾仁", "amount": 100, "unit": "g" },
+        { "name": "青菜", "amount": 120, "unit": "g" },
+        { "name": "小米", "amount": 50, "unit": "g" }
+      ],
+      "calories": 380,
+      "macros": { "protein": 36, "carbs": 40, "fat": 8 },
+      "cooking_tip": "小米粥煮 30 分钟；虾仁豆腐快炒收汁。",
+      "tags": ["清淡", "助消化"]
+    },
+    {
+      "id": "dn009",
+      "name": "鸡胸肉意面番茄酱",
+      "meal_type": "dinner",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 150, "unit": "g" },
+        { "name": "意大利面", "amount": 90, "unit": "g" },
+        { "name": "番茄酱", "amount": 50, "unit": "g" }
+      ],
+      "calories": 560,
+      "macros": { "protein": 44, "carbs": 66, "fat": 10 },
+      "cooking_tip": "鸡胸丁煎熟后加番茄酱炖 3 分钟，拌面。",
+      "tags": ["饱腹", "增肌"]
+    },
+
+    {
+      "id": "sn001",
+      "name": "无糖希腊酸奶 + 蓝莓",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "希腊酸奶（无糖）", "amount": 200, "unit": "g" },
+        { "name": "蓝莓", "amount": 60, "unit": "g" }
+      ],
+      "calories": 170,
+      "macros": { "protein": 20, "carbs": 16, "fat": 4 },
+      "cooking_tip": "适合两餐之间，抗饿且低脂。",
+      "tags": ["加餐", "低脂"]
+    },
+    {
+      "id": "sn002",
+      "name": "水煮蛋 + 黄瓜",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength", "bulk"],
+      "ingredients": [
+        { "name": "水煮蛋", "amount": 2, "unit": "个" },
+        { "name": "黄瓜", "amount": 150, "unit": "g" }
+      ],
+      "calories": 180,
+      "macros": { "protein": 14, "carbs": 6, "fat": 11 },
+      "cooking_tip": "便携耐存，办公场景常备。",
+      "tags": ["便携", "快手"]
+    },
+    {
+      "id": "sn003",
+      "name": "坚果混合 + 黑巧克力",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "混合坚果", "amount": 25, "unit": "g" },
+        { "name": "85% 黑巧克力", "amount": 10, "unit": "g" }
+      ],
+      "calories": 210,
+      "macros": { "protein": 6, "carbs": 12, "fat": 16 },
+      "cooking_tip": "控制分量（坚果一把 = 25g）。",
+      "tags": ["健康脂肪"]
+    },
+    {
+      "id": "sn004",
+      "name": "蛋白棒 + 苹果",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "bulk"],
+      "ingredients": [
+        { "name": "蛋白棒", "amount": 1, "unit": "根" },
+        { "name": "苹果", "amount": 1, "unit": "个" }
+      ],
+      "calories": 260,
+      "macros": { "protein": 20, "carbs": 32, "fat": 8 },
+      "cooking_tip": "选择无添加糖醇的蛋白棒。",
+      "tags": ["便携", "急救加餐"]
+    },
+    {
+      "id": "sn005",
+      "name": "毛豆 + 低脂牛奶",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "带壳毛豆", "amount": 200, "unit": "g" },
+        { "name": "低脂牛奶", "amount": 200, "unit": "ml" }
+      ],
+      "calories": 240,
+      "macros": { "protein": 22, "carbs": 24, "fat": 8 },
+      "cooking_tip": "毛豆盐水煮 5 分钟，快手又饱腹。",
+      "tags": ["高蛋白", "家常"]
+    },
+    {
+      "id": "sn006",
+      "name": "低脂奶酪 + 全麦饼干",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "低脂奶酪", "amount": 40, "unit": "g" },
+        { "name": "全麦饼干", "amount": 30, "unit": "g" }
+      ],
+      "calories": 195,
+      "macros": { "protein": 12, "carbs": 22, "fat": 6 },
+      "cooking_tip": "奶酪抹饼干，控盐款更佳。",
+      "tags": ["加餐", "快手"]
+    },
+    {
+      "id": "sn007",
+      "name": "香蕉 + 花生酱",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "香蕉", "amount": 1, "unit": "根" },
+        { "name": "花生酱（无糖）", "amount": 15, "unit": "g" }
+      ],
+      "calories": 220,
+      "macros": { "protein": 6, "carbs": 34, "fat": 8 },
+      "cooking_tip": "训练后 30 分钟内食用更佳。",
+      "tags": ["训练后"]
+    },
+    {
+      "id": "sn008",
+      "name": "豆腐干 + 小番茄",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength", "bulk"],
+      "ingredients": [
+        { "name": "卤豆腐干", "amount": 80, "unit": "g" },
+        { "name": "小番茄", "amount": 120, "unit": "g" }
+      ],
+      "calories": 160,
+      "macros": { "protein": 16, "carbs": 18, "fat": 4 },
+      "cooking_tip": "选择低钠豆腐干。",
+      "tags": ["高蛋白", "便携"]
+    },
+    {
+      "id": "sn009",
+      "name": "即食鸡胸条 + 生菜卷",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "即食鸡胸条", "amount": 100, "unit": "g" },
+        { "name": "生菜", "amount": 80, "unit": "g" }
+      ],
+      "calories": 185,
+      "macros": { "protein": 28, "carbs": 6, "fat": 5 },
+      "cooking_tip": "卷成手卷，少酱。",
+      "tags": ["低脂", "高蛋白"]
+    },
+    {
+      "id": "sn010",
+      "name": "蒸红薯 + 无糖豆浆",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "红薯", "amount": 150, "unit": "g" },
+        { "name": "无糖豆浆", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 230,
+      "macros": { "protein": 12, "carbs": 42, "fat": 3 },
+      "cooking_tip": "红薯蒸熟即可，粗粮补充碳水。",
+      "tags": ["饱腹"]
+    },
+    {
+      "id": "sn011",
+      "name": "金枪鱼罐头（水浸）+ 苏打饼干",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "水浸金枪鱼", "amount": 100, "unit": "g" },
+        { "name": "苏打饼干", "amount": 25, "unit": "g" }
+      ],
+      "calories": 200,
+      "macros": { "protein": 24, "carbs": 16, "fat": 5 },
+      "cooking_tip": "沥干罐头汁减钠。",
+      "tags": ["高蛋白", "便携"]
+    },
+    {
+      "id": "ln020",
+      "name": "番茄鸡蛋荞麦面 + 凉拌菠菜",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "荞麦面（干）", "amount": 70, "unit": "g" },
+        { "name": "鸡蛋", "amount": 2, "unit": "个" },
+        { "name": "番茄", "amount": 200, "unit": "g" },
+        { "name": "菠菜", "amount": 150, "unit": "g" }
+      ],
+      "calories": 520,
+      "macros": { "protein": 28, "carbs": 68, "fat": 14 },
+      "cooking_tip": "少油炒番茄鸡蛋，面煮后过冷水更筋道。",
+      "tags": ["家常", "低脂"]
+    },
+    {
+      "id": "ln021",
+      "name": "黑椒牛柳 + 糙米饭 + 西兰花",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "瘦牛肉", "amount": 150, "unit": "g" },
+        { "name": "糙米（熟）", "amount": 200, "unit": "g" },
+        { "name": "西兰花", "amount": 150, "unit": "g" }
+      ],
+      "calories": 640,
+      "macros": { "protein": 48, "carbs": 62, "fat": 18 },
+      "cooking_tip": "牛肉横纹切片，大火快炒锁汁。",
+      "tags": ["增肌", "训练日"]
+    },
+    {
+      "id": "dn020",
+      "name": "清蒸鲈鱼 + 小米饭 + 蒜蓉娃娃菜",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鲈鱼", "amount": 200, "unit": "g" },
+        { "name": "小米饭（熟）", "amount": 150, "unit": "g" },
+        { "name": "娃娃菜", "amount": 200, "unit": "g" }
+      ],
+      "calories": 480,
+      "macros": { "protein": 42, "carbs": 48, "fat": 10 },
+      "cooking_tip": "鱼身划刀，蒸 8–10 分钟，淋少量蒸鱼豉油。",
+      "tags": ["低脂", "高蛋白"]
+    },
+    {
+      "id": "dn021",
+      "name": "土豆炖牛腩（瘦）+ 杂粮饭",
+      "meal_type": "dinner",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "牛腩（瘦块）", "amount": 160, "unit": "g" },
+        { "name": "土豆", "amount": 200, "unit": "g" },
+        { "name": "杂粮饭（熟）", "amount": 180, "unit": "g" }
+      ],
+      "calories": 720,
+      "macros": { "protein": 46, "carbs": 78, "fat": 22 },
+      "cooking_tip": "撇去浮油，搭配大量蔬菜更均衡。",
+      "tags": ["力量", "饱腹"]
+    },
+    {
+      "id": "bk010",
+      "name": "蔬菜鸡蛋卷饼 + 豆浆",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "全麦卷饼", "amount": 1, "unit": "张" },
+        { "name": "鸡蛋", "amount": 2, "unit": "个" },
+        { "name": "彩椒丝", "amount": 80, "unit": "g" },
+        { "name": "无糖豆浆", "amount": 300, "unit": "ml" }
+      ],
+      "calories": 455,
+      "macros": { "protein": 26, "carbs": 44, "fat": 16 },
+      "cooking_tip": "少油摊蛋饼，蔬菜先炒软再卷。",
+      "tags": ["快手", "低脂"]
+    },
+    {
+      "id": "bk011",
+      "name": "牛油果吐司 + 水波蛋",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "全麦吐司", "amount": 2, "unit": "片" },
+        { "name": "牛油果", "amount": 80, "unit": "g" },
+        { "name": "鸡蛋", "amount": 2, "unit": "个" }
+      ],
+      "calories": 480,
+      "macros": { "protein": 22, "carbs": 38, "fat": 26 },
+      "cooking_tip": "牛油果碾碎抹吐司，水波蛋煮3分钟放上。",
+      "tags": ["健康脂肪", "增肌"]
+    },
+    {
+      "id": "bk012",
+      "name": "紫薯燕麦粥 + 坚果",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "紫薯", "amount": 150, "unit": "g" },
+        { "name": "燕麦片", "amount": 50, "unit": "g" },
+        { "name": "混合坚果", "amount": 15, "unit": "g" }
+      ],
+      "calories": 380,
+      "macros": { "protein": 14, "carbs": 62, "fat": 10 },
+      "cooking_tip": "紫薯蒸熟压泥，与燕麦同煮5分钟，撒坚果。",
+      "tags": ["慢碳", "抗氧化"]
+    },
+    {
+      "id": "bk013",
+      "name": "蛋白蔬菜饼 + 牛奶",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "蛋白", "amount": 5, "unit": "个" },
+        { "name": "菠菜", "amount": 80, "unit": "g" },
+        { "name": "低脂牛奶", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 290,
+      "macros": { "protein": 32, "carbs": 18, "fat": 6 },
+      "cooking_tip": "蛋白打散加菠菜碎，不粘锅小火两面煎。",
+      "tags": ["低脂", "高蛋白"]
+    },
+    {
+      "id": "bk014",
+      "name": "小米红枣粥 + 鸡蛋 + 馒头",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "小米", "amount": 60, "unit": "g" },
+        { "name": "红枣", "amount": 5, "unit": "颗" },
+        { "name": "水煮蛋", "amount": 2, "unit": "个" },
+        { "name": "全麦馒头", "amount": 80, "unit": "g" }
+      ],
+      "calories": 500,
+      "macros": { "protein": 24, "carbs": 70, "fat": 10 },
+      "cooking_tip": "小米红枣煮30分钟至粘稠。",
+      "tags": ["中式", "养胃"]
+    },
+    {
+      "id": "bk015",
+      "name": "希腊酸奶燕麦杯 + 蓝莓蜂蜜",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "希腊酸奶", "amount": 200, "unit": "g" },
+        { "name": "燕麦片", "amount": 40, "unit": "g" },
+        { "name": "蓝莓", "amount": 50, "unit": "g" },
+        { "name": "蜂蜜", "amount": 8, "unit": "g" }
+      ],
+      "calories": 340,
+      "macros": { "protein": 24, "carbs": 42, "fat": 6 },
+      "cooking_tip": "燕麦提前一晚泡在酸奶里，早晨加蓝莓和蜂蜜。",
+      "tags": ["隔夜燕麦", "快手"]
+    },
+    {
+      "id": "bk016",
+      "name": "全麦三明治（鸡胸+生菜+番茄）",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "全麦面包", "amount": 80, "unit": "g" },
+        { "name": "鸡胸肉", "amount": 80, "unit": "g" },
+        { "name": "生菜", "amount": 50, "unit": "g" },
+        { "name": "番茄", "amount": 60, "unit": "g" }
+      ],
+      "calories": 360,
+      "macros": { "protein": 30, "carbs": 40, "fat": 8 },
+      "cooking_tip": "鸡胸提前煎熟冷藏，早晨夹入面包即可。",
+      "tags": ["便携", "高蛋白"]
+    },
+    {
+      "id": "bk017",
+      "name": "香蕉花生酱吐司 + 牛奶",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "全麦吐司", "amount": 2, "unit": "片" },
+        { "name": "花生酱（无糖）", "amount": 20, "unit": "g" },
+        { "name": "香蕉", "amount": 1, "unit": "根" },
+        { "name": "牛奶", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 530,
+      "macros": { "protein": 22, "carbs": 64, "fat": 20 },
+      "cooking_tip": "吐司抹花生酱铺香蕉片，配牛奶。",
+      "tags": ["增肌", "高能量"]
+    },
+    {
+      "id": "bk018",
+      "name": "蛋白粉松饼 + 蓝莓",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "乳清蛋白粉", "amount": 30, "unit": "g" },
+        { "name": "燕麦粉", "amount": 40, "unit": "g" },
+        { "name": "鸡蛋", "amount": 1, "unit": "个" },
+        { "name": "蓝莓", "amount": 50, "unit": "g" }
+      ],
+      "calories": 370,
+      "macros": { "protein": 36, "carbs": 36, "fat": 8 },
+      "cooking_tip": "蛋白粉+燕麦粉+鸡蛋搅拌，不粘锅两面煎。",
+      "tags": ["高蛋白", "创新"]
+    },
+    {
+      "id": "bk019",
+      "name": "虾仁鸡蛋羹 + 杂粮包",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "虾仁", "amount": 60, "unit": "g" },
+        { "name": "鸡蛋", "amount": 2, "unit": "个" },
+        { "name": "杂粮包", "amount": 80, "unit": "g" }
+      ],
+      "calories": 360,
+      "macros": { "protein": 28, "carbs": 34, "fat": 10 },
+      "cooking_tip": "蛋液加1.5倍温水蒸8分后摆虾仁续蒸2分。",
+      "tags": ["中式", "高蛋白"]
+    },
+    {
+      "id": "bk020",
+      "name": "奇亚籽布丁 + 水果麦片",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "奇亚籽", "amount": 25, "unit": "g" },
+        { "name": "无糖杏仁奶", "amount": 200, "unit": "ml" },
+        { "name": "混合水果", "amount": 80, "unit": "g" },
+        { "name": "麦片", "amount": 20, "unit": "g" }
+      ],
+      "calories": 280,
+      "macros": { "protein": 10, "carbs": 32, "fat": 12 },
+      "cooking_tip": "奇亚籽泡杏仁奶冷藏一晚，早晨加水果麦片。",
+      "tags": ["减脂", "低卡"]
+    },
+
+    {
+      "id": "lc010",
+      "name": "鸡肉蔬菜咖喱 + 糙米饭",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 150, "unit": "g" },
+        { "name": "咖喱粉", "amount": 10, "unit": "g" },
+        { "name": "土豆胡萝卜", "amount": 150, "unit": "g" },
+        { "name": "糙米饭", "amount": 180, "unit": "g" }
+      ],
+      "calories": 600,
+      "macros": { "protein": 42, "carbs": 70, "fat": 12 },
+      "cooking_tip": "鸡胸切块与蔬菜同炒加咖喱粉和水焖10分钟。",
+      "tags": ["咖喱", "增肌"]
+    },
+    {
+      "id": "lc011",
+      "name": "鲷鱼时蔬焖饭",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鲷鱼片", "amount": 150, "unit": "g" },
+        { "name": "糙米", "amount": 80, "unit": "g" },
+        { "name": "西兰花胡萝卜", "amount": 150, "unit": "g" }
+      ],
+      "calories": 480,
+      "macros": { "protein": 38, "carbs": 52, "fat": 8 },
+      "cooking_tip": "米先煮半熟，加入鱼块和蔬菜焖至熟透。",
+      "tags": ["一锅出", "低脂"]
+    },
+    {
+      "id": "lc012",
+      "name": "鸡蛋卷饼 + 牛油果 + 鸡胸",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "全麦卷饼", "amount": 1, "unit": "张" },
+        { "name": "鸡蛋", "amount": 2, "unit": "个" },
+        { "name": "鸡胸肉", "amount": 100, "unit": "g" },
+        { "name": "牛油果", "amount": 50, "unit": "g" }
+      ],
+      "calories": 520,
+      "macros": { "protein": 38, "carbs": 40, "fat": 22 },
+      "cooking_tip": "摊鸡蛋饼铺卷饼上，加鸡胸牛油果卷起。",
+      "tags": ["便携", "高蛋白"]
+    },
+    {
+      "id": "lc013",
+      "name": "瘦猪肉白菜炖豆腐 + 米饭",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "瘦猪肉", "amount": 130, "unit": "g" },
+        { "name": "大白菜", "amount": 200, "unit": "g" },
+        { "name": "北豆腐", "amount": 150, "unit": "g" },
+        { "name": "糙米饭", "amount": 180, "unit": "g" }
+      ],
+      "calories": 580,
+      "macros": { "protein": 40, "carbs": 60, "fat": 16 },
+      "cooking_tip": "猪肉切片炒变色，加白菜豆腐焖10分钟。",
+      "tags": ["中式", "家常"]
+    },
+    {
+      "id": "lc014",
+      "name": "龙利鱼番茄意面",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "龙利鱼", "amount": 150, "unit": "g" },
+        { "name": "意大利面", "amount": 80, "unit": "g" },
+        { "name": "番茄", "amount": 200, "unit": "g" }
+      ],
+      "calories": 460,
+      "macros": { "protein": 36, "carbs": 56, "fat": 8 },
+      "cooking_tip": "番茄炒出汁煮鱼片，浇在煮好的意面上。",
+      "tags": ["低脂", "西式"]
+    },
+    {
+      "id": "lc015",
+      "name": "卤牛肉三明治 + 蔬菜沙拉",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "卤瘦牛肉", "amount": 120, "unit": "g" },
+        { "name": "全麦面包", "amount": 80, "unit": "g" },
+        { "name": "混合蔬菜", "amount": 150, "unit": "g" }
+      ],
+      "calories": 500,
+      "macros": { "protein": 40, "carbs": 48, "fat": 14 },
+      "cooking_tip": "卤牛肉切薄片夹面包，沙拉淋橄榄油醋汁。",
+      "tags": ["高蛋白", "便携"]
+    },
+    {
+      "id": "lc016",
+      "name": "鸡蛋炒西红柿 + 糙米饭 + 青菜",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "鸡蛋", "amount": 3, "unit": "个" },
+        { "name": "番茄", "amount": 200, "unit": "g" },
+        { "name": "小白菜", "amount": 150, "unit": "g" },
+        { "name": "糙米饭", "amount": 180, "unit": "g" }
+      ],
+      "calories": 500,
+      "macros": { "protein": 24, "carbs": 64, "fat": 14 },
+      "cooking_tip": "少油炒蛋加番茄翻炒，青菜单独焯水。",
+      "tags": ["家常", "快手"]
+    },
+    {
+      "id": "lc017",
+      "name": "鸡胸牛油果饭碗",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 150, "unit": "g" },
+        { "name": "牛油果", "amount": 80, "unit": "g" },
+        { "name": "糙米饭", "amount": 180, "unit": "g" },
+        { "name": "毛豆", "amount": 50, "unit": "g" }
+      ],
+      "calories": 620,
+      "macros": { "protein": 42, "carbs": 58, "fat": 22 },
+      "cooking_tip": "鸡胸煎熟切片，与牛油果毛豆铺在饭上。",
+      "tags": ["健康脂肪", "增肌"]
+    },
+    {
+      "id": "lc018",
+      "name": "红烧鸡腿 + 土豆 + 糙米饭",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "去皮鸡腿", "amount": 160, "unit": "g" },
+        { "name": "土豆", "amount": 150, "unit": "g" },
+        { "name": "糙米饭", "amount": 180, "unit": "g" }
+      ],
+      "calories": 620,
+      "macros": { "protein": 38, "carbs": 72, "fat": 16 },
+      "cooking_tip": "鸡腿焯水后加酱油冰糖小火炖20分钟。",
+      "tags": ["中式", "增肌"]
+    },
+    {
+      "id": "lc019",
+      "name": "虾仁西芹炒百合 + 杂粮饭",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "虾仁", "amount": 120, "unit": "g" },
+        { "name": "西芹", "amount": 100, "unit": "g" },
+        { "name": "鲜百合", "amount": 80, "unit": "g" },
+        { "name": "杂粮饭", "amount": 150, "unit": "g" }
+      ],
+      "calories": 440,
+      "macros": { "protein": 34, "carbs": 52, "fat": 6 },
+      "cooking_tip": "虾仁快炒变色，加西芹百合翻炒2分钟。",
+      "tags": ["低脂", "清淡"]
+    },
+    {
+      "id": "lc022",
+      "name": "牛排配烤蔬菜 + 红薯",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "瘦牛排", "amount": 180, "unit": "g" },
+        { "name": "红薯", "amount": 200, "unit": "g" },
+        { "name": "西葫芦彩椒", "amount": 150, "unit": "g" }
+      ],
+      "calories": 660,
+      "macros": { "protein": 48, "carbs": 56, "fat": 22 },
+      "cooking_tip": "牛排煎至五分熟静置3分钟，蔬菜烤箱180度15分钟。",
+      "tags": ["西式", "高蛋白"]
+    },
+    {
+      "id": "lc023",
+      "name": "三文鱼牛油果饭团",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "三文鱼", "amount": 100, "unit": "g" },
+        { "name": "牛油果", "amount": 60, "unit": "g" },
+        { "name": "糙米饭", "amount": 160, "unit": "g" },
+        { "name": "海苔", "amount": 3, "unit": "g" }
+      ],
+      "calories": 560,
+      "macros": { "protein": 30, "carbs": 54, "fat": 24 },
+      "cooking_tip": "三文鱼煎熟切丁，与牛油果米饭捏成团。",
+      "tags": ["便携", "健康脂肪"]
+    },
+    {
+      "id": "lc024",
+      "name": "鸡胸玉米沙拉 + 全麦面包",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 130, "unit": "g" },
+        { "name": "甜玉米粒", "amount": 80, "unit": "g" },
+        { "name": "生菜番茄", "amount": 150, "unit": "g" },
+        { "name": "全麦面包", "amount": 60, "unit": "g" }
+      ],
+      "calories": 400,
+      "macros": { "protein": 36, "carbs": 44, "fat": 8 },
+      "cooking_tip": "鸡胸煮熟撕丝拌入蔬菜和玉米，淋柠檬汁。",
+      "tags": ["低脂", "减脂"]
+    },
+
+    {
+      "id": "pr005",
+      "name": "红薯 + 黑咖啡",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "红薯", "amount": 150, "unit": "g" },
+        { "name": "黑咖啡", "amount": 200, "unit": "ml" }
+      ],
+      "calories": 180,
+      "macros": { "protein": 3, "carbs": 38, "fat": 1 },
+      "cooking_tip": "红薯蒸熟，训练前45分钟吃。",
+      "tags": ["训练前", "慢碳"]
+    },
+    {
+      "id": "pr006",
+      "name": "米饭团 + 鸡胸丝",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "糙米饭", "amount": 120, "unit": "g" },
+        { "name": "鸡胸肉", "amount": 60, "unit": "g" },
+        { "name": "海苔", "amount": 3, "unit": "g" }
+      ],
+      "calories": 270,
+      "macros": { "protein": 18, "carbs": 40, "fat": 3 },
+      "cooking_tip": "鸡胸撕丝包在饭团里，训练前60分钟。",
+      "tags": ["训练前", "中式"]
+    },
+    {
+      "id": "pr007",
+      "name": "全麦贝果 + 花生酱",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "全麦贝果", "amount": 1, "unit": "个" },
+        { "name": "花生酱", "amount": 15, "unit": "g" }
+      ],
+      "calories": 290,
+      "macros": { "protein": 10, "carbs": 42, "fat": 10 },
+      "cooking_tip": "贝果烤2分钟抹花生酱，训练前45分钟。",
+      "tags": ["训练前", "快碳"]
+    },
+    {
+      "id": "pr008",
+      "name": "葡萄干燕麦能量棒",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "燕麦片", "amount": 35, "unit": "g" },
+        { "name": "葡萄干", "amount": 20, "unit": "g" },
+        { "name": "蜂蜜", "amount": 10, "unit": "g" }
+      ],
+      "calories": 220,
+      "macros": { "protein": 6, "carbs": 42, "fat": 4 },
+      "cooking_tip": "混合压模冷藏，训练前30分钟吃1块。",
+      "tags": ["训练前", "便携"]
+    },
+    {
+      "id": "pr009",
+      "name": "香蕉花生酱卷饼",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "全麦卷饼", "amount": 1, "unit": "张" },
+        { "name": "花生酱", "amount": 15, "unit": "g" },
+        { "name": "香蕉", "amount": 1, "unit": "根" }
+      ],
+      "calories": 310,
+      "macros": { "protein": 10, "carbs": 48, "fat": 10 },
+      "cooking_tip": "卷饼抹花生酱铺香蕉片卷起，训练前45分钟。",
+      "tags": ["训练前", "快碳"]
+    },
+    {
+      "id": "pr010",
+      "name": "低脂酸奶 + 燕麦 + 蓝莓",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "低脂酸奶", "amount": 150, "unit": "g" },
+        { "name": "燕麦片", "amount": 30, "unit": "g" },
+        { "name": "蓝莓", "amount": 40, "unit": "g" }
+      ],
+      "calories": 200,
+      "macros": { "protein": 12, "carbs": 30, "fat": 4 },
+      "cooking_tip": "酸奶拌燕麦和蓝莓，训练前60分钟。",
+      "tags": ["训练前", "轻食"]
+    },
+
+    {
+      "id": "po005",
+      "name": "巧克力蛋白奶昔",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "乳清蛋白粉（巧克力味）", "amount": 30, "unit": "g" },
+        { "name": "低脂牛奶", "amount": 300, "unit": "ml" },
+        { "name": "香蕉", "amount": 1, "unit": "根" }
+      ],
+      "calories": 380,
+      "macros": { "protein": 36, "carbs": 42, "fat": 6 },
+      "cooking_tip": "全部放入摇摇杯摇匀，训练后30分钟内。",
+      "tags": ["训练后", "快碳+蛋白"]
+    },
+    {
+      "id": "po006",
+      "name": "鸡蛋蔬菜炒饭",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡蛋", "amount": 3, "unit": "个" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" },
+        { "name": "豌豆玉米胡萝卜粒", "amount": 100, "unit": "g" }
+      ],
+      "calories": 480,
+      "macros": { "protein": 26, "carbs": 60, "fat": 14 },
+      "cooking_tip": "少油炒蛋加蔬菜粒和米饭翻炒。",
+      "tags": ["训练后", "家常"]
+    },
+    {
+      "id": "po007",
+      "name": "三文鱼牛油果饭碗",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "烟熏三文鱼", "amount": 100, "unit": "g" },
+        { "name": "牛油果", "amount": 60, "unit": "g" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" }
+      ],
+      "calories": 480,
+      "macros": { "protein": 28, "carbs": 48, "fat": 18 },
+      "cooking_tip": "三文鱼和牛油果铺在米饭上，淋少许酱油。",
+      "tags": ["训练后", "健康脂肪"]
+    },
+    {
+      "id": "po008",
+      "name": "鸡胸红薯碗 + 西兰花",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 130, "unit": "g" },
+        { "name": "红薯", "amount": 180, "unit": "g" },
+        { "name": "西兰花", "amount": 120, "unit": "g" }
+      ],
+      "calories": 420,
+      "macros": { "protein": 36, "carbs": 54, "fat": 6 },
+      "cooking_tip": "鸡胸煎熟红薯蒸西兰花焯水，一起装碗。",
+      "tags": ["训练后", "增肌减脂"]
+    },
+    {
+      "id": "po009",
+      "name": "蛋白燕麦饼干 + 牛奶",
+      "meal_type": "post_workout",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "蛋白粉", "amount": 25, "unit": "g" },
+        { "name": "燕麦片", "amount": 40, "unit": "g" },
+        { "name": "蜂蜜", "amount": 10, "unit": "g" },
+        { "name": "低脂牛奶", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 350,
+      "macros": { "protein": 30, "carbs": 42, "fat": 6 },
+      "cooking_tip": "蛋白粉+燕麦+蜂蜜混合烤15分钟，配牛奶。",
+      "tags": ["训练后", "便携"]
+    },
+    {
+      "id": "po010",
+      "name": "瘦牛肉洋葱炒面",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "瘦牛肉", "amount": 120, "unit": "g" },
+        { "name": "意大利面", "amount": 80, "unit": "g" },
+        { "name": "洋葱青椒", "amount": 100, "unit": "g" }
+      ],
+      "calories": 460,
+      "macros": { "protein": 36, "carbs": 52, "fat": 10 },
+      "cooking_tip": "牛肉切丝快炒，加煮好的意面和蔬菜翻炒。",
+      "tags": ["训练后", "增肌"]
+    },
+
+    {
+      "id": "dn010",
+      "name": "黑椒鸡胸 + 藜麦 + 烤蔬菜",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 150, "unit": "g" },
+        { "name": "藜麦", "amount": 80, "unit": "g" },
+        { "name": "西葫芦彩椒", "amount": 150, "unit": "g" }
+      ],
+      "calories": 460,
+      "macros": { "protein": 42, "carbs": 48, "fat": 8 },
+      "cooking_tip": "鸡胸撒黑椒煎熟，藜麦煮15分钟，蔬菜烤制。",
+      "tags": ["低脂", "西式"]
+    },
+    {
+      "id": "dn011",
+      "name": "蒜蓉虾 + 杂粮饭 + 炒时蔬",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "大虾", "amount": 150, "unit": "g" },
+        { "name": "杂粮饭", "amount": 150, "unit": "g" },
+        { "name": "时令蔬菜", "amount": 150, "unit": "g" }
+      ],
+      "calories": 440,
+      "macros": { "protein": 36, "carbs": 50, "fat": 8 },
+      "cooking_tip": "蒜蓉爆香加虾快炒2分钟，蔬菜另炒。",
+      "tags": ["低脂", "高蛋白"]
+    },
+    {
+      "id": "dn012",
+      "name": "瘦牛肉蔬菜汤 + 全麦面包",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "瘦牛肉", "amount": 120, "unit": "g" },
+        { "name": "番茄土豆卷心菜", "amount": 200, "unit": "g" },
+        { "name": "全麦面包", "amount": 60, "unit": "g" }
+      ],
+      "calories": 400,
+      "macros": { "protein": 34, "carbs": 44, "fat": 8 },
+      "cooking_tip": "牛肉焯水后加蔬菜炖30分钟，蘸面包吃。",
+      "tags": ["低脂", "暖胃"]
+    },
+    {
+      "id": "dn013",
+      "name": "鲷鱼香菇蒸 + 小米粥 + 青菜",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鲷鱼", "amount": 150, "unit": "g" },
+        { "name": "香菇", "amount": 60, "unit": "g" },
+        { "name": "小米", "amount": 50, "unit": "g" },
+        { "name": "青菜", "amount": 120, "unit": "g" }
+      ],
+      "calories": 400,
+      "macros": { "protein": 34, "carbs": 44, "fat": 8 },
+      "cooking_tip": "鱼身铺香菇大火蒸8分钟，小米粥煮30分钟。",
+      "tags": ["清淡", "中式"]
+    },
+    {
+      "id": "dn014",
+      "name": "鸡胸蘑菇焗饭",
+      "meal_type": "dinner",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 130, "unit": "g" },
+        { "name": "蘑菇", "amount": 100, "unit": "g" },
+        { "name": "糙米饭", "amount": 180, "unit": "g" },
+        { "name": "低脂芝士", "amount": 30, "unit": "g" }
+      ],
+      "calories": 560,
+      "macros": { "protein": 42, "carbs": 58, "fat": 14 },
+      "cooking_tip": "鸡胸蘑菇炒熟铺在饭上，撒芝士烤箱180度8分钟。",
+      "tags": ["西式", "增肌"]
+    },
+    {
+      "id": "dn015",
+      "name": "白灼虾 + 蒸南瓜 + 凉拌黄瓜",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "大虾", "amount": 200, "unit": "g" },
+        { "name": "南瓜", "amount": 200, "unit": "g" },
+        { "name": "黄瓜", "amount": 150, "unit": "g" }
+      ],
+      "calories": 340,
+      "macros": { "protein": 36, "carbs": 36, "fat": 4 },
+      "cooking_tip": "虾水煮3分钟蘸酱油，南瓜蒸熟，黄瓜拍碎凉拌。",
+      "tags": ["低脂", "清淡"]
+    },
+    {
+      "id": "dn016",
+      "name": "咖喱鸡肉 + 糙米饭",
+      "meal_type": "dinner",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 150, "unit": "g" },
+        { "name": "咖喱块", "amount": 20, "unit": "g" },
+        { "name": "土豆胡萝卜洋葱", "amount": 200, "unit": "g" },
+        { "name": "糙米饭", "amount": 180, "unit": "g" }
+      ],
+      "calories": 620,
+      "macros": { "protein": 40, "carbs": 72, "fat": 14 },
+      "cooking_tip": "蔬菜鸡胸炒后加水焖10分钟，加咖喱块收汁。",
+      "tags": ["咖喱", "增肌"]
+    },
+    {
+      "id": "dn017",
+      "name": "清蒸鳕鱼 + 紫薯 + 芦笋",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鳕鱼", "amount": 150, "unit": "g" },
+        { "name": "紫薯", "amount": 150, "unit": "g" },
+        { "name": "芦笋", "amount": 100, "unit": "g" }
+      ],
+      "calories": 380,
+      "macros": { "protein": 34, "carbs": 42, "fat": 8 },
+      "cooking_tip": "鳕鱼加姜丝蒸8分钟，紫薯蒸熟，芦笋焯水。",
+      "tags": ["低脂", "清淡"]
+    },
+    {
+      "id": "dn018",
+      "name": "番茄鸡蛋面 + 凉拌木耳",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "挂面", "amount": 80, "unit": "g" },
+        { "name": "鸡蛋", "amount": 2, "unit": "个" },
+        { "name": "番茄", "amount": 200, "unit": "g" },
+        { "name": "黑木耳", "amount": 80, "unit": "g" }
+      ],
+      "calories": 420,
+      "macros": { "protein": 22, "carbs": 56, "fat": 10 },
+      "cooking_tip": "少油炒番茄鸡蛋加水煮面，木耳凉拌。",
+      "tags": ["中式", "家常"]
+    },
+    {
+      "id": "dn019",
+      "name": "三文鱼牛油果沙拉 + 全麦面包",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "烟熏三文鱼", "amount": 100, "unit": "g" },
+        { "name": "牛油果", "amount": 60, "unit": "g" },
+        { "name": "混合蔬菜", "amount": 150, "unit": "g" },
+        { "name": "全麦面包", "amount": 60, "unit": "g" }
+      ],
+      "calories": 440,
+      "macros": { "protein": 28, "carbs": 36, "fat": 22 },
+      "cooking_tip": "蔬菜铺底，三文鱼牛油果摆上，淋柠檬橄榄油。",
+      "tags": ["低脂", "西式"]
+    },
+    {
+      "id": "dn022",
+      "name": "酱烧豆腐 + 青菜 + 杂粮饭",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "北豆腐", "amount": 200, "unit": "g" },
+        { "name": "青菜", "amount": 150, "unit": "g" },
+        { "name": "杂粮饭", "amount": 150, "unit": "g" }
+      ],
+      "calories": 380,
+      "macros": { "protein": 24, "carbs": 48, "fat": 10 },
+      "cooking_tip": "豆腐煎至两面金黄加酱油焖3分钟。",
+      "tags": ["素食", "低脂"]
+    },
+    {
+      "id": "dn023",
+      "name": "鸡腿肉烤蔬菜 + 红薯",
+      "meal_type": "dinner",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "去皮鸡腿肉", "amount": 150, "unit": "g" },
+        { "name": "红薯", "amount": 200, "unit": "g" },
+        { "name": "西兰花彩椒", "amount": 150, "unit": "g" }
+      ],
+      "calories": 550,
+      "macros": { "protein": 38, "carbs": 60, "fat": 14 },
+      "cooking_tip": "鸡肉和蔬菜一起烤180度20分钟，红薯蒸熟。",
+      "tags": ["一锅出", "增肌"]
+    },
+    {
+      "id": "dn024",
+      "name": "花蛤豆腐汤 + 小米饭",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "花蛤", "amount": 200, "unit": "g" },
+        { "name": "北豆腐", "amount": 150, "unit": "g" },
+        { "name": "小米", "amount": 50, "unit": "g" }
+      ],
+      "calories": 360,
+      "macros": { "protein": 30, "carbs": 40, "fat": 6 },
+      "cooking_tip": "花蛤吐沙后与豆腐煮5分钟，小米粥另煮。",
+      "tags": ["清淡", "低脂"]
+    },
+
+    {
+      "id": "sn012",
+      "name": "蛋白粉 + 燕麦 + 花生酱能量球",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "乳清蛋白粉", "amount": 20, "unit": "g" },
+        { "name": "燕麦片", "amount": 30, "unit": "g" },
+        { "name": "花生酱", "amount": 10, "unit": "g" }
+      ],
+      "calories": 240,
+      "macros": { "protein": 18, "carbs": 28, "fat": 6 },
+      "cooking_tip": "混合搓成球冷藏2小时后食用。",
+      "tags": ["高蛋白", "便携"]
+    },
+    {
+      "id": "sn013",
+      "name": "低脂牛奶 + 全麦饼干",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "低脂牛奶", "amount": 250, "unit": "ml" },
+        { "name": "全麦饼干", "amount": 30, "unit": "g" }
+      ],
+      "calories": 190,
+      "macros": { "protein": 10, "carbs": 28, "fat": 4 },
+      "cooking_tip": "睡前1小时饮用助眠。",
+      "tags": ["助眠", "快手"]
+    },
+    {
+      "id": "sn014",
+      "name": "牛油果鸡蛋沙拉",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "牛油果", "amount": 80, "unit": "g" },
+        { "name": "水煮蛋", "amount": 2, "unit": "个" }
+      ],
+      "calories": 260,
+      "macros": { "protein": 14, "carbs": 4, "fat": 20 },
+      "cooking_tip": "牛油果切丁拌鸡蛋碎，加少量黑胡椒。",
+      "tags": ["健康脂肪", "快手"]
+    },
+    {
+      "id": "sn015",
+      "name": "烤鹰嘴豆",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength", "bulk"],
+      "ingredients": [
+        { "name": "鹰嘴豆（熟）", "amount": 80, "unit": "g" },
+        { "name": "橄榄油", "amount": 3, "unit": "ml" },
+        { "name": "辣椒粉", "amount": 2, "unit": "g" }
+      ],
+      "calories": 180,
+      "macros": { "protein": 10, "carbs": 26, "fat": 4 },
+      "cooking_tip": "鹰嘴豆拌油和调料，烤箱200度烤20分钟。",
+      "tags": ["素食", "高纤维"]
+    },
+    {
+      "id": "sn016",
+      "name": "火鸡胸肉片 + 黄瓜条",
+      "meal_type": "snack",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "火鸡胸肉片", "amount": 80, "unit": "g" },
+        { "name": "黄瓜", "amount": 150, "unit": "g" }
+      ],
+      "calories": 130,
+      "macros": { "protein": 20, "carbs": 4, "fat": 3 },
+      "cooking_tip": "火鸡胸片卷黄瓜条当零食。",
+      "tags": ["低脂", "减脂"]
+    },
+    {
+      "id": "sn017",
+      "name": "奇亚籽酸奶杯",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "无糖酸奶", "amount": 150, "unit": "g" },
+        { "name": "奇亚籽", "amount": 10, "unit": "g" },
+        { "name": "蜂蜜", "amount": 5, "unit": "g" }
+      ],
+      "calories": 160,
+      "macros": { "protein": 12, "carbs": 16, "fat": 6 },
+      "cooking_tip": "奇亚籽泡酸奶冷藏2小时，加少量蜂蜜。",
+      "tags": ["减脂", "高纤维"]
+    },
+    {
+      "id": "sn018",
+      "name": "全麦吐司 + 牛油果泥",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "全麦吐司", "amount": 1, "unit": "片" },
+        { "name": "牛油果", "amount": 50, "unit": "g" }
+      ],
+      "calories": 180,
+      "macros": { "protein": 4, "carbs": 20, "fat": 10 },
+      "cooking_tip": "牛油果碾泥抹烤吐司，撒少量盐和黑胡椒。",
+      "tags": ["健康脂肪", "快手"]
+    },
+    {
+      "id": "sn019",
+      "name": "黑豆玉米沙拉",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength", "bulk"],
+      "ingredients": [
+        { "name": "黑豆（熟）", "amount": 80, "unit": "g" },
+        { "name": "甜玉米粒", "amount": 60, "unit": "g" },
+        { "name": "小番茄", "amount": 60, "unit": "g" }
+      ],
+      "calories": 190,
+      "macros": { "protein": 10, "carbs": 32, "fat": 2 },
+      "cooking_tip": "混合拌匀，淋少许柠檬汁。",
+      "tags": ["素食", "高纤维"]
+    },
+    {
+      "id": "sn020",
+      "name": "希腊酸奶 + 蜂蜜 + 核桃",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "希腊酸奶", "amount": 150, "unit": "g" },
+        { "name": "蜂蜜", "amount": 8, "unit": "g" },
+        { "name": "核桃仁", "amount": 15, "unit": "g" }
+      ],
+      "calories": 220,
+      "macros": { "protein": 16, "carbs": 18, "fat": 10 },
+      "cooking_tip": "酸奶淋蜂蜜撒核桃碎。",
+      "tags": ["健康脂肪", "快手"]
+    },
+    {
+      "id": "sn021",
+      "name": "鸡肉丸子 + 小番茄",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉丸", "amount": 100, "unit": "g" },
+        { "name": "小番茄", "amount": 100, "unit": "g" }
+      ],
+      "calories": 170,
+      "macros": { "protein": 22, "carbs": 10, "fat": 4 },
+      "cooking_tip": "自制鸡胸肉丸蒸熟冷藏，随取随吃。",
+      "tags": ["高蛋白", "便携"]
+    },
+    {
+      "id": "sn022",
+      "name": "紫薯泥 + 牛奶",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "紫薯", "amount": 150, "unit": "g" },
+        { "name": "低脂牛奶", "amount": 200, "unit": "ml" }
+      ],
+      "calories": 220,
+      "macros": { "protein": 10, "carbs": 38, "fat": 3 },
+      "cooking_tip": "紫薯蒸熟压泥，配温牛奶。",
+      "tags": ["慢碳", "饱腹"]
+    },
+    {
+      "id": "sn023",
+      "name": "蛋白质冰沙（蓝莓味）",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "乳清蛋白粉", "amount": 25, "unit": "g" },
+        { "name": "冷冻蓝莓", "amount": 80, "unit": "g" },
+        { "name": "水", "amount": 200, "unit": "ml" }
+      ],
+      "calories": 180,
+      "macros": { "protein": 24, "carbs": 16, "fat": 2 },
+      "cooking_tip": "全部放入搅拌机打匀，夏日必备。",
+      "tags": ["低卡", "高蛋白"]
+    },
+    {
+      "id": "sn024",
+      "name": "水煮毛豆 + 玉米棒",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "带壳毛豆", "amount": 150, "unit": "g" },
+        { "name": "鲜玉米", "amount": 1, "unit": "根" }
+      ],
+      "calories": 240,
+      "macros": { "protein": 14, "carbs": 40, "fat": 4 },
+      "cooking_tip": "毛豆盐水煮5分钟，玉米蒸15分钟。",
+      "tags": ["家常", "饱腹"]
+    },
+    {
+      "id": "sn025",
+      "name": "草莓 + 原味杏仁",
+      "meal_type": "snack",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "草莓", "amount": 120, "unit": "g" },
+        { "name": "原味杏仁", "amount": 15, "unit": "g" }
+      ],
+      "calories": 170,
+      "macros": { "protein": 4, "carbs": 20, "fat": 8 },
+      "cooking_tip": "草莓洗净直接吃，杏仁控制分量。",
+      "tags": ["低卡", "减脂"]
+    },
+    {
+      "id": "sn026",
+      "name": "奶酪火腿卷",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "低脂奶酪片", "amount": 20, "unit": "g" },
+        { "name": "鸡胸火腿片", "amount": 40, "unit": "g" }
+      ],
+      "calories": 120,
+      "macros": { "protein": 14, "carbs": 2, "fat": 6 },
+      "cooking_tip": "奶酪片卷火腿片，快手高蛋白。",
+      "tags": ["快手", "高蛋白"]
+    },
+    {
+      "id": "sn027",
+      "name": "可可蛋白奶",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "乳清蛋白粉", "amount": 25, "unit": "g" },
+        { "name": "可可粉", "amount": 5, "unit": "g" },
+        { "name": "低脂牛奶", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 230,
+      "macros": { "protein": 30, "carbs": 18, "fat": 4 },
+      "cooking_tip": "蛋白粉和可可粉加入牛奶摇匀。",
+      "tags": ["高蛋白", "快手"]
+    },
+    {
+      "id": "sn028",
+      "name": "菠菜蛋白卷",
+      "meal_type": "snack",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "蛋白", "amount": 3, "unit": "个" },
+        { "name": "菠菜", "amount": 50, "unit": "g" }
+      ],
+      "calories": 110,
+      "macros": { "protein": 16, "carbs": 4, "fat": 2 },
+      "cooking_tip": "蛋白打散加菠菜碎，不粘锅两面煎。",
+      "tags": ["低卡", "减脂"]
+    },
+    {
+      "id": "sn029",
+      "name": "燕麦蓝莓松饼",
+      "meal_type": "snack",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "燕麦片", "amount": 40, "unit": "g" },
+        { "name": "鸡蛋", "amount": 1, "unit": "个" },
+        { "name": "蓝莓", "amount": 40, "unit": "g" },
+        { "name": "蜂蜜", "amount": 8, "unit": "g" }
+      ],
+      "calories": 220,
+      "macros": { "protein": 10, "carbs": 32, "fat": 6 },
+      "cooking_tip": "燕麦+蛋+蜂蜜搅拌加蓝莓，不粘锅两面煎。",
+      "tags": ["加餐", "快手"]
+    },
+    {
+      "id": "sn030",
+      "name": "金枪鱼生菜杯",
+      "meal_type": "snack",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "水浸金枪鱼", "amount": 80, "unit": "g" },
+        { "name": "生菜叶", "amount": 4, "unit": "片" },
+        { "name": "希腊酸奶", "amount": 20, "unit": "g" }
+      ],
+      "calories": 130,
+      "macros": { "protein": 22, "carbs": 4, "fat": 3 },
+      "cooking_tip": "金枪鱼拌酸奶，用生菜叶包着吃。",
+      "tags": ["低卡", "高蛋白"]
+    },
+
+    {
+      "id": "bk021",
+      "name": "小米南瓜粥 + 坚果碎",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "小米", "amount": 50, "unit": "g" },
+        { "name": "南瓜", "amount": 150, "unit": "g" },
+        { "name": "核桃碎", "amount": 10, "unit": "g" }
+      ],
+      "calories": 320,
+      "macros": { "protein": 10, "carbs": 54, "fat": 8 },
+      "cooking_tip": "小米南瓜同煮30分钟至软烂，撒核桃碎。",
+      "tags": ["中式", "养胃"]
+    },
+    {
+      "id": "bk022",
+      "name": "三文鱼牛油果吐司",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "全麦吐司", "amount": 2, "unit": "片" },
+        { "name": "烟熏三文鱼", "amount": 60, "unit": "g" },
+        { "name": "牛油果", "amount": 50, "unit": "g" }
+      ],
+      "calories": 420,
+      "macros": { "protein": 22, "carbs": 36, "fat": 22 },
+      "cooking_tip": "吐司抹牛油果铺三文鱼，撒黑胡椒。",
+      "tags": ["西式", "健康脂肪"]
+    },
+    {
+      "id": "bk023",
+      "name": "豆腐脑 + 油条（少量）+ 茶叶蛋",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "嫩豆腐", "amount": 200, "unit": "g" },
+        { "name": "油条", "amount": 30, "unit": "g" },
+        { "name": "茶叶蛋", "amount": 2, "unit": "个" }
+      ],
+      "calories": 380,
+      "macros": { "protein": 22, "carbs": 30, "fat": 18 },
+      "cooking_tip": "豆腐脑少卤汁，油条控制量。",
+      "tags": ["中式", "经典"]
+    },
+    {
+      "id": "bk024",
+      "name": "蛋白粉燕麦粥 + 核桃",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "燕麦片", "amount": 60, "unit": "g" },
+        { "name": "乳清蛋白粉", "amount": 25, "unit": "g" },
+        { "name": "核桃仁", "amount": 15, "unit": "g" }
+      ],
+      "calories": 430,
+      "macros": { "protein": 32, "carbs": 48, "fat": 12 },
+      "cooking_tip": "燕麦煮熟后稍凉拌入蛋白粉，撒核桃。",
+      "tags": ["高蛋白", "增肌"]
+    },
+    {
+      "id": "bk025",
+      "name": "蔬菜蛋饼 + 玉米 + 牛奶",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鸡蛋", "amount": 2, "unit": "个" },
+        { "name": "菠菜番茄", "amount": 100, "unit": "g" },
+        { "name": "玉米段", "amount": 100, "unit": "g" },
+        { "name": "牛奶", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 400,
+      "macros": { "protein": 24, "carbs": 38, "fat": 14 },
+      "cooking_tip": "蛋饼加蔬菜少油煎，玉米蒸熟。",
+      "tags": ["均衡", "家常"]
+    },
+
+    {
+      "id": "lc025",
+      "name": "鸡胸菠菜意面",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 130, "unit": "g" },
+        { "name": "意大利面", "amount": 80, "unit": "g" },
+        { "name": "菠菜", "amount": 100, "unit": "g" },
+        { "name": "蒜", "amount": 5, "unit": "g" }
+      ],
+      "calories": 490,
+      "macros": { "protein": 40, "carbs": 54, "fat": 8 },
+      "cooking_tip": "意面煮8分钟，蒜香炒鸡胸和菠菜拌面。",
+      "tags": ["西式", "低脂"]
+    },
+    {
+      "id": "lc026",
+      "name": "牛肉蔬菜卷饼",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "瘦牛肉", "amount": 120, "unit": "g" },
+        { "name": "全麦卷饼", "amount": 1, "unit": "张" },
+        { "name": "生菜番茄洋葱", "amount": 100, "unit": "g" }
+      ],
+      "calories": 480,
+      "macros": { "protein": 36, "carbs": 46, "fat": 14 },
+      "cooking_tip": "牛肉煎熟切条，与蔬菜一起卷入饼中。",
+      "tags": ["便携", "增肌"]
+    },
+    {
+      "id": "lc027",
+      "name": "豆腐蔬菜汤 + 糙米饭",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "北豆腐", "amount": 150, "unit": "g" },
+        { "name": "番茄白菜", "amount": 200, "unit": "g" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" }
+      ],
+      "calories": 380,
+      "macros": { "protein": 22, "carbs": 52, "fat": 8 },
+      "cooking_tip": "番茄炒出汁加水和豆腐煮10分钟。",
+      "tags": ["低脂", "素食"]
+    },
+    {
+      "id": "lc028",
+      "name": "三文鱼荞麦面沙拉",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "三文鱼", "amount": 120, "unit": "g" },
+        { "name": "荞麦面", "amount": 80, "unit": "g" },
+        { "name": "黄瓜紫甘蓝", "amount": 120, "unit": "g" }
+      ],
+      "calories": 470,
+      "macros": { "protein": 32, "carbs": 46, "fat": 16 },
+      "cooking_tip": "三文鱼煎熟，荞麦面煮熟过冷水拌沙拉。",
+      "tags": ["日式", "低脂"]
+    },
+    {
+      "id": "lc029",
+      "name": "鸡肉土豆炖菜 + 杂粮饭",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡腿肉", "amount": 140, "unit": "g" },
+        { "name": "土豆胡萝卜", "amount": 180, "unit": "g" },
+        { "name": "杂粮饭", "amount": 180, "unit": "g" }
+      ],
+      "calories": 600,
+      "macros": { "protein": 36, "carbs": 70, "fat": 14 },
+      "cooking_tip": "鸡肉炒变色加蔬菜和水焖15分钟。",
+      "tags": ["中式", "家常"]
+    },
+    {
+      "id": "lc030",
+      "name": "虾仁西兰花炒饭",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "虾仁", "amount": 120, "unit": "g" },
+        { "name": "糙米饭", "amount": 160, "unit": "g" },
+        { "name": "西兰花", "amount": 120, "unit": "g" }
+      ],
+      "calories": 460,
+      "macros": { "protein": 34, "carbs": 56, "fat": 8 },
+      "cooking_tip": "虾仁快炒加西兰花粒和米饭翻炒。",
+      "tags": ["高蛋白", "低脂"]
+    },
+
+    {
+      "id": "pr011",
+      "name": "蛋白粉 + 香蕉 + 水",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "乳清蛋白粉", "amount": 20, "unit": "g" },
+        { "name": "香蕉", "amount": 1, "unit": "根" },
+        { "name": "水", "amount": 300, "unit": "ml" }
+      ],
+      "calories": 190,
+      "macros": { "protein": 18, "carbs": 28, "fat": 1 },
+      "cooking_tip": "训练前30分钟摇匀喝下。",
+      "tags": ["训练前", "简易"]
+    },
+    {
+      "id": "pr012",
+      "name": "全麦面包 + 鸡蛋",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["strength", "bulk"],
+      "ingredients": [
+        { "name": "全麦面包", "amount": 60, "unit": "g" },
+        { "name": "水煮蛋", "amount": 1, "unit": "个" }
+      ],
+      "calories": 210,
+      "macros": { "protein": 12, "carbs": 30, "fat": 6 },
+      "cooking_tip": "训练前60分钟吃，消化负担小。",
+      "tags": ["训练前", "家常"]
+    },
+    {
+      "id": "pr013",
+      "name": "橙子 + 杏仁",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "橙子", "amount": 1, "unit": "个" },
+        { "name": "原味杏仁", "amount": 12, "unit": "g" }
+      ],
+      "calories": 160,
+      "macros": { "protein": 3, "carbs": 24, "fat": 6 },
+      "cooking_tip": "橙子提供维C和快碳，杏仁少量健康脂肪。",
+      "tags": ["训练前", "减脂"]
+    },
+
+    {
+      "id": "po011",
+      "name": "鸡肉蔬菜卷 + 牛奶",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 120, "unit": "g" },
+        { "name": "全麦卷饼", "amount": 1, "unit": "张" },
+        { "name": "生菜番茄", "amount": 80, "unit": "g" },
+        { "name": "低脂牛奶", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 420,
+      "macros": { "protein": 38, "carbs": 42, "fat": 8 },
+      "cooking_tip": "鸡胸煎熟卷饼，配牛奶快速补充蛋白。",
+      "tags": ["训练后", "便携"]
+    },
+    {
+      "id": "po012",
+      "name": "鸡蛋香蕉燕麦碗",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡蛋", "amount": 2, "unit": "个" },
+        { "name": "燕麦片", "amount": 50, "unit": "g" },
+        { "name": "香蕉", "amount": 1, "unit": "根" }
+      ],
+      "calories": 400,
+      "macros": { "protein": 22, "carbs": 56, "fat": 10 },
+      "cooking_tip": "燕麦煮好拌入香蕉，鸡蛋另煮。",
+      "tags": ["训练后", "快碳+蛋白"]
+    },
+    {
+      "id": "po013",
+      "name": "鸡胸糙米碗 + 毛豆",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 130, "unit": "g" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" },
+        { "name": "毛豆", "amount": 60, "unit": "g" }
+      ],
+      "calories": 430,
+      "macros": { "protein": 40, "carbs": 48, "fat": 8 },
+      "cooking_tip": "鸡胸煎熟铺饭上，毛豆焯水撒盐。",
+      "tags": ["训练后", "增肌减脂"]
+    },
+
+    {
+      "id": "dn025",
+      "name": "鸡腿肉蒸蛋 + 小白菜 + 糙米饭",
+      "meal_type": "dinner",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡腿肉", "amount": 130, "unit": "g" },
+        { "name": "鸡蛋", "amount": 2, "unit": "个" },
+        { "name": "小白菜", "amount": 120, "unit": "g" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" }
+      ],
+      "calories": 530,
+      "macros": { "protein": 38, "carbs": 54, "fat": 14 },
+      "cooking_tip": "鸡腿肉铺蛋液蒸10分钟，小白菜另炒。",
+      "tags": ["中式", "家常"]
+    },
+    {
+      "id": "dn026",
+      "name": "烤三文鱼 + 芦笋 + 红薯",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "三文鱼", "amount": 140, "unit": "g" },
+        { "name": "芦笋", "amount": 100, "unit": "g" },
+        { "name": "红薯", "amount": 180, "unit": "g" }
+      ],
+      "calories": 470,
+      "macros": { "protein": 34, "carbs": 46, "fat": 16 },
+      "cooking_tip": "三文鱼和芦笋一起烤180度15分钟，红薯蒸熟。",
+      "tags": ["西式", "低脂"]
+    },
+    {
+      "id": "dn027",
+      "name": "番茄鱼片 + 豆腐 + 米饭",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鱼片", "amount": 150, "unit": "g" },
+        { "name": "番茄", "amount": 200, "unit": "g" },
+        { "name": "北豆腐", "amount": 100, "unit": "g" },
+        { "name": "糙米饭", "amount": 150, "unit": "g" }
+      ],
+      "calories": 440,
+      "macros": { "protein": 36, "carbs": 50, "fat": 8 },
+      "cooking_tip": "番茄炒出汁煮豆腐，鱼片最后放煮2分钟。",
+      "tags": ["低脂", "家常"]
+    },
+    {
+      "id": "dn028",
+      "name": "牛肉蔬菜汤 + 杂粮饭",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "瘦牛肉", "amount": 130, "unit": "g" },
+        { "name": "土豆胡萝卜洋葱", "amount": 200, "unit": "g" },
+        { "name": "杂粮饭", "amount": 150, "unit": "g" }
+      ],
+      "calories": 480,
+      "macros": { "protein": 34, "carbs": 56, "fat": 10 },
+      "cooking_tip": "牛肉焯水后加蔬菜炖30分钟，撇去浮油。",
+      "tags": ["暖胃", "家常"]
+    },
+    {
+      "id": "dn029",
+      "name": "虾仁蒸豆腐 + 小米粥 + 青菜",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut"],
+      "ingredients": [
+        { "name": "虾仁", "amount": 100, "unit": "g" },
+        { "name": "嫩豆腐", "amount": 150, "unit": "g" },
+        { "name": "小米", "amount": 40, "unit": "g" },
+        { "name": "青菜", "amount": 120, "unit": "g" }
+      ],
+      "calories": 320,
+      "macros": { "protein": 28, "carbs": 34, "fat": 8 },
+      "cooking_tip": "虾仁铺豆腐上蒸6分钟，小米粥另煮。",
+      "tags": ["低脂", "清淡"]
+    },
+    {
+      "id": "dn030",
+      "name": "蒜香鸡胸 + 烤根茎蔬菜",
+      "meal_type": "dinner",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 150, "unit": "g" },
+        { "name": "红薯胡萝卜", "amount": 200, "unit": "g" },
+        { "name": "大蒜", "amount": 3, "unit": "瓣" }
+      ],
+      "calories": 400,
+      "macros": { "protein": 38, "carbs": 44, "fat": 6 },
+      "cooking_tip": "鸡胸蒜末腌制10分钟煎熟，蔬菜烤箱烤20分钟。",
+      "tags": ["低脂", "西式"]
+    },
+
+    {
+      "id": "bk026",
+      "name": "蛋白质松饼 + 树莓",
+      "meal_type": "breakfast",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "蛋白粉", "amount": 25, "unit": "g" },
+        { "name": "鸡蛋", "amount": 1, "unit": "个" },
+        { "name": "香蕉", "amount": 1, "unit": "根" },
+        { "name": "树莓", "amount": 50, "unit": "g" }
+      ],
+      "calories": 340,
+      "macros": { "protein": 30, "carbs": 36, "fat": 6 },
+      "cooking_tip": "蛋白粉+鸡蛋+香蕉搅拌，不粘锅煎小饼，配树莓。",
+      "tags": ["高蛋白", "创新"]
+    },
+    {
+      "id": "bk027",
+      "name": "牛奶麦片 + 蓝莓 + 杏仁片",
+      "meal_type": "breakfast",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "牛奶", "amount": 300, "unit": "ml" },
+        { "name": "混合麦片", "amount": 60, "unit": "g" },
+        { "name": "蓝莓", "amount": 50, "unit": "g" },
+        { "name": "杏仁片", "amount": 10, "unit": "g" }
+      ],
+      "calories": 400,
+      "macros": { "protein": 16, "carbs": 52, "fat": 14 },
+      "cooking_tip": "牛奶倒麦片泡2分钟，撒蓝莓和杏仁片。",
+      "tags": ["快手", "增肌"]
+    },
+
+    {
+      "id": "pr014",
+      "name": "米糕 + 乳清蛋白粉",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "年糕/米糕", "amount": 80, "unit": "g" },
+        { "name": "乳清蛋白粉", "amount": 20, "unit": "g" },
+        { "name": "水", "amount": 200, "unit": "ml" }
+      ],
+      "calories": 240,
+      "macros": { "protein": 18, "carbs": 36, "fat": 1 },
+      "cooking_tip": "米糕蒸热，蛋白粉水冲服，训练前40分钟。",
+      "tags": ["训练前", "快碳"]
+    },
+    {
+      "id": "pr015",
+      "name": "红薯干 + 黑咖啡",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "红薯干", "amount": 40, "unit": "g" },
+        { "name": "黑咖啡", "amount": 200, "unit": "ml" }
+      ],
+      "calories": 150,
+      "macros": { "protein": 2, "carbs": 34, "fat": 0 },
+      "cooking_tip": "红薯干提前泡软或直接嚼，训练前30分钟。",
+      "tags": ["训练前", "便携"]
+    },
+    {
+      "id": "pr016",
+      "name": "酸奶 + 蜂蜜 + 麦片",
+      "meal_type": "pre_workout",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "无糖酸奶", "amount": 120, "unit": "g" },
+        { "name": "蜂蜜", "amount": 10, "unit": "g" },
+        { "name": "麦片", "amount": 20, "unit": "g" }
+      ],
+      "calories": 180,
+      "macros": { "protein": 8, "carbs": 30, "fat": 3 },
+      "cooking_tip": "酸奶拌蜂蜜和麦片，训练前45分钟。",
+      "tags": ["训练前", "轻食"]
+    },
+
+    {
+      "id": "po014",
+      "name": "三文鱼蔬菜饭碗",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "三文鱼", "amount": 120, "unit": "g" },
+        { "name": "糙米饭", "amount": 160, "unit": "g" },
+        { "name": "西兰花胡萝卜", "amount": 120, "unit": "g" }
+      ],
+      "calories": 500,
+      "macros": { "protein": 32, "carbs": 54, "fat": 14 },
+      "cooking_tip": "三文鱼煎熟铺饭上，蔬菜焯水摆盘。",
+      "tags": ["训练后", "增肌"]
+    },
+    {
+      "id": "po015",
+      "name": "鸡蛋红薯碗 + 牛奶",
+      "meal_type": "post_workout",
+      "suitable_goals": ["bulk", "strength", "cut"],
+      "ingredients": [
+        { "name": "水煮蛋", "amount": 3, "unit": "个" },
+        { "name": "红薯", "amount": 180, "unit": "g" },
+        { "name": "低脂牛奶", "amount": 250, "unit": "ml" }
+      ],
+      "calories": 410,
+      "macros": { "protein": 26, "carbs": 52, "fat": 12 },
+      "cooking_tip": "红薯蒸熟，鸡蛋煮熟，配牛奶。",
+      "tags": ["训练后", "家常"]
+    },
+    {
+      "id": "po016",
+      "name": "鸡肉玉米汤 + 全麦面包",
+      "meal_type": "post_workout",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 120, "unit": "g" },
+        { "name": "甜玉米粒", "amount": 80, "unit": "g" },
+        { "name": "全麦面包", "amount": 60, "unit": "g" }
+      ],
+      "calories": 340,
+      "macros": { "protein": 32, "carbs": 40, "fat": 6 },
+      "cooking_tip": "鸡胸撕丝与玉米煮汤5分钟，蘸面包。",
+      "tags": ["训练后", "暖胃"]
+    },
+
+    {
+      "id": "lc031",
+      "name": "鸡肉蘑菇意面 + 沙拉",
+      "meal_type": "lunch",
+      "suitable_goals": ["bulk", "strength"],
+      "ingredients": [
+        { "name": "鸡胸肉", "amount": 130, "unit": "g" },
+        { "name": "意大利面", "amount": 90, "unit": "g" },
+        { "name": "蘑菇", "amount": 80, "unit": "g" },
+        { "name": "混合蔬菜", "amount": 100, "unit": "g" }
+      ],
+      "calories": 540,
+      "macros": { "protein": 40, "carbs": 60, "fat": 10 },
+      "cooking_tip": "鸡胸蘑菇炒熟，拌入煮好的意面，蔬菜做沙拉。",
+      "tags": ["西式", "增肌"]
+    },
+    {
+      "id": "lc032",
+      "name": "鲈鱼杂粮饭 + 凉拌西蓝花",
+      "meal_type": "lunch",
+      "suitable_goals": ["cut", "strength"],
+      "ingredients": [
+        { "name": "鲈鱼", "amount": 150, "unit": "g" },
+        { "name": "杂粮饭", "amount": 150, "unit": "g" },
+        { "name": "西兰花", "amount": 120, "unit": "g" }
+      ],
+      "calories": 430,
+      "macros": { "protein": 36, "carbs": 48, "fat": 8 },
+      "cooking_tip": "鲈鱼清蒸8分钟，西兰花焯水拌蒜蓉。",
+      "tags": ["低脂", "中式"]
+    }
+  ]
+}

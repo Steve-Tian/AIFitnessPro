@@ -1,4 +1,14 @@
 const bundledCatalog = require('../data/exercises.json')
+const {
+  MUSCLE_LABELS,
+  EQUIPMENT_LABELS,
+  DIFFICULTY_LABELS,
+  CATEGORY_LABELS,
+  normalizeList,
+  translateLabels,
+  buildInstructionSteps,
+  buildDetailedStepCards
+} = require('./shared')
 
 const DEFAULT_EXERCISE_IMAGE = '/images/default_exercise.png'
 const DEFAULT_EXERCISE_INSTRUCTIONS = [
@@ -7,47 +17,10 @@ const DEFAULT_EXERCISE_INSTRUCTIONS = [
   '每次还原都控制速度，若出现明显疼痛或动作变形请立即降强度'
 ]
 
-const CATEGORY_LABELS = {
-  all: '全部',
-  push: '推日',
-  pull: '拉日',
-  legs: '腿日'
-}
-
-const MUSCLE_LABELS = {
-  chest: '胸肌',
-  triceps: '肱三头肌',
-  front_delts: '前三角',
-  shoulders: '三角肌',
-  rear_delts: '后三角',
-  back: '背阔肌',
-  rhomboids: '菱形肌',
-  biceps: '肱二头肌',
-  forearms: '前臂',
-  quads: '股四头肌',
-  hamstrings: '腘绳肌',
-  glutes: '臀大肌',
-  calves: '小腿',
-  core: '核心'
-}
-
-const EQUIPMENT_LABELS = {
-  full_gym: '综合器械',
-  barbell_bench: '杠铃/卧推架',
-  dumbbell_only: '哑铃',
-  bodyweight: '徒手',
-  cable: '绳索器械'
-}
-
-const DIFFICULTY_LABELS = {
-  beginner: '入门',
-  intermediate: '中级',
-  advanced: '进阶'
-}
-
 const SOURCE_LABELS = {
   ExerciseDB: 'ExerciseDB 主源',
   Wger: 'Wger 补充源',
+  'cloud-library': '云端动作库',
   'local-bundle': '内置种子库'
 }
 
@@ -61,13 +34,15 @@ const ADDITIONAL_EXERCISES = [
     equipment: ['bodyweight'],
     difficulty: 'intermediate',
     gifUrl: '',
+    motto: '钻石手型 · 肘贴身侧 · 夹臂推起',
     instructions: [
-      '双手放在胸前下方，拇指与食指靠近呈钻石形',
-      '身体保持一条直线，缓慢下放至胸部接近手背',
-      '手掌发力推起，顶端收紧胸肌和三头肌'
+      '双手放在胸前下方，拇指与食指靠近呈钻石形（菱形），指尖朝前',
+      '身体从头到脚保持一条直线，收紧核心和臀部',
+      '肘部贴近身体两侧，缓慢下放至胸部接近手背，停顿 1 秒',
+      '手掌均匀发力推起，顶端收紧胸肌内侧和三头肌'
     ],
-    tips: ['肘部自然贴近身体两侧', '全程收紧核心，避免塌腰'],
-    commonMistakes: ['手掌位置过宽，导致胸肌发力分散', '下放时塌腰或耸肩']
+    tips: ['肘部自然贴近身体两侧而非外翻', '全程收紧核心避免塌腰', '做不了可以先从跪姿开始'],
+    commonMistakes: ['手掌位置过宽变成普通俯卧撑', '下放时塌腰或耸肩', '肘部外翻减弱三头刺激']
   },
   {
     id: 'pike_push_up',
@@ -78,13 +53,15 @@ const ADDITIONAL_EXERCISES = [
     equipment: ['bodyweight'],
     difficulty: 'intermediate',
     gifUrl: '',
+    motto: '倒V撑地 · 头冲地面 · 肩部主推',
     instructions: [
-      '双手撑地，臀部抬高形成倒 V 字',
-      '屈肘让头部向地面下方移动',
-      '肩部发力推回起始位置'
+      '双手撑地略宽于肩，双脚向手方向走近，臀部抬高形成倒 V 字型',
+      '头部位于双臂之间，眼睛看向脚尖方向',
+      '屈肘让头部向地面方向下沉，肘部朝斜后方弯曲',
+      '肩部发力推回起始位置，回到倒 V 型'
     ],
-    tips: ['重心略向前，让肩部更多发力', '动作全程避免耸肩'],
-    commonMistakes: ['臀部塌陷，变成普通俯卧撑轨迹', '手肘外翻过大导致肩部不稳']
+    tips: ['重心略向前让肩部承受更多负荷', '全程避免耸肩', '脚越靠近手难度越大'],
+    commonMistakes: ['臀部塌陷变成普通俯卧撑轨迹', '手肘外翻过大导致肩部不稳', '颈部过度伸展']
   },
   {
     id: 'superman_hold',
@@ -95,13 +72,15 @@ const ADDITIONAL_EXERCISES = [
     equipment: ['bodyweight'],
     difficulty: 'beginner',
     gifUrl: '',
+    motto: '趴平伸展 · 背臀发力 · 顶峰停顿',
     instructions: [
-      '俯卧趴地，双手向前伸直',
-      '同时抬起双臂和双腿，感受背部发力',
-      '顶峰停顿 1 秒后缓慢放下'
+      '俯卧趴在地面上，双手向前伸直过头，双腿伸直并拢',
+      '同时抬起双臂和双腿离开地面 10-15 厘米，感受背部和臀部同时发力',
+      '在最高点停顿 1-2 秒，充分挤压竖脊肌',
+      '缓慢放下四肢回到地面，不要一下摔下来'
     ],
-    tips: ['动作幅度不必过大，重在控制', '颈部保持自然，不要抬头过度'],
-    commonMistakes: ['抬头过高导致颈部受压', '依靠甩腿而不是背部主动发力']
+    tips: ['动作幅度不必过大，重在控制和停顿', '颈部保持自然延长线，不要抬头看前方', '可以增加停顿时间来增加难度'],
+    commonMistakes: ['抬头过高导致颈部受压', '依靠甩腿而非背部主动发力', '没有顶峰停顿就放下']
   },
   {
     id: 'ytw_raise',
@@ -112,13 +91,15 @@ const ADDITIONAL_EXERCISES = [
     equipment: ['bodyweight'],
     difficulty: 'beginner',
     gifUrl: '',
+    motto: '三字轨迹 · 肩胛后缩 · 慢举慢放',
     instructions: [
-      '微屈髋俯身，核心收紧',
-      '双臂依次做 Y、T、W 三个轨迹抬举',
-      '每个轨迹顶峰停顿后缓慢回到起始位置'
+      '俯卧或微屈髋俯身站立，核心收紧，手臂自然下垂',
+      'Y 轨迹：双臂向头部斜上方 45° 抬举成 Y 字，拇指朝天',
+      'T 轨迹：双臂向身体两侧水平抬举成 T 字，挤压肩胛骨',
+      'W 轨迹：双臂屈肘向后拉成 W 字型，肩胛骨完全后缩下沉'
     ],
-    tips: ['全程小重量或徒手控制', '肩胛骨主动后缩下沉'],
-    commonMistakes: ['动作太快，肩后束无法充分收缩', '耸肩代偿导致斜方肌抢力']
+    tips: ['每个轨迹顶峰停顿 1-2 秒', '全程小重量或徒手控制', '肩胛骨主动后缩下沉是发力关键'],
+    commonMistakes: ['动作太快肩后束无法充分收缩', '耸肩代偿导致斜方肌抢力', '三个轨迹混在一起没有区分']
   },
   {
     id: 'towel_curl',
@@ -129,13 +110,15 @@ const ADDITIONAL_EXERCISES = [
     equipment: ['bodyweight'],
     difficulty: 'beginner',
     gifUrl: '',
+    motto: '毛巾对拉 · 均匀阻力 · 肘固不动',
     instructions: [
-      '双手握住毛巾两端，一侧向上弯举，另一侧提供阻力',
-      '弯举至手肘完全屈曲，顶峰停顿',
-      '缓慢下放并换边重复'
+      '双手握住毛巾两端，一只脚踩住毛巾中间（或对侧手提供阻力）',
+      '弯举侧的手肘固定在身体一侧，以肘关节为轴向上弯举',
+      '弯举至手肘完全屈曲，顶峰停顿挤压肱二头肌 1 秒',
+      '缓慢下放回到起始位置，保持阻力不突然松开'
     ],
-    tips: ['阻力保持均匀，不要突然放松', '肘部尽量固定在身体两侧'],
-    commonMistakes: ['阻力忽大忽小，导致动作节奏失控', '身体后仰借力']
+    tips: ['阻力保持均匀，不要突然放松', '肘部尽量固定在身体两侧', '可以调节踩踏位置来改变阻力大小'],
+    commonMistakes: ['阻力忽大忽小导致动作节奏失控', '身体后仰借力', '肘部前后移动']
   },
   {
     id: 'bodyweight_squat',
@@ -146,13 +129,15 @@ const ADDITIONAL_EXERCISES = [
     equipment: ['bodyweight'],
     difficulty: 'beginner',
     gifUrl: '',
+    motto: '脚跟踩实 · 膝跟脚尖 · 蹲深站稳',
     instructions: [
-      '双脚与肩同宽站立，脚尖略向外',
-      '屈髋屈膝下蹲至大腿接近平行地面',
-      '脚跟发力站起，回到起始姿势'
+      '双脚与肩同宽或略宽站立，脚尖外展约 15°-30°，双手前伸或抱胸保持平衡',
+      '挺胸收核心，屈髋屈膝同时向下坐，想象身后有把椅子',
+      '下蹲至大腿与地面平行或更低，膝盖方向始终与脚尖一致',
+      '脚跟发力站起回到初始位置，站直时臀部微微收紧'
     ],
-    tips: ['膝盖方向与脚尖一致', '保持胸口打开，避免塌腰'],
-    commonMistakes: ['膝盖内扣', '下蹲时脚跟离地']
+    tips: ['膝盖方向与脚尖一致是保护膝盖的关键', '保持胸口打开不要弓背', '脚跟始终踩实地面'],
+    commonMistakes: ['膝盖内扣（膝外翻）', '下蹲时脚跟离地', '身体过度前倾弓背']
   },
   {
     id: 'reverse_lunge',
@@ -163,13 +148,15 @@ const ADDITIONAL_EXERCISES = [
     equipment: ['bodyweight'],
     difficulty: 'beginner',
     gifUrl: '',
+    motto: '后撤一步 · 双膝九十 · 前跟蹬起',
     instructions: [
-      '站立姿势开始，单腿向后撤一步',
-      '前腿屈膝下蹲，后膝接近地面',
-      '前脚发力回到起始位置，再换边'
+      '自然站立，双手叉腰或自然下垂，挺胸收核心',
+      '一条腿向正后方撤出一大步，前脚脚掌踩稳地面',
+      '双膝同时弯曲下蹲，前腿和后腿都弯至约 90°，后膝接近但不触地',
+      '前脚脚跟发力蹬地站起回到初始位置，换另一条腿重复'
     ],
-    tips: ['前脚脚跟持续发力', '躯干保持稳定直立'],
-    commonMistakes: ['步幅过小导致膝盖压力过大', '躯干前倾过多']
+    tips: ['前脚脚跟持续发力是关键', '躯干保持稳定直立不前倾', '后撤比前跨对膝盖更友好'],
+    commonMistakes: ['步幅过小导致前膝压力过大', '躯干前倾过多失去平衡', '后膝撞击地面']
   },
   {
     id: 'standing_calf_raise',
@@ -180,13 +167,15 @@ const ADDITIONAL_EXERCISES = [
     equipment: ['bodyweight'],
     difficulty: 'beginner',
     gifUrl: '',
+    motto: '踮到最高 · 停顿两秒 · 慢放拉伸',
     instructions: [
-      '双脚与肩同宽站立，脚掌踩稳地面',
-      '脚尖发力将脚跟抬至最高点',
-      '缓慢下放，感受小腿拉伸'
+      '双脚与肩同宽站立，可以扶墙保持平衡（站在台阶边缘效果更好）',
+      '呼气，脚尖发力将脚跟抬至最高点，充分收缩小腿',
+      '在顶峰位置停顿 1-2 秒，感受小腿完全收紧',
+      '吸气以 2-3 秒速度缓慢下放，让脚跟低于台阶平面充分拉伸'
     ],
-    tips: ['顶峰停顿 1 秒', '下降过程尽量放慢'],
-    commonMistakes: ['动作反弹过快', '身体左右摇晃']
+    tips: ['顶峰停顿 1-2 秒是刺激关键', '下降过程尽量放慢', '可以单腿进行增加难度'],
+    commonMistakes: ['动作反弹过快像跳跃', '身体左右摇晃', '没有做到最大活动范围']
   }
 ]
 
@@ -196,25 +185,18 @@ function sanitizeRemoteMedia(url) {
   return url
 }
 
-function normalizeList(value) {
-  if (Array.isArray(value)) {
-    return value.filter(Boolean)
-  }
-  if (value) {
-    return [value]
-  }
-  return []
-}
+function buildHeroHighlights(primaryMuscles, commonMistakes) {
+  const highlights = []
 
-function translateLabels(values, dictionary) {
-  return normalizeList(values).map((value) => dictionary[value] || value)
-}
+  if (primaryMuscles.length > 0) {
+    highlights.push(`主练 ${primaryMuscles.join(' / ')}`)
+  }
 
-function buildInstructionSteps(instructions) {
-  return normalizeList(instructions).map((text, index) => ({
-    label: `步骤 ${index + 1}`,
-    text
-  }))
+  normalizeList(commonMistakes).slice(0, 2).forEach((item) => {
+    highlights.push(`避免 ${item}`)
+  })
+
+  return highlights.slice(0, 3)
 }
 
 function getSourceLabel(provider) {
@@ -252,6 +234,7 @@ function buildBundledRecord(exercise) {
     primary_muscles: primaryMuscles,
     secondary_muscles: secondaryMuscles,
     difficulty: exercise.difficulty,
+    motto: exercise.motto || '',
     media: {
       muscle_map_url: '',
       gif_url: gifUrl,
@@ -287,6 +270,7 @@ function normalizeRecordShape(record) {
       instructions: normalizeList(record.instructions),
       exercise_tips: normalizeList(record.exercise_tips || record.tips),
       common_mistakes: normalizeList(record.common_mistakes || record.commonMistakes),
+      motto: record.motto || '',
       overview: record.overview || '',
       media: {
         muscle_map_url: record.media && record.media.muscle_map_url ? record.media.muscle_map_url : '',
@@ -316,8 +300,14 @@ function decorateRecord(record) {
   const instructions = normalizeList(normalizedRecord.instructions)
   const exerciseTips = normalizeList(normalizedRecord.exercise_tips)
   const commonMistakes = normalizeList(normalizedRecord.common_mistakes)
-  const provider = normalizedRecord.source && normalizedRecord.source.provider ? normalizedRecord.source.provider : 'local-bundle'
+  const provider = normalizedRecord.source && normalizedRecord.source.provider
+    ? normalizedRecord.source.provider
+    : normalizedRecord._id
+      ? 'cloud-library'
+      : 'local-bundle'
   const sourceLabel = getSourceLabel(provider)
+  const motto = normalizedRecord.motto || ''
+  const detailedStepCards = buildDetailedStepCards(instructions.length ? instructions : DEFAULT_EXERCISE_INSTRUCTIONS, exerciseTips, commonMistakes, motto)
 
   return {
     ...normalizedRecord,
@@ -334,6 +324,7 @@ function decorateRecord(record) {
       : '重点关注动作轨迹、核心稳定和离心控制',
     equipmentText: equipmentLabels.join(' / ') || '按现有器械完成',
     difficultyLabel: DIFFICULTY_LABELS[normalizedRecord.difficulty] || '常规难度',
+    motto,
     coverUrl,
     videoUrl,
     mediaUrl: hasGif ? normalizedRecord.media.gif_url : coverUrl,
@@ -342,11 +333,22 @@ function decorateRecord(record) {
     sourceLabel,
     sourceProvider: provider,
     overviewText: normalizedRecord.overview || '',
+    mediaLabel: hasVideo ? '视频示范' : (hasGif ? 'GIF 示范' : '口诀 + 步骤'),
+    mediaNoteText: hasVideo
+      ? '先直接看视频动作轨迹，再开始练。'
+      : hasGif
+        ? '优先照着 GIF 轨迹练，不必先读长步骤。'
+        : motto
+          ? '记住口诀「' + motto + '」，跟着下方步骤练。'
+          : '参考下方详细步骤进行训练。',
     mediaStatus: hasGif || hasVideo ? '已同步媒体资源' : '待同步动图/视频',
     instructions: instructions.length ? instructions : DEFAULT_EXERCISE_INSTRUCTIONS,
     exercise_tips: exerciseTips,
     common_mistakes: commonMistakes,
-    instructionSteps: buildInstructionSteps(instructions.length ? instructions : DEFAULT_EXERCISE_INSTRUCTIONS)
+    instructionSteps: buildInstructionSteps(instructions.length ? instructions : DEFAULT_EXERCISE_INSTRUCTIONS),
+    detailedStepCards,
+    heroHighlights: buildHeroHighlights(primaryMuscles, commonMistakes),
+    muscleMapUrl: sanitizeRemoteMedia(normalizedRecord.media && normalizedRecord.media.muscle_map_url)
   }
 }
 
@@ -437,6 +439,7 @@ function mergeWorkoutExercise(workoutExercise, record) {
   const instructions = normalizeList(reference.instructions).length
     ? normalizeList(reference.instructions)
     : DEFAULT_EXERCISE_INSTRUCTIONS
+  const motto = reference.motto || workoutExercise.motto || ''
 
   return {
     ...reference,
@@ -450,8 +453,10 @@ function mergeWorkoutExercise(workoutExercise, record) {
     hasMedia: Boolean(reference.hasGif),
     hasGif: Boolean(reference.hasGif),
     hasVideo: Boolean(reference.hasVideo),
+    motto,
     instructions,
     instructionSteps: buildInstructionSteps(instructions),
+    detailedStepCards: buildDetailedStepCards(instructions, normalizeList(reference.exercise_tips), normalizeList(reference.common_mistakes), motto),
     tips: normalizeList(reference.exercise_tips),
     commonMistakes: normalizeList(reference.common_mistakes),
     primaryMuscles,
@@ -466,10 +471,84 @@ function mergeWorkoutExercise(workoutExercise, record) {
 }
 
 function getCloudDatabase() {
-  if (typeof wx === 'undefined' || !wx || !wx.cloud || typeof wx.cloud.database !== 'function') {
+  try {
+    if (typeof wx === 'undefined' || !wx || !wx.cloud || typeof wx.cloud.database !== 'function') {
+      return null
+    }
+    return wx.cloud.database()
+  } catch (err) {
+    console.warn('云数据库不可用：', err.message || err)
     return null
   }
-  return wx.cloud.database()
+}
+
+async function queryCloudExerciseById(id) {
+  if (!id) return null
+  const db = getCloudDatabase()
+  if (!db) return null
+
+  try {
+    const result = await db.collection('exercises').where({
+      exercise_id: id
+    }).get()
+
+    if (Array.isArray(result.data) && result.data.length > 0) {
+      return decorateRecord(result.data[0])
+    }
+  } catch (error) {
+    return null
+  }
+
+  return null
+}
+
+async function queryCloudExerciseByKey(key) {
+  if (!key) return null
+  const db = getCloudDatabase()
+  if (!db) return null
+
+  const candidateQueries = [
+    { exercise_id: key },
+    { name_cn: key },
+    { name_en: key }
+  ]
+
+  for (const query of candidateQueries) {
+    try {
+      const result = await db.collection('exercises').where(query).get()
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        return decorateRecord(result.data[0])
+      }
+    } catch (error) {
+      continue
+    }
+  }
+
+  return null
+}
+
+async function queryAllCloudExercises(db) {
+  const collection = db.collection('exercises')
+
+  if (collection && typeof collection.limit === 'function' && typeof collection.skip === 'function') {
+    const pageSize = 20
+    let offset = 0
+    let results = []
+    let hasNextPage = true
+
+    while (hasNextPage) {
+      const pageResult = await collection.skip(offset).limit(pageSize).get()
+      const pageData = Array.isArray(pageResult.data) ? pageResult.data : []
+      results = results.concat(pageData)
+      hasNextPage = pageData.length === pageSize
+      offset += pageSize
+    }
+
+    return results
+  }
+
+  const result = await collection.get()
+  return Array.isArray(result.data) ? result.data : []
 }
 
 async function fetchRuntimeRecords(forceRefresh) {
@@ -494,9 +573,9 @@ async function fetchRuntimeRecords(forceRefresh) {
     }
 
     try {
-      const result = await db.collection('exercises').get()
-      const records = Array.isArray(result.data)
-        ? result.data.map((record) => decorateRecord(record)).filter(Boolean)
+      const cloudRecords = await queryAllCloudExercises(db)
+      const records = Array.isArray(cloudRecords)
+        ? cloudRecords.map((record) => decorateRecord(record)).filter(Boolean)
         : []
 
       runtimeRecordsCache = records.length > 0 ? records : decoratedRecords
@@ -531,12 +610,20 @@ async function loadExerciseLibrary(options = {}) {
 }
 
 async function loadExerciseById(id, options = {}) {
+  const cloudRecord = await queryCloudExerciseById(id)
+  if (cloudRecord) {
+    return cloudRecord
+  }
   const records = await fetchRuntimeRecords(Boolean(options.forceRefresh))
   return records.find((record) => record.exercise_id === id) || null
 }
 
 async function loadExerciseByKey(key, options = {}) {
   if (!key) return null
+  const cloudRecord = await queryCloudExerciseByKey(key)
+  if (cloudRecord) {
+    return cloudRecord
+  }
   const records = await fetchRuntimeRecords(Boolean(options.forceRefresh))
   return createExerciseLookup(records)[key] || null
 }
@@ -589,6 +676,8 @@ module.exports = {
   enrichWorkoutExercises,
   mergeWorkoutExercise,
   fetchRuntimeRecords,
+  queryCloudExerciseById,
+  queryCloudExerciseByKey,
   buildExerciseSeedRecords,
   decorateRecord,
   getExerciseRuntimeMeta,

@@ -2,6 +2,14 @@ const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 const db = cloud.database()
+const { formatDateKey } = require('../shared/date-utils')
+
+function ok(data = {}, message = 'OK') {
+  return { success: true, message, ...data }
+}
+function fail(message = 'Error') {
+  return { success: false, message }
+}
 
 const MUSCLE_LABELS = {
   chest: '胸肌',
@@ -22,14 +30,6 @@ const MUSCLE_LABELS = {
 
 const DEFAULT_WARMUP_DURATION = '6-8 分钟'
 const DEFAULT_COOLDOWN_DURATION = '5-8 分钟'
-
-function padNumber(value) {
-  return String(value).padStart(2, '0')
-}
-
-function formatDateKey(date) {
-  return `${date.getFullYear()}-${padNumber(date.getMonth() + 1)}-${padNumber(date.getDate())}`
-}
 
 // 训练动作库（按肌群分类）
 const EXERCISE_LIBRARY = {
@@ -377,6 +377,14 @@ function buildAdaptiveNotes(workout) {
     }))
 }
 
+// 周期化阶段配置（需求 DESIGN.md §6.2 四周循环）
+const PHASE_CONFIG = {
+  1: { name: '适应期', label: '适应', rpeTarget: '6-7', volumeMultiplier: 1.0, intensityMultiplier: 0.85, extraNote: '本周重点是适应动作和节奏，不要追求极限' },
+  2: { name: '渐进期', label: '渐进', rpeTarget: '7-8', volumeMultiplier: 1.1, intensityMultiplier: 0.95, extraNote: '本周可以适当加重，挑战更高训练量' },
+  3: { name: '冲击期', label: '冲击', rpeTarget: '8-9', volumeMultiplier: 1.15, intensityMultiplier: 1.05, extraNote: '本周冲击新高，全力以赴但注意动作质量' },
+  4: { name: '减载周', label: '减载', rpeTarget: '5-6', volumeMultiplier: 0.6, intensityMultiplier: 0.75, extraNote: '减载恢复周，容量和强度都降低，让身体充分恢复' }
+}
+
 // 根据用户设备筛选可用动作
 function filterExercisesByEquipment(exercises, userEquipment) {
   const equipment = Array.isArray(userEquipment) ? userEquipment : []
@@ -394,32 +402,44 @@ function buildWeeklySchedule(daysPerWeek) {
   return schedules[normalizedDays]
 }
 
-// 生成单日训练计划
-function generateDayWorkout(dayType, userEquipment, dayIndex, adjustmentLookup) {
+// 生成单日训练计划（支持周期化阶段）
+function generateDayWorkout(dayType, userEquipment, dayIndex, adjustmentLookup, phase) {
   const equipment = Array.isArray(userEquipment) ? userEquipment : []
   const availableExercises = filterExercisesByEquipment(EXERCISE_LIBRARY[dayType], userEquipment)
   if (availableExercises.length < 1) {
     throw new Error(`设备 ${equipment.join(',') || '未配置'} 无法满足${dayType}日训练需求`)
   }
 
+  // 周期化参数
+  const phaseConfig = PHASE_CONFIG[phase] || PHASE_CONFIG[1]
+  const volMul = phaseConfig.volumeMultiplier
+  const intMul = phaseConfig.intensityMultiplier
+
   // 随机选取动作
   const selectedExercises = []
   const shuffled = [...availableExercises].sort(() => Math.random() - 0.5)
   
-  // 确保至少选择1个动作，最多选择2-3个
-  const maxExercises = Math.min(Math.random() > 0.5 ? 2 : 3, shuffled.length)
+  // 减载周只选2个动作，其他周2-3个
+  const maxExercises = phase === 4 ? 2 : Math.min(Math.random() > 0.5 ? 2 : 3, shuffled.length)
   
   for (const ex of shuffled) {
     if (selectedExercises.length >= maxExercises) break
     if (!selectedExercises.find(se => se.muscle === ex.muscle)) {
+      // 基础组数/次数，应用周期化调整
+      const baseSets = 3 + dayIndex % 2
+      const baseReps = 8 + (dayIndex % 3) * 2
+      const baseRest = 90 + (dayIndex % 2) * 30
+
       selectedExercises.push({
         name: ex.name,
         alias: ex.alias[0],
         muscle: ex.muscle,
         equipment: ex.equipment,
-        sets: 3 + dayIndex % 2, // 渐进超负荷：奇数天增加组数
-        reps: 8 + (dayIndex % 3) * 2, // 渐进超负荷：循环递增次数
-        rest: 90 + (dayIndex % 2) * 30 // 休息时间微调
+        sets: Math.max(2, Math.round(baseSets * volMul)),
+        reps: Math.max(6, Math.round(baseReps * intMul)),
+        rest: Math.round(baseRest / intMul),
+        phaseLabel: phaseConfig.label,
+        rpeTarget: phaseConfig.rpeTarget
       })
     }
   }
@@ -427,14 +447,20 @@ function generateDayWorkout(dayType, userEquipment, dayIndex, adjustmentLookup) 
   // 如果因为肌肉群限制导致没有选中任何动作，至少选择一个动作
   if (selectedExercises.length === 0 && shuffled.length > 0) {
     const firstExercise = shuffled[0]
+    const baseSets = 3 + dayIndex % 2
+    const baseReps = 8 + (dayIndex % 3) * 2
+    const baseRest = 90 + (dayIndex % 2) * 30
+
     selectedExercises.push({
       name: firstExercise.name,
       alias: firstExercise.alias[0],
       muscle: firstExercise.muscle,
       equipment: firstExercise.equipment,
-      sets: 3 + dayIndex % 2,
-      reps: 8 + (dayIndex % 3) * 2,
-      rest: 90 + (dayIndex % 2) * 30
+      sets: Math.max(2, Math.round(baseSets * volMul)),
+      reps: Math.max(6, Math.round(baseReps * intMul)),
+      rest: Math.round(baseRest / intMul),
+      phaseLabel: phaseConfig.label,
+      rpeTarget: phaseConfig.rpeTarget
     })
   }
 
@@ -450,52 +476,65 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   const { OPENID } = wxContext
 
+  if (!OPENID) {
+    return fail('未获取到用户身份，请重新登录')
+  }
+
   try {
-    // 获取用户档案
     const userDoc = await db.collection('users').where({
       _openid: OPENID
     }).get()
 
     if (userDoc.data.length === 0) {
-      return { success: false, message: '用户档案不存在，请先完成问卷' }
+      return fail('用户档案不存在，请先完成问卷')
     }
 
     const user = userDoc.data[0]
     const profile = user.profile
     if (!profile || !Array.isArray(profile.equipment) || profile.equipment.length === 0) {
-      return { success: false, message: '用户器械信息不完整，请重新完成问卷' }
+      return fail('用户器械信息不完整，请重新完成问卷')
     }
     const adjustmentLookup = buildAdjustmentLookup(user.exercise_adjustments)
 
-    // 生成7天计划（3天Push/Pull/Legs循环 + 休息日）
+    // 4周周期化计划（需求 DESIGN.md §6.2）
     const weeklyPlan = []
     const schedule = buildWeeklySchedule(profile.days_per_week)
     const startDate = new Date()
-    
-    for (let i = 0; i < 7; i++) {
-      const dayType = schedule[i]
-      const currentDate = new Date(startDate)
-      currentDate.setDate(currentDate.getDate() + i)
-      
-      if (dayType === 'rest') {
-        weeklyPlan.push({
-          date: formatDateKey(currentDate),
-          type: 'rest',
-          title: '休息日',
-          note: '充分恢复，为下周训练储备能量'
-        })
-      } else {
-        const workout = generateDayWorkout(dayType, profile.equipment, i, adjustmentLookup)
-        weeklyPlan.push({
-          date: formatDateKey(currentDate),
-          type: dayType,
-          title: `${dayType === 'push' ? '推' : dayType === 'pull' ? '拉' : '腿'}日`,
-          workout,
-          warmup: buildWarmup(dayType, workout),
-          cooldown: buildCooldown(workout),
-          adaptive_notes: buildAdaptiveNotes(workout),
-          focus_muscles: Array.from(new Set(workout.map(w => w.muscle).filter(Boolean)))
-        })
+    const currentCycleWeek = ((user.cycle_week || 0) % 4) + 1 // 当前周期周次 1-4
+
+    for (let weekOffset = 0; weekOffset < 4; weekOffset++) {
+      const phase = (currentCycleWeek - 1 + weekOffset) % 4 + 1
+      const phaseConfig = PHASE_CONFIG[phase]
+
+      for (let i = 0; i < 7; i++) {
+        const dayType = schedule[i]
+        const dayOffset = weekOffset * 7 + i
+        const currentDate = new Date(startDate)
+        currentDate.setDate(currentDate.getDate() + dayOffset)
+        
+        if (dayType === 'rest') {
+          weeklyPlan.push({
+            date: formatDateKey(currentDate),
+            type: 'rest',
+            title: '休息日',
+            note: '充分恢复，为下周训练储备能量',
+            phase: phaseConfig.label
+          })
+        } else {
+          const workout = generateDayWorkout(dayType, profile.equipment, dayOffset, adjustmentLookup, phase)
+          weeklyPlan.push({
+            date: formatDateKey(currentDate),
+            type: dayType,
+            title: `${dayType === 'push' ? '推' : dayType === 'pull' ? '拉' : '腿'}日`,
+            phase: phaseConfig.label,
+            phaseNote: phaseConfig.extraNote,
+            workout,
+            warmup: buildWarmup(dayType, workout),
+            cooldown: buildCooldown(workout),
+            adaptive_notes: buildAdaptiveNotes(workout),
+            focus_muscles: Array.from(new Set(workout.map(w => w.muscle).filter(Boolean)))
+          })
+        }
       }
     }
 
@@ -506,33 +545,30 @@ exports.main = async (event, context) => {
         _id: planId,
         userId: OPENID,
         startDate: new Date(),
-        endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        endDate: new Date(Date.now() + 28 * 24 * 60 * 60 * 1000),
         daysPerWeek: Number(profile.days_per_week) || 4,
         schedule,
+        cycleWeek: currentCycleWeek,
+        totalWeeks: 4,
         weeklyPlan,
         createdAt: db.serverDate()
       }
     })
 
-    // 更新用户当前计划
+    // 更新用户当前计划和周期
     await db.collection('users').where({ _openid: OPENID }).update({
       data: {
         current_plan_id: planId,
+        cycle_week: currentCycleWeek,
         updated_at: db.serverDate()
       }
     })
 
-    return {
-      success: true,
-      planId,
-      weeklyPlan,
-      message: '本周训练计划生成成功！'
-    }
+    // 返回第一周数据（兼容前端只显示当前周）
+    const firstWeekPlan = weeklyPlan.slice(0, 7)
+    return ok({ planId, weeklyPlan: firstWeekPlan, fullWeeklyPlan: weeklyPlan, currentPhase: currentCycleWeek, phaseLabel: PHASE_CONFIG[currentCycleWeek].label }, '4周周期化训练计划生成成功！')
   } catch (err) {
     console.error('生成计划失败：', err)
-    return {
-      success: false,
-      message: err.message || '生成计划失败，请稍后重试'
-    }
+    return fail(err.message || '生成计划失败，请稍后重试')
   }
 }

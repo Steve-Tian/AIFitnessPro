@@ -20,19 +20,19 @@
 
   <!-- 成就列表 -->
   <view class="achievements-list">
-    <view class="achievement-card {{achievement.unlocked ? 'unlocked' : 'locked'}}" 
+    <view class="achievement-card {{item.unlocked ? 'unlocked' : 'locked'}}" 
           wx:for="{{achievements}}" 
           wx:key="id">
-      <view class="achievement-icon">{{achievement.icon}}</view>
+      <view class="achievement-icon">{{item.icon}}</view>
       <view class="achievement-content">
         <view class="achievement-header">
-          <text class="achievement-name">{{achievement.name}}</text>
-          <text class="achievement-points">+{{achievement.points}}分</text>
+          <text class="achievement-name">{{item.name}}</text>
+          <text class="achievement-points">+{{item.points}}分</text>
         </view>
-        <text class="achievement-description">{{achievement.description}}</text>
+        <text class="achievement-description">{{item.description}}</text>
       </view>
       <view class="achievement-status">
-        <text class="status-text">{{achievement.unlocked ? '✓ 已解锁' : '🔒 未解锁'}}</text>
+        <text class="status-text">{{item.unlocked ? '✓ 已解锁' : '🔒 未解锁'}}</text>
       </view>
     </view>
   </view>

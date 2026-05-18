@@ -103,9 +103,22 @@ function createDatabaseApi() {
           return { data: clone(ensureCollection(name)) }
         },
         where(query = {}) {
-          return {
+          const filtered = () => ensureCollection(name).filter((doc) => matchesQuery(doc, query))
+
+          // 链式查询构造器（支持 .where().skip().limit().get()）
+          const chainable = {
+            _offset: 0,
+            _limit: 100,
+            skip(n) {
+              this._offset = Math.max(0, Number(n) || 0)
+              return this
+            },
+            limit(n) {
+              this._limit = Math.max(0, Number(n) || 0)
+              return this
+            },
             async get() {
-              const docs = ensureCollection(name).filter((doc) => matchesQuery(doc, query))
+              const docs = filtered().slice(this._offset, this._offset + this._limit)
               return { data: clone(docs) }
             },
             async update({ data }) {
@@ -120,6 +133,9 @@ function createDatabaseApi() {
               return { stats: { updated } }
             }
           }
+
+          // 兼容旧调用：where().get() / where().limit().get()
+          return chainable
         },
         async add({ data }) {
           const docs = ensureCollection(name)
@@ -135,6 +151,18 @@ function createDatabaseApi() {
             async get() {
               const doc = ensureCollection(name).find((item) => item._id === id)
               return { data: doc ? clone(doc) : null }
+            },
+            async set({ data }) {
+              const docs = ensureCollection(name)
+              const index = docs.findIndex((item) => item._id === id)
+              const next = clone(data)
+              if (!next._id) next._id = id
+              if (index === -1) {
+                docs.push(next)
+              } else {
+                docs[index] = { ...docs[index], ...next }
+              }
+              return { _id: id }
             },
             async update({ data }) {
               const docs = ensureCollection(name)
@@ -233,19 +261,56 @@ global.wx = {
   navigateBack: jest.fn(),
   reLaunch: jest.fn(),
   switchTab: jest.fn(),
+  redirectTo: jest.fn(),
   setNavigationBarTitle: jest.fn(),
   previewImage: jest.fn(),
   showLoading: jest.fn(),
   hideLoading: jest.fn(),
   clearStorageSync: jest.fn(),
+  setKeepScreenOn: jest.fn(),
+  showModal: jest.fn((opts = {}) => {
+    if (typeof opts.success === 'function') {
+      opts.success({ confirm: false, cancel: true })
+    }
+  }),
   getSystemInfoSync: () => ({
     SDKVersion: '3.0.0',
     version: '8.0.0'
-  })
+  }),
+  createCanvasContext: jest.fn(() => ({
+    setFillStyle: jest.fn(),
+    fillRect: jest.fn(),
+    setFontSize: jest.fn(),
+    setTextAlign: jest.fn(),
+    fillText: jest.fn(),
+    createLinearGradient: jest.fn(() => ({
+      addColorStop: jest.fn()
+    })),
+    draw: jest.fn((_reserve, cb) => {
+      if (typeof cb === 'function') cb()
+    })
+  })),
+  canvasToTempFilePath: jest.fn((opts = {}) => {
+    if (typeof opts.success === 'function') {
+      opts.success({ tempFilePath: '/tmp/mock-share.png' })
+    }
+  }),
+  saveImageToPhotosAlbum: jest.fn((opts = {}) => {
+    if (typeof opts.success === 'function') {
+      opts.success()
+    }
+  }),
+  openSetting: jest.fn()
 }
 
 global.setAppMock = (patch) => {
   appState = mergeObjects(DEFAULT_APP_STATE, patch)
+  if (typeof appState.getUserStorage !== 'function') {
+    appState.getUserStorage = jest.fn(() => null)
+  }
+  if (typeof appState.setUserStorage !== 'function') {
+    appState.setUserStorage = jest.fn()
+  }
   return appState
 }
 
@@ -275,6 +340,8 @@ global.freshRequire = freshRequire
 beforeEach(() => {
   jest.restoreAllMocks()
   resetAppState()
+  appState.getUserStorage = jest.fn(() => null)
+  appState.setUserStorage = jest.fn()
   resetCloudState()
   lastRegisteredPage = null
 
@@ -305,11 +372,28 @@ beforeEach(() => {
   global.wx.navigateBack.mockClear()
   global.wx.reLaunch.mockClear()
   global.wx.switchTab.mockClear()
+  global.wx.redirectTo.mockClear()
   global.wx.setNavigationBarTitle.mockClear()
   global.wx.previewImage.mockClear()
   global.wx.showLoading.mockClear()
   global.wx.hideLoading.mockClear()
   global.wx.clearStorageSync.mockClear()
+  global.wx.setKeepScreenOn.mockClear()
+  global.wx.showModal.mockClear()
+  global.wx.showModal.mockImplementation((opts = {}) => {
+    if (typeof opts.success === 'function') {
+      opts.success({ confirm: false, cancel: true })
+    }
+  })
 
+  global.wx.createCanvasContext.mockClear()
+  global.wx.canvasToTempFilePath.mockClear()
+  global.wx.saveImageToPhotosAlbum.mockClear()
+  global.wx.openSetting.mockClear()
+
+  jest.useRealTimers()
+})
+
+afterEach(() => {
   jest.useRealTimers()
 })

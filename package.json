@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --forceExit",
     "validate": "node validate.js",
     "validate:core": "node validate_core.js",
     "exercise:sync": "node scripts/sync_exercise_catalog.js"

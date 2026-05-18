@@ -1,0 +1,81 @@
+<view class="container" wx:if="{{hasData}}">
+  <view class="hero">
+    <text class="hero-title">训练完成</text>
+    <text class="hero-date">{{workoutDate}} · {{dayTypeLabel}}</text>
+  </view>
+
+  <view class="stats-grid">
+    <view class="stat-card">
+      <text class="stat-value">{{durationMin}}</text>
+      <text class="stat-label">分钟</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-value">{{totalExercises}}</text>
+      <text class="stat-label">动作</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-value">{{totalSets}}</text>
+      <text class="stat-label">总组数</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-value">{{estimatedKcal}}</text>
+      <text class="stat-label">千卡</text>
+    </view>
+  </view>
+
+  <view class="stat-card wide" wx:if="{{totalVolume > 0}}">
+    <text class="stat-value">{{totalVolume}} kg</text>
+    <text class="stat-label">总训练量</text>
+  </view>
+
+  <view class="streak-banner" wx:if="{{newStreak > 0}}">
+    <text class="streak-num">{{newStreak}}</text>
+    <text class="streak-text">天连续打卡</text>
+  </view>
+
+  <!-- 进步亮点 -->
+  <view class="highlight-banner" wx:if="{{highlights.length}}">
+    <text class="highlight-title">进步亮点</text>
+    <view class="highlight-item" wx:for="{{highlights}}" wx:key="text">
+      <text class="highlight-icon">{{item.type === 'streak' ? '🔥' : item.type === 'weight_up' ? '💪' : item.type === 'volume' ? '📦' : '⬆️'}}</text>
+      <text class="highlight-text">{{item.text}}</text>
+    </view>
+  </view>
+
+  <view class="exercise-list" wx:if="{{perExercise.length}}">
+    <text class="section-title">动作明细</text>
+    <view class="exercise-row" wx:for="{{perExercise}}" wx:key="_rowKey">
+      <text class="exercise-name">{{item.name}}</text>
+      <text class="exercise-meta">{{item.sets}}组 × {{item.reps}}次</text>
+      <text class="exercise-rpe" wx:if="{{item.rpe}}">RPE {{item.rpe}}</text>
+    </view>
+  </view>
+
+  <view class="achievement-banner" wx:if="{{unlockedAchievements.length}}">
+    <text class="achievement-title">新成就解锁</text>
+    <view class="achievement-item" wx:for="{{unlockedAchievements}}" wx:key="id">
+      <text class="achievement-icon">{{item.icon || '🏆'}}</text>
+      <text class="achievement-name">{{item.name || item.id}}</text>
+    </view>
+    <view class="achievement-more" bindtap="goAchievements">
+      <text>查看全部成就</text>
+    </view>
+  </view>
+
+  <view class="share-actions">
+    <button class="btn-share btn-share-wechat" open-type="share">分享给好友</button>
+    <button class="btn-share btn-share-save" bindtap="saveSharePoster">保存分享图</button>
+  </view>
+
+  <view class="actions">
+    <button class="btn-primary" bindtap="goHome">返回首页</button>
+    <button class="btn-secondary" bindtap="goTraining">继续训练</button>
+  </view>
+
+  <canvas canvas-id="summaryShareCanvas" class="share-poster-canvas" disable-scroll="true"></canvas>
+</view>
+
+<view class="container empty" wx:else>
+  <text class="empty-text">暂无训练记录</text>
+  <button class="btn-primary" bindtap="goHome">返回首页</button>
+</view>

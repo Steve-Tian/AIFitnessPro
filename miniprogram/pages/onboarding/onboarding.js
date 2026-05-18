@@ -36,14 +36,23 @@ Page({
 
   onSelect(e) {
     const { field, value } = e.currentTarget.dataset
+    const NUMERIC_FIELDS = ['days_per_week', 'age', 'height', 'weight']
+    const resolved = NUMERIC_FIELDS.includes(field) ? Number(value) : value
     this.setData({
-      [`formData.${field}`]: value
+      [`formData.${field}`]: resolved
     }, () => this.validateStep())
   },
 
   onSliderChange(e) {
     const { field } = e.currentTarget.dataset
-    const value = e.detail.value
+    let value = e.detail.value
+    if (field === 'days_per_week') {
+      const n = Number(value)
+      if (n < 3 || n > 5) {
+        value = Math.min(5, Math.max(3, n))
+        wx.showToast({ title: '每周训练 3–5 天', icon: 'none' })
+      }
+    }
     this.setData({ [`formData.${field}`]: value }, () => this.validateStep())
   },
 
@@ -66,18 +75,36 @@ Page({
       case 3: valid = formData.weight >= 30 && formData.weight <= 200; break
       case 4: valid = !!formData.goal; break
       case 5: valid = !!formData.experience; break
-      case 6: valid = formData.days_per_week >= 3; break
+      case 6: { const d = Number(formData.days_per_week); valid = d >= 3 && d <= 5; break }
       case 7:
         valid = EQUIPMENT_KEYS.some(k => formData[k])
         break
       case 8: valid = !!formData.persona; break
+      default: valid = false
     }
 
     this.setData({ canProceed: valid })
   },
 
   nextStep() {
-    if (!this.data.canProceed) return
+    if (!this.data.canProceed) {
+      // 给出明确提示（尤其是器械未选的情况）
+      const { currentStep, formData } = this.data
+      let hint = '请先完成当前步骤'
+      if (currentStep === 7 && !EQUIPMENT_KEYS.some(k => formData[k])) {
+        hint = '请至少选择一种器械'
+      } else if (currentStep === 1) {
+        hint = '年龄需在 16 - 65 岁之间'
+      } else if (currentStep === 2) {
+        hint = '身高需在 140 - 220cm 之间'
+      } else if (currentStep === 3) {
+        hint = '体重需在 30 - 200kg 之间'
+      } else if (currentStep === 6) {
+        hint = '每周训练天数需在 3 - 5 天之间'
+      }
+      wx.showToast({ title: hint, icon: 'none' })
+      return
+    }
 
     if (this.data.currentStep < this.data.totalSteps - 1) {
       this.setData({ currentStep: this.data.currentStep + 1, canProceed: false }, () => {
@@ -127,21 +154,27 @@ Page({
         _openid: app.globalData.openid
       }).get()
 
-      const userDoc = {
-        profile,
-        onboarding_completed: true,
-        streak_days: 0,
-        current_plan_id: null,
-        updated_at: db.serverDate()
-      }
-
       if (existing.length > 0) {
+        // 现有用户重新填写问卷：只更新 profile，保留 streak_days / current_plan_id 等进度字段
         await db.collection('users').doc(existing[0]._id).update({
-          data: userDoc
+          data: {
+            profile,
+            onboarding_completed: true,
+            updated_at: db.serverDate()
+          }
         })
       } else {
-        userDoc.created_at = db.serverDate()
-        await db.collection('users').add({ data: userDoc })
+        // 新用户首次提交：设置初始值
+        await db.collection('users').add({
+          data: {
+            profile,
+            onboarding_completed: true,
+            streak_days: 0,
+            current_plan_id: null,
+            created_at: db.serverDate(),
+            updated_at: db.serverDate()
+          }
+        })
       }
 
       const { data: users } = await db.collection('users').where({
@@ -153,7 +186,6 @@ Page({
 
       wx.showToast({ title: '设置完成！', icon: 'success', duration: 2000 })
       setTimeout(() => {
-        wx.clearStorageSync()
         wx.reLaunch({ url: '/pages/index/index' })
       }, 2000)
     } catch (err) {

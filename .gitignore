@@ -19,7 +19,27 @@ cloudfunctions/*/dist/
 
 # Sensitive config (keep local only)
 project.config.json
+project.private.config.json
+
+# Cloud function env files (may contain secrets)
+cloudfunctions/*/.env
+cloudfunctions/*/.env.local
+cloudfunctions/**/credentials.json
+
+# Scripts env
+scripts/exercise-sync.env
+scripts/*.env
+scripts/output/
 
 # User data
 miniprogram/.history/
+
+# OS / editor
+.DS_Store
+*.swp
+*.swo
+
+# Coverage & temp
+coverage/
+.tmp/
 

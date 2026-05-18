@@ -8,6 +8,26 @@
       <text class="hero-hint text-hint" wx:if="{{!userInfo}}">登录后同步档案</text>
     </view>
 
+    <!-- 训练统计概览 -->
+    <view class="card stats-card" wx:if="{{userInfo}}">
+      <view class="stats-grid">
+        <view class="stat-item">
+          <text class="stat-value">{{streakDays}}</text>
+          <text class="stat-label">连续打卡(天)</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-value">{{totalWorkouts}}</text>
+          <text class="stat-label">累计训练(次)</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-value">{{totalVolume > 9999 ? (totalVolume / 10000).toFixed(1) + '万' : totalVolume}}</text>
+          <text class="stat-label">总容量(kg)</text>
+        </view>
+      </view>
+    </view>
+
     <view class="card info-card" wx:if="{{userInfo}}">
       <text class="info-title">训练档案</text>
       <view class="info-row">
@@ -29,22 +49,112 @@
       <text class="empty-hint text-secondary">完成引导后在此展示目标与经验</text>
     </view>
 
-    <text class="section-label">设置</text>
+    <text class="section-label">快捷</text>
+    <view class="card settings-card" wx:if="{{userInfo}}">
+      <view class="settings-row" bindtap="goAchievements">
+        <text class="settings-name">我的成就</text>
+        <text class="settings-chevron text-hint">›</text>
+      </view>
+    </view>
+
+    <text class="section-label">训练设置</text>
     <view class="card settings-card">
-      <view class="settings-row">
+      <view class="settings-row" bindtap="showPersonaOptions">
+        <view class="settings-left">
+          <text class="settings-name">搭子风格</text>
+        </view>
+        <view class="settings-right">
+          <text class="settings-value text-secondary">{{personaLabel}}</text>
+          <text class="settings-chevron text-hint">›</text>
+        </view>
+      </view>
+      <view class="settings-divider"></view>
+      <view class="settings-row" bindtap="showFeedbackModeOptions">
+        <view class="settings-left">
+          <text class="settings-name">反馈模式</text>
+        </view>
+        <view class="settings-right">
+          <text class="settings-value text-secondary">{{feedbackModeLabel}}</text>
+          <text class="settings-chevron text-hint">›</text>
+        </view>
+      </view>
+      <view class="settings-divider"></view>
+      <view class="settings-row" bindtap="retakeOnboarding">
+        <view class="settings-left">
+          <text class="settings-name">重新填写问卷</text>
+          <text class="settings-desc">更新目标、器械等信息</text>
+        </view>
+        <view class="settings-right">
+          <text class="settings-chevron text-hint">›</text>
+        </view>
+      </view>
+    </view>
+
+    <text class="section-label">其他</text>
+    <view class="card settings-card">
+      <view class="settings-row" bindtap="onSettingsPlaceholder" data-key="privacy">
         <text class="settings-name">账号与隐私</text>
         <text class="settings-chevron text-hint">›</text>
       </view>
       <view class="settings-divider"></view>
-      <view class="settings-row">
+      <view class="settings-row" bindtap="onSettingsPlaceholder" data-key="notify">
         <text class="settings-name">通知与提醒</text>
         <text class="settings-chevron text-hint">›</text>
       </view>
       <view class="settings-divider"></view>
-      <view class="settings-row">
+      <view class="settings-row" bindtap="onAbout">
         <text class="settings-name">关于 AIFitnessPro</text>
         <text class="settings-chevron text-hint">›</text>
       </view>
+    </view>
+  </view>
+
+  <!-- 搭子风格选择弹窗 -->
+  <view class="picker-mask" wx:if="{{showPersonaPicker}}" bindtap="hidePersonaPicker">
+    <view class="picker-panel" catchtap>
+      <text class="picker-title">选择搭子风格</text>
+      <view class="picker-options">
+        <view class="picker-option" wx:for="{{['coach','buddy','comedian']}}" wx:key="*this"
+              data-value="{{item}}" bindtap="selectPersona">
+          <text class="picker-option-name">{{item === 'coach' ? '硬核教练' : item === 'buddy' ? '暖男兄弟' : '幽默毒舌'}}</text>
+          <text class="picker-option-desc">{{item === 'coach' ? '直接、有压迫感' : item === 'buddy' ? '轻松、接地气' : '调侃、搞笑'}}</text>
+          <view class="picker-option-check" wx:if="{{personaLabel === (item === 'coach' ? '硬核教练' : item === 'buddy' ? '暖男兄弟' : '幽默毒舌')}}">
+            <text class="check-icon">✓</text>
+          </view>
+        </view>
+      </view>
+      <view class="picker-cancel" bindtap="hidePersonaPicker">取消</view>
+    </view>
+  </view>
+
+  <!-- 反馈模式选择弹窗 -->
+  <view class="picker-mask" wx:if="{{showFeedbackModePicker}}" bindtap="hideFeedbackModePicker">
+    <view class="picker-panel" catchtap>
+      <text class="picker-title">选择反馈模式</text>
+      <view class="picker-options">
+        <view class="picker-option" data-value="standard" bindtap="selectFeedbackMode">
+          <text class="picker-option-name">标准三按钮</text>
+          <text class="picker-option-desc">太轻 / 刚好 / 太重</text>
+          <view class="picker-option-check" wx:if="{{feedbackMode === 'standard'}}">
+            <text class="check-icon">✓</text>
+          </view>
+        </view>
+        <view class="picker-option" data-value="rpe" bindtap="selectFeedbackMode">
+          <text class="picker-option-name">RPE 数字评分</text>
+          <text class="picker-option-desc">6-10 主观疲劳度评分</text>
+          <view class="picker-option-check" wx:if="{{feedbackMode === 'rpe'}}">
+            <text class="check-icon">✓</text>
+          </view>
+        </view>
+        <view class="picker-option" data-value="minimal" bindtap="selectFeedbackMode">
+          <text class="picker-option-name">极简模式</text>
+          <text class="picker-option-desc">只记重量次数，自适应推断</text>
+          <view class="picker-option-check" wx:if="{{feedbackMode === 'minimal'}}">
+            <text class="check-icon">✓</text>
+          </view>
+        </view>
+      </view>
+      <view class="picker-cancel" bindtap="hideFeedbackModePicker">取消</view>
     </view>
   </view>
 </view>

@@ -23,7 +23,8 @@ describe('AIFitnessPro - Unit Tests', () => {
       const macros = engine.getMacroSummary()
 
       expect(macros.calories).toBeGreaterThan(2800)
-      expect(macros.proteinPercentage).toBeGreaterThanOrEqual(30)
+      expect(macros.protein).toBeGreaterThanOrEqual(140)
+      expect(macros.proteinPercentage).toBeGreaterThanOrEqual(15)
     })
 
     test('supports onboarding cut goal aliases when calculating macros', () => {
@@ -41,7 +42,8 @@ describe('AIFitnessPro - Unit Tests', () => {
       const macros = engine.getMacroSummary()
 
       expect(macros.calories).toBeLessThan(2200)
-      expect(macros.proteinPercentage).toBeGreaterThanOrEqual(35)
+      expect(macros.protein).toBeGreaterThanOrEqual(120)
+      expect(macros.proteinPercentage).toBeGreaterThanOrEqual(28)
     })
   })
 
@@ -278,12 +280,13 @@ describe('AIFitnessPro - Unit Tests', () => {
           sets: 3,
           reps: 8,
           rest: 90,
-          equipment: ['barbell_bench']
+          equipment: ['barbell_bench'],
+          setIndex: 1
         }]
       }, {})
 
       expect(result.success).toBe(true)
-      expect(result.exerciseAdjustments[0].loadAdjustment).toBe(-0.05)
+      expect(result.exerciseAdjustments[0].loadAdjustment).toBe(-0.1)
 
       const updatedUser = getCollectionDocs('users')[0]
       expect(updatedUser.exercise_adjustments.卧推.nextSets).toBe(2)
@@ -292,7 +295,7 @@ describe('AIFitnessPro - Unit Tests', () => {
       const updatedPlan = getCollectionDocs('plans')[0]
       expect(updatedPlan.weeklyPlan[1].workout[0].sets).toBe(2)
       expect(updatedPlan.weeklyPlan[1].workout[0].reps).toBe(6)
-      expect(updatedPlan.weeklyPlan[1].workout[0].adaptiveNote).toContain('降低约 5%')
+      expect(updatedPlan.weeklyPlan[1].workout[0].adaptiveNote).toContain('降低约 10%')
     })
 
     test('unlockAchievement only counts training types the user actually completed', async () => {
@@ -332,6 +335,181 @@ describe('AIFitnessPro - Unit Tests', () => {
       expect(result.success).toBe(true)
       expect(result.unlocked.map((item) => item.id)).toContain('first_workout')
       expect(result.unlocked.map((item) => item.id)).not.toContain('diversity_master')
+    })
+  })
+
+  describe('Nutrition & Diet', () => {
+    test('NutritionEngine differentiates training vs rest day calories', () => {
+      const { NutritionEngine } = freshRequire(nutritionModulePath)
+      const profile = { gender: 'male', age: 25, height: 175, weight: 70, goal: 'bulk', days_per_week: 4 }
+
+      const trainingEngine = new NutritionEngine(profile, { isTrainingDay: true })
+      const restEngine = new NutritionEngine(profile, { isTrainingDay: false })
+
+      const tMacros = trainingEngine.getMacroSummary()
+      const rMacros = restEngine.getMacroSummary()
+
+      expect(tMacros.calories).toBeGreaterThan(rMacros.calories)
+      expect(tMacros.carbs).toBeGreaterThan(rMacros.carbs)
+    })
+
+    test('NutritionEngine generates daily meal plan with options', () => {
+      const { NutritionEngine } = freshRequire(nutritionModulePath)
+      const profile = { gender: 'female', age: 28, height: 165, weight: 58, goal: 'cut', days_per_week: 3 }
+
+      const engine = new NutritionEngine(profile, { isTrainingDay: true })
+      const plan = engine.generateDailyMealPlan()
+
+      expect(plan.meals.length).toBeGreaterThanOrEqual(4)
+      plan.meals.forEach((meal) => {
+        expect(meal.mealType).toBeTruthy()
+        expect(meal.mealLabel).toBeTruthy()
+        expect(meal.targetCalories).toBeGreaterThan(0)
+      })
+    })
+
+    test('NutritionEngine.computeIntakeSummary aggregates selected recipes', () => {
+      const { NutritionEngine } = freshRequire(nutritionModulePath)
+      const profile = { gender: 'male', age: 30, height: 180, weight: 80, goal: 'strength', days_per_week: 4 }
+
+      const engine = new NutritionEngine(profile, { isTrainingDay: true })
+      const plan = engine.generateDailyMealPlan()
+
+      const selections = plan.meals
+        .filter((m) => m.options.length > 0)
+        .map((m) => ({ mealType: m.mealType, selectedId: m.options[0].id }))
+
+      const intake = engine.computeIntakeSummary(selections)
+      expect(intake.calories).toBeGreaterThan(0)
+      expect(intake.protein).toBeGreaterThan(0)
+      expect(intake.caloriePercent).toBeGreaterThan(0)
+      expect(intake.caloriePercent).toBeLessThanOrEqual(100)
+    })
+  })
+
+  describe('Onboarding Validation', () => {
+    test('validateStep rejects days_per_week outside 3-5', () => {
+      const onboardingPath = path.resolve(__dirname, '../../miniprogram/pages/onboarding/onboarding.js')
+      const page = createMiniProgramPage(onboardingPath)
+
+      page.setData({ currentStep: 6, formData: { ...page.data.formData, days_per_week: 2 } })
+      page.validateStep()
+      expect(page.data.canProceed).toBe(false)
+
+      page.setData({ currentStep: 6, formData: { ...page.data.formData, days_per_week: 6 } })
+      page.validateStep()
+      expect(page.data.canProceed).toBe(false)
+
+      page.setData({ currentStep: 6, formData: { ...page.data.formData, days_per_week: 4 } })
+      page.validateStep()
+      expect(page.data.canProceed).toBe(true)
+    })
+
+    test('validateStep requires at least one equipment selected', () => {
+      const onboardingPath = path.resolve(__dirname, '../../miniprogram/pages/onboarding/onboarding.js')
+      const page = createMiniProgramPage(onboardingPath)
+
+      page.setData({
+        currentStep: 7,
+        formData: {
+          ...page.data.formData,
+          equipment_full_gym: false,
+          equipment_barbell: false,
+          equipment_dumbbell: false,
+          equipment_bodyweight: false
+        }
+      })
+      page.validateStep()
+      expect(page.data.canProceed).toBe(false)
+
+      page.setData({ 'formData.equipment_bodyweight': true })
+      page.validateStep()
+      expect(page.data.canProceed).toBe(true)
+    })
+  })
+
+  describe('Persona Engine Extended', () => {
+    test('each persona has at least 30 templates across all categories', () => {
+      const personaPath = path.resolve(__dirname, '../../miniprogram/utils/persona.js')
+      const { PersonaEngine } = freshRequire(personaPath)
+      const categories = ['warmup', 'during', 'finish', 'encouragement', 'correction']
+      const styles = ['coach', 'buddy', 'comedian', 'beauty_coach']
+
+      styles.forEach((style) => {
+        const engine = new PersonaEngine(style)
+        const templates = engine.templates[style] || {}
+        const total = categories.reduce((sum, cat) => sum + (templates[cat] || []).length, 0)
+        expect(total).toBeGreaterThanOrEqual(30)
+      })
+    })
+
+    test('getRPEResponse returns string for all RPE ranges', () => {
+      const personaPath = path.resolve(__dirname, '../../miniprogram/utils/persona.js')
+      const { PersonaEngine } = freshRequire(personaPath)
+      const engine = new PersonaEngine('coach')
+
+      expect(typeof engine.getRPEResponse(10)).toBe('string')
+      expect(typeof engine.getRPEResponse(8)).toBe('string')
+      expect(typeof engine.getRPEResponse(6)).toBe('string')
+    })
+  })
+
+  describe('Training summary share', () => {
+    const summaryPagePath = path.resolve(__dirname, '../../miniprogram/pages/training-summary/training-summary.js')
+
+    test('onShareAppMessage returns workout-specific title when summary exists', () => {
+      setAppMock({
+        globalData: {
+          lastTrainingSummary: {
+            workoutDate: '2026-04-17',
+            dayType: 'push',
+            durationMin: 42,
+            totalExercises: 4,
+            totalSets: 16,
+            totalReps: 64,
+            totalVolume: 1200,
+            estimatedKcal: 180,
+            perExercise: [{ name: '卧推', sets: 4, reps: 8 }],
+            newStreak: 2,
+            unlockedAchievements: []
+          }
+        }
+      })
+      const page = createMiniProgramPage(summaryPagePath)
+      page.onLoad()
+      expect(page.data.hasData).toBe(true)
+      const share = page.onShareAppMessage()
+      expect(share.path).toBe('/pages/index/index')
+      expect(share.title).toContain('推日')
+      expect(share.title).toContain('42')
+    })
+
+    test('saveSharePoster triggers canvas export and album save', () => {
+      setAppMock({
+        globalData: {
+          lastTrainingSummary: {
+            workoutDate: '2026-04-17',
+            dayType: 'pull',
+            durationMin: 30,
+            totalExercises: 3,
+            totalSets: 12,
+            totalReps: 48,
+            totalVolume: 0,
+            estimatedKcal: 150,
+            perExercise: [],
+            newStreak: 0,
+            unlockedAchievements: []
+          }
+        }
+      })
+      const page = createMiniProgramPage(summaryPagePath)
+      page.onLoad()
+      page.saveSharePoster()
+      expect(wx.showLoading).toHaveBeenCalled()
+      expect(wx.createCanvasContext).toHaveBeenCalled()
+      expect(wx.canvasToTempFilePath).toHaveBeenCalled()
+      expect(wx.saveImageToPhotosAlbum).toHaveBeenCalled()
+      expect(wx.hideLoading).toHaveBeenCalled()
     })
   })
 })

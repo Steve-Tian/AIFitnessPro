@@ -72,11 +72,16 @@ Page({
   },
 
   openExerciseDetail(e) {
-    const id = e.currentTarget.dataset.id
-    if (!id) return
+    const id = e.currentTarget.dataset.id || ''
+    const name = e.currentTarget.dataset.name || ''
+    if (!id && !name) return
+
+    const parts = []
+    if (id) parts.push(`id=${id}`)
+    if (name) parts.push(`name=${encodeURIComponent(name)}`)
 
     wx.navigateTo({
-      url: `/pages/exercise-detail/exercise-detail?id=${id}`
+      url: `/pages/exercise-detail/exercise-detail?${parts.join('&')}`
     })
   }
 })

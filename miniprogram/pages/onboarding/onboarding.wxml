@@ -323,22 +323,22 @@
           </view>
           <view class="option-info">
             <text class="option-label">幽默毒舌</text>
-          <text class="option-hint">「就这重量？我奶奶都能推」</text>
+            <text class="option-hint">「就这重量？我奶奶都能推」</text>
+          </view>
+        </view>
+        <view
+          class="option-card horizontal persona {{formData.persona === 'beauty_coach' ? 'selected' : ''}}"
+          bindtap="onSelect" data-field="persona" data-value="beauty_coach"
+        >
+          <view class="persona-avatar beauty-coach-bg">
+            <text class="persona-icon">👩‍💼</text>
+          </view>
+          <view class="option-info">
+            <text class="option-label">美女教练</text>
+            <text class="option-hint">「加油哦，你做得很棒！」</text>
+          </view>
         </view>
       </view>
-      <view
-        class="option-card horizontal persona {{formData.persona === 'beauty_coach' ? 'selected' : ''}}"
-        bindtap="onSelect" data-field="persona" data-value="beauty_coach"
-      >
-        <view class="persona-avatar beauty-coach-bg">
-          <text class="persona-icon">👩‍💼</text>
-        </view>
-        <view class="option-info">
-          <text class="option-label">美女教练</text>
-          <text class="option-hint">「加油哦，你做得很棒！」</text>
-        </view>
-      </view>
-    </view>
     </view>
 
   </view>

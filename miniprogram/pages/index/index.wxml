@@ -49,7 +49,7 @@
             <text class="exercise-meta">{{exercise.sets}}组 × {{exercise.reps}}次 | 休息{{exercise.rest}}秒</text>
             <view class="exercise-details" wx:if="{{exercise.instructions && exercise.instructions.length > 0}}">
               <text class="exercise-detail-title">动作要领:</text>
-              <text class="exercise-instruction" wx:for="{{exercise.instructions}}" wx:key="index">• {{item}}</text>
+              <text class="exercise-instruction" wx:for="{{exercise.instructions}}" wx:for-item="instr" wx:key="*this">• {{instr}}</text>
             </view>
           </view>
           <text class="tap-hint">点击开始本日训练</text>
@@ -63,5 +63,17 @@
       <text>还没有训练计划</text>
       <text>点击上方按钮生成专属计划</text>
     </view>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="shortcut-section" wx:if="{{userInfo}}">
+    <view class="shortcut-btn" bindtap="goAchievements">
+      <text class="shortcut-icon">🏆</text>
+      <text class="shortcut-label">我的成就</text>
+    </view>
+  </view>
+
+  <view class="dev-reset-section">
+    <button class="dev-reset-btn" bindtap="resetAllData">重置所有数据（重新开始）</button>
   </view>
 </view>
