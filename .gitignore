@@ -42,4 +42,4 @@ miniprogram/.history/
 # Coverage & temp
 coverage/
 .tmp/
-
+.worktrees/
