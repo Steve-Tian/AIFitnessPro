@@ -16,13 +16,23 @@ Create the Android project under `android/` so the existing mini program stays u
 
 ```text
 android/
+  gradlew
+  gradlew.bat
   settings.gradle.kts
   build.gradle.kts
   gradle.properties
+  gradle/wrapper/gradle-wrapper.properties
+  gradle/wrapper/gradle-wrapper.jar
   app/
     build.gradle.kts
     src/main/
       AndroidManifest.xml
+      res/drawable/ic_launcher_foreground.xml
+      res/mipmap-anydpi-v26/ic_launcher.xml
+      res/mipmap-anydpi-v26/ic_launcher_round.xml
+      res/values/styles.xml
+      res/xml/backup_rules.xml
+      res/xml/data_extraction_rules.xml
       java/com/aifitnesspro/android/
         MainActivity.kt
         AIFitnessProApp.kt
@@ -60,8 +70,17 @@ Responsibilities:
 - Create: `android/settings.gradle.kts`
 - Create: `android/build.gradle.kts`
 - Create: `android/gradle.properties`
+- Create: `android/gradle/wrapper/gradle-wrapper.properties`
+- Create: `android/gradlew`
+- Create: `android/gradlew.bat`
 - Create: `android/app/build.gradle.kts`
 - Create: `android/app/src/main/AndroidManifest.xml`
+- Create: `android/app/src/main/res/drawable/ic_launcher_foreground.xml`
+- Create: `android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml`
+- Create: `android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml`
+- Create: `android/app/src/main/res/values/styles.xml`
+- Create: `android/app/src/main/res/xml/backup_rules.xml`
+- Create: `android/app/src/main/res/xml/data_extraction_rules.xml`
 
 - [ ] **Step 1: Add Gradle settings**
 
@@ -111,7 +130,43 @@ kotlin.code.style=official
 android.nonTransitiveRClass=true
 ```
 
-- [ ] **Step 4: Add app build file**
+- [ ] **Step 4: Add Gradle wrapper files**
+
+Create `android/gradle/wrapper/gradle-wrapper.properties`:
+
+```properties
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.9-bin.zip
+networkTimeout=10000
+validateDistributionUrl=true
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+```
+
+Copy an existing `gradle-wrapper.jar` from a trusted local Android template or generate it with a local Gradle install. The expected path is:
+
+```text
+android/gradle/wrapper/gradle-wrapper.jar
+```
+
+Create `android/gradlew`:
+
+```sh
+#!/bin/sh
+APP_HOME=$(cd "$(dirname "$0")" >/dev/null 2>&1 && pwd -P)
+exec java -jar "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" "$@"
+```
+
+Create `android/gradlew.bat`:
+
+```bat
+@echo off
+set APP_HOME=%~dp0
+java -jar "%APP_HOME%\gradle\wrapper\gradle-wrapper.jar" %*
+```
+
+- [ ] **Step 5: Add app build file**
 
 Create `android/app/build.gradle.kts`:
 
@@ -211,7 +266,84 @@ Create `android/app/src/main/AndroidManifest.xml`:
 </manifest>
 ```
 
-- [ ] **Step 6: Run project sync/build**
+- [ ] **Step 7: Add required Android resources**
+
+Create `android/app/src/main/res/values/styles.xml`:
+
+```xml
+<resources>
+    <style name="Theme.AIFitnessPro" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:colorAccent">#2563EB</item>
+    </style>
+</resources>
+```
+
+Create `android/app/src/main/res/drawable/ic_launcher_foreground.xml`:
+
+```xml
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:fillColor="#2563EB" android:pathData="M0,0h108v108h-108z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M28,58h10v-8h32v8h10v-18h-10v6h-32v-6h-10z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M44,30h20v12h-20z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M44,66h20v12h-20z" />
+</vector>
+```
+
+Create `android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml`:
+
+```xml
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>
+```
+
+Create `android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml`:
+
+```xml
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>
+```
+
+Create `android/app/src/main/res/values/colors.xml`:
+
+```xml
+<resources>
+    <color name="ic_launcher_background">#2563EB</color>
+</resources>
+```
+
+Create `android/app/src/main/res/xml/backup_rules.xml`:
+
+```xml
+<full-backup-content>
+    <exclude domain="sharedpref" path="consent.preferences_pb" />
+</full-backup-content>
+```
+
+Create `android/app/src/main/res/xml/data_extraction_rules.xml`:
+
+```xml
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="consent.preferences_pb" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="consent.preferences_pb" />
+    </device-transfer>
+</data-extraction-rules>
+```
+
+- [ ] **Step 8: Run project sync/build**
 
 Run:
 
@@ -1113,4 +1245,3 @@ Known deliberate exclusions from this plan:
 - Account deletion backend.
 
 These exclusions are covered by later roadmap plans.
-
