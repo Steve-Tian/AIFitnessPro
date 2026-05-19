@@ -86,6 +86,13 @@
 
 Start with Plan 1 only. Do not scaffold backend, content admin, AI, payment, community, or media pipelines before the Android foundation and compliance shell passes verification.
 
+## Current Status
+
+- Plan 1 Android foundation and compliance shell: implemented and verified.
+- Local Android build environment is installed: Homebrew `openjdk@17`, Android Studio SDK, Android 35 system image, Android Emulator, and Pixel 8 AVD `AIFitnessPro_API35`.
+- Verification passed: `./gradlew :app:testDebugUnitTest`, `./gradlew :app:assembleDebug`, and emulator smoke test for consent gating, relaunch persistence, bottom navigation, and minimal permissions.
+- Next recommended plan: Backend API and Database Foundation.
+
 ## Verification Gates
 
 Each child plan must pass these gates before the next plan starts:
@@ -94,4 +101,3 @@ Each child plan must pass these gates before the next plan starts:
 2. The planned user flow is manually smoke-tested.
 3. The implementation is reviewed against the design spec.
 4. Known gaps are documented in the plan or a follow-up issue.
-
