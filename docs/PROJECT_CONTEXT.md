@@ -12,9 +12,9 @@
 
 项目目标：构建 Kotlin + Jetpack Compose 原生 Android App，并满足国内安卓应用市场合规要求。
 
-当前开发阶段：Plan 1 - Android foundation and compliance shell 收尾 / Plan 2 准备。
+当前开发阶段：Plan 1 - Android foundation and compliance shell 已合并 / Plan 2 准备。
 
-当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已在 worktree 分支本地提交；JDK、Android Studio SDK、Android SDK 35、Android Emulator、Pixel 8 AVD 已可用。
+当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；JDK、Android Studio SDK、Android SDK 35、Android Emulator、Pixel 8 AVD 已可用。
 
 ## 2. 技术栈
 
@@ -39,24 +39,13 @@ Android：Kotlin、Gradle、Android Gradle Plugin、Jetpack Compose、Navigation
 docs/                           项目文档、产品计划、持续上下文
 docs/superpowers/specs/         Android 产品设计规格
 docs/superpowers/plans/         Android 迁移路线图和 Plan 1
-.worktrees/android-foundation-compliance-shell/
-                                 当前 Android 原生工程开发 worktree
+android/                        当前 Android 原生工程
 cloudfunctions/                 历史微信云函数，仅作迁移参考
 miniprogram/                    历史微信小程序，仅作迁移参考
 tests/                          历史小程序测试
 ```
 
-当前 Android 开发在隔离 worktree：
-
-```text
-/Users/steve/Desktop/Smart Everything/AIFitnessPro/.worktrees/android-foundation-compliance-shell
-```
-
-分支：
-
-```text
-codex-android-foundation-compliance-shell
-```
+Plan 1 开发分支：`codex-android-foundation-compliance-shell`，已合并到 `main`。
 
 ## 4. 当前已完成内容
 
@@ -77,6 +66,7 @@ codex-android-foundation-compliance-shell
 - 重新运行 `./gradlew :app:assembleDebug`：通过。
 - 暂存 Android Plan 1 工程、`.gitignore` 和计划文档，排除 worktree 内未跟踪的 `docs/PROJECT_CONTEXT.md`，避免与主分支项目记忆文件冲突。
 - 已在 worktree 分支提交 Plan 1：`62e15af feat: add Android foundation compliance shell`。
+- 合并 Plan 1 分支到 `main` 时解决计划文档冲突，保留 wrapper/resources 的详细步骤并标记为已完成。
 - 安装 Homebrew `openjdk@17`，确认 `java -version` 为 OpenJDK 17.0.19。
 - 安装 Android command line tools。
 - 安装 Android SDK 35、Build-Tools 35.0.0、Build-Tools 34.0.0、platform-tools、emulator。
@@ -94,10 +84,11 @@ codex-android-foundation-compliance-shell
 - worktree：`android/`
 - worktree：`docs/superpowers/plans/2026-05-18-android-foundation-compliance-shell.md`
 - worktree：`docs/superpowers/plans/2026-05-18-android-mvp-roadmap.md`
+- main：`docs/superpowers/plans/2026-05-18-android-foundation-compliance-shell.md`
 
 ## 7. 当前未完成事项
 
-- Plan 1 已本地提交，剩合并到 `main` 或推送创建 PR。
+- Plan 1 已合并到 `main`。
 - 下一阶段可启动 Plan 2：Backend API and Database Foundation。
 
 ## 8. 已知 bug 或风险
@@ -107,19 +98,19 @@ codex-android-foundation-compliance-shell
 
 ## 9. 当前暂停点
 
-暂停在 Android Plan 1 集成阶段：实现、单测、debug 构建、模拟器烟测均已通过，worktree 分支已提交 `62e15af`，下一步是选择本地合并、推送 PR，或基于该成果启动 Plan 2。
+暂停在 Android Plan 1 完成后的 Plan 2 准备阶段：实现、单测、debug 构建、模拟器烟测均已通过，Plan 1 已合并到 `main`，下一步启动 Backend API and Database Foundation。
 
 ## 10. 下一步开发任务
 
-1. 选择 Plan 1 集成方式：本地合并到 `main`，或推送并创建 PR。
-2. 启动 Plan 2：Backend API and Database Foundation。
+1. 启动 Plan 2：Backend API and Database Foundation。
+2. 为后端 API、数据库 schema、健康检查、用户/profile API 制定并执行子计划。
 
 ## 11. 下一个 AI 会话应该从哪里继续
 
-从 worktree 继续：
+从主仓库继续：
 
 ```bash
-cd "/Users/steve/Desktop/Smart Everything/AIFitnessPro/.worktrees/android-foundation-compliance-shell/android"
+cd "/Users/steve/Desktop/Smart Everything/AIFitnessPro/android"
 export JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
 export PATH=/usr/local/opt/openjdk@17/bin:$PATH
 export ANDROID_HOME=/Users/steve/Library/Android/sdk
@@ -133,5 +124,5 @@ export ANDROID_SDK_ROOT=/Users/steve/Library/Android/sdk
 ## 12. 建议 git commit message
 
 ```text
-chore: update project context after Android Plan 1 commit
+feat: add backend API and database foundation
 ```

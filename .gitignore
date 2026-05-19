@@ -13,6 +13,9 @@ miniprogram/miniprogram_npm/
 # Build outputs
 miniprogram/dist/
 cloudfunctions/*/dist/
+android/.gradle/
+android/**/build/
+android/local.properties
 
 # IDE files
 .vscode/

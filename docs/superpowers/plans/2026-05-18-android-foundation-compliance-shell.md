@@ -8,6 +8,15 @@
 
 **Tech Stack:** Kotlin, Gradle, Android Gradle Plugin, Jetpack Compose, Navigation Compose, DataStore, JUnit.
 
+## Current Execution Status
+
+- Android foundation files are implemented in `android/` on branch `codex-android-foundation-compliance-shell`.
+- Consent gating, DataStore consent persistence, four-tab Navigation Compose shell, and product-boundary placeholder screens are in place.
+- Local Android build environment is installed: Homebrew `openjdk@17`, Android command line tools, `platforms;android-35`, `build-tools;35.0.0`, and `platform-tools`.
+- Android unit tests pass: `./gradlew :app:testDebugUnitTest`.
+- Android debug APK build passes: `./gradlew :app:assembleDebug`.
+- Manual emulator smoke test passes on `AIFitnessPro_API35`: first launch consent, accept-to-main, four-tab navigation, relaunch consent persistence, and minimal permission surface verified.
+
 ---
 
 ## File Structure
@@ -82,7 +91,7 @@ Responsibilities:
 - Create: `android/app/src/main/res/xml/backup_rules.xml`
 - Create: `android/app/src/main/res/xml/data_extraction_rules.xml`
 
-- [ ] **Step 1: Add Gradle settings**
+- [x] **Step 1: Add Gradle settings**
 
 Create `android/settings.gradle.kts`:
 
@@ -107,7 +116,7 @@ rootProject.name = "AIFitnessProAndroid"
 include(":app")
 ```
 
-- [ ] **Step 2: Add root build file**
+- [x] **Step 2: Add root build file**
 
 Create `android/build.gradle.kts`:
 
@@ -119,7 +128,7 @@ plugins {
 }
 ```
 
-- [ ] **Step 3: Add Gradle properties**
+- [x] **Step 3: Add Gradle properties**
 
 Create `android/gradle.properties`:
 
@@ -130,7 +139,7 @@ kotlin.code.style=official
 android.nonTransitiveRClass=true
 ```
 
-- [ ] **Step 4: Add Gradle wrapper files**
+- [x] **Step 4: Add Gradle wrapper files**
 
 Create `android/gradle/wrapper/gradle-wrapper.properties`:
 
@@ -155,7 +164,7 @@ Create `android/gradlew`:
 ```sh
 #!/bin/sh
 APP_HOME=$(cd "$(dirname "$0")" >/dev/null 2>&1 && pwd -P)
-exec java -jar "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" "$@"
+exec java -classpath "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" org.gradle.wrapper.GradleWrapperMain "$@"
 ```
 
 Create `android/gradlew.bat`:
@@ -163,10 +172,10 @@ Create `android/gradlew.bat`:
 ```bat
 @echo off
 set APP_HOME=%~dp0
-java -jar "%APP_HOME%\gradle\wrapper\gradle-wrapper.jar" %*
+java -classpath "%APP_HOME%\gradle\wrapper\gradle-wrapper.jar" org.gradle.wrapper.GradleWrapperMain %*
 ```
 
-- [ ] **Step 5: Add app build file**
+- [x] **Step 5: Add app build file**
 
 Create `android/app/build.gradle.kts`:
 
@@ -237,7 +246,7 @@ dependencies {
 }
 ```
 
-- [ ] **Step 5: Add Android manifest**
+- [x] **Step 6: Add Android manifest**
 
 Create `android/app/src/main/AndroidManifest.xml`:
 
@@ -266,7 +275,7 @@ Create `android/app/src/main/AndroidManifest.xml`:
 </manifest>
 ```
 
-- [ ] **Step 7: Add required Android resources**
+- [x] **Step 7: Add required Android resources**
 
 Create `android/app/src/main/res/values/styles.xml`:
 
@@ -343,7 +352,7 @@ Create `android/app/src/main/res/xml/data_extraction_rules.xml`:
 </data-extraction-rules>
 ```
 
-- [ ] **Step 8: Run project sync/build**
+- [x] **Step 8: Run project sync/build**
 
 Run:
 
@@ -361,7 +370,7 @@ Expected: build fails only if wrapper is missing. If no wrapper exists, run the 
 - Create: `android/app/src/main/java/com/aifitnesspro/android/AIFitnessProApp.kt`
 - Create: `android/app/src/main/java/com/aifitnesspro/android/core/ui/AppTheme.kt`
 
-- [ ] **Step 1: Add app theme**
+- [x] **Step 1: Add app theme**
 
 Create `AppTheme.kt`:
 
@@ -411,7 +420,7 @@ fun AIFitnessProTheme(
 }
 ```
 
-- [ ] **Step 2: Add main activity**
+- [x] **Step 2: Add main activity**
 
 Create `MainActivity.kt`:
 
@@ -435,7 +444,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-- [ ] **Step 3: Add temporary app composable**
+- [x] **Step 3: Add temporary app composable**
 
 Create `AIFitnessProApp.kt`:
 
@@ -451,7 +460,7 @@ fun AIFitnessProApp() {
 }
 ```
 
-- [ ] **Step 4: Build**
+- [x] **Step 4: Build**
 
 Run:
 
@@ -469,7 +478,7 @@ Expected: assembleDebug passes.
 - Create: `android/app/src/main/java/com/aifitnesspro/android/core/settings/ConsentRepository.kt`
 - Create: `android/app/src/test/java/com/aifitnesspro/android/core/settings/ConsentRepositoryTest.kt`
 
-- [ ] **Step 1: Add consent state model**
+- [x] **Step 1: Add consent state model**
 
 Create `ConsentState.kt`:
 
@@ -500,7 +509,7 @@ data class ConsentState(
 }
 ```
 
-- [ ] **Step 2: Write model test**
+- [x] **Step 2: Write model test**
 
 Create `ConsentRepositoryTest.kt`:
 
@@ -527,7 +536,7 @@ class ConsentRepositoryTest {
 }
 ```
 
-- [ ] **Step 3: Run failing/passing unit test**
+- [x] **Step 3: Run failing/passing unit test**
 
 Run:
 
@@ -538,7 +547,7 @@ cd android
 
 Expected: test passes after model exists.
 
-- [ ] **Step 4: Add DataStore repository**
+- [x] **Step 4: Add DataStore repository**
 
 Create `ConsentRepository.kt`:
 
@@ -591,7 +600,7 @@ class ConsentRepository(
 - Create: `android/app/src/main/java/com/aifitnesspro/android/feature/consent/ConsentScreen.kt`
 - Modify: `android/app/src/main/java/com/aifitnesspro/android/AIFitnessProApp.kt`
 
-- [ ] **Step 1: Create consent screen**
+- [x] **Step 1: Create consent screen**
 
 Create `ConsentScreen.kt`:
 
@@ -660,7 +669,7 @@ fun ConsentScreen(
 }
 ```
 
-- [ ] **Step 2: Wire app to show consent screen temporarily**
+- [x] **Step 2: Wire app to show consent screen temporarily**
 
 Modify `AIFitnessProApp.kt`:
 
@@ -684,7 +693,7 @@ fun AIFitnessProApp() {
 }
 ```
 
-- [ ] **Step 3: Build**
+- [x] **Step 3: Build**
 
 Run:
 
@@ -705,7 +714,7 @@ Expected: build passes and app starts on the consent screen.
 - Create: `android/app/src/main/java/com/aifitnesspro/android/feature/exercise/ExerciseLibraryScreen.kt`
 - Create: `android/app/src/main/java/com/aifitnesspro/android/feature/profile/ProfileScreen.kt`
 
-- [ ] **Step 1: Add destination model**
+- [x] **Step 1: Add destination model**
 
 Create `AppDestination.kt`:
 
@@ -727,7 +736,7 @@ data class AppDestination(
 }
 ```
 
-- [ ] **Step 2: Add destination test**
+- [x] **Step 2: Add destination test**
 
 Create `AppDestinationTest.kt`:
 
@@ -748,7 +757,7 @@ class AppDestinationTest {
 }
 ```
 
-- [ ] **Step 3: Add placeholder screens**
+- [x] **Step 3: Add placeholder screens**
 
 Create `HomeScreen.kt`:
 
@@ -806,7 +815,7 @@ fun ProfileScreen() {
 }
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 Run:
 
@@ -823,7 +832,7 @@ Expected: test passes.
 - Create: `android/app/src/main/java/com/aifitnesspro/android/navigation/AppNavHost.kt`
 - Modify: `android/app/src/main/java/com/aifitnesspro/android/AIFitnessProApp.kt`
 
-- [ ] **Step 1: Add navigation host**
+- [x] **Step 1: Add navigation host**
 
 Create `AppNavHost.kt`:
 
@@ -891,7 +900,7 @@ fun AppNavHost() {
 }
 ```
 
-- [ ] **Step 2: Show navigation after temporary consent bypass**
+- [x] **Step 2: Show navigation after temporary consent bypass**
 
 Modify `AIFitnessProApp.kt`:
 
@@ -924,7 +933,7 @@ fun AIFitnessProApp() {
 }
 ```
 
-- [ ] **Step 3: Build**
+- [x] **Step 3: Build**
 
 Run:
 
@@ -941,7 +950,7 @@ Expected: build passes. Accepting consent in the UI shows the four-tab shell.
 - Modify: `android/app/src/main/java/com/aifitnesspro/android/AIFitnessProApp.kt`
 - Modify: `android/app/src/main/java/com/aifitnesspro/android/MainActivity.kt`
 
-- [ ] **Step 1: Pass repository from activity**
+- [x] **Step 1: Pass repository from activity**
 
 Modify `MainActivity.kt`:
 
@@ -967,7 +976,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-- [ ] **Step 2: Collect consent state**
+- [x] **Step 2: Collect consent state**
 
 Modify `AIFitnessProApp.kt`:
 
@@ -1014,7 +1023,7 @@ fun AIFitnessProApp(
 }
 ```
 
-- [ ] **Step 3: Build**
+- [x] **Step 3: Build**
 
 Run:
 
@@ -1033,7 +1042,7 @@ Expected: build passes. After accepting once, relaunching the app opens the main
 - Modify: `android/app/src/main/java/com/aifitnesspro/android/feature/exercise/ExerciseLibraryScreen.kt`
 - Modify: `android/app/src/main/java/com/aifitnesspro/android/feature/profile/ProfileScreen.kt`
 
-- [ ] **Step 1: Replace placeholders with product boundary copy**
+- [x] **Step 1: Replace placeholders with product boundary copy**
 
 Modify `HomeScreen.kt`:
 
@@ -1155,7 +1164,7 @@ fun ProfileScreen() {
 }
 ```
 
-- [ ] **Step 2: Build**
+- [x] **Step 2: Build**
 
 Run:
 
@@ -1172,7 +1181,7 @@ Expected: build passes and all four tabs display product-specific placeholders.
 - Modify: `docs/android-app-product-plan.md`
 - Modify: `docs/superpowers/plans/2026-05-18-android-mvp-roadmap.md`
 
-- [ ] **Step 1: Run unit tests**
+- [x] **Step 1: Run unit tests**
 
 Run:
 
@@ -1183,7 +1192,7 @@ cd android
 
 Expected: all unit tests pass.
 
-- [ ] **Step 2: Run debug build**
+- [x] **Step 2: Run debug build**
 
 Run:
 
@@ -1194,7 +1203,7 @@ cd android
 
 Expected: debug APK builds successfully.
 
-- [ ] **Step 3: Manual smoke test**
+- [x] **Step 3: Manual smoke test**
 
 Install the debug APK on an Android device or emulator and verify:
 
@@ -1204,7 +1213,7 @@ Install the debug APK on an Android device or emulator and verify:
 4. Bottom tabs switch between 首页、训练、动作库、我的.
 5. App does not request camera, location, contacts, microphone, Bluetooth, notification, or photo permissions on launch.
 
-- [ ] **Step 4: Update roadmap status**
+- [x] **Step 4: Update roadmap status**
 
 Add a short status note to `docs/superpowers/plans/2026-05-18-android-mvp-roadmap.md`:
 
