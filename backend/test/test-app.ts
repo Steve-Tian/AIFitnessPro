@@ -1,5 +1,7 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { ApiErrorFilter } from '../src/common/errors/api-error.filter';
+import { validationExceptionFactory } from '../src/common/validation/validation-exception.factory';
 import { AppModule } from '../src/app.module';
 
 export async function createTestApp(): Promise<INestApplication> {
@@ -13,8 +15,10 @@ export async function createTestApp(): Promise<INestApplication> {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      exceptionFactory: validationExceptionFactory,
     }),
   );
+  app.useGlobalFilters(new ApiErrorFilter());
   await app.init();
   return app;
 }

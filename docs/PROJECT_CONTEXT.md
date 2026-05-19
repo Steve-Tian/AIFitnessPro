@@ -14,7 +14,7 @@
 
 当前开发阶段：Plan 2 - Backend API and Database Foundation 执行阶段。
 
-当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 后端基础已开始实现，Task 1 backend tooling scaffold、Task 2 Prisma database foundation 和 Task 3 health endpoint 已完成。
+当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 后端基础已开始实现，Task 1 backend tooling scaffold、Task 2 Prisma database foundation、Task 3 health endpoint 和 Task 4 development user API 已完成。
 
 ## 2. 技术栈
 
@@ -77,6 +77,7 @@ codex/backend-api-database-foundation
 - 已完成 Plan 2 Task 1：新增 `backend/` tooling scaffold、Docker Compose、env 示例和 npm lockfile。
 - 已完成 Plan 2 Task 2：新增 Prisma schema、初始 PostgreSQL migration，并验证 reset/deploy。
 - 已完成 Plan 2 Task 3：新增 Nest app shell、Prisma provider、`GET /health` endpoint 和 e2e 测试。
+- 已完成 Plan 2 Task 4：新增统一错误 envelope、validation factory、`POST /v1/dev/users` 开发用户创建接口和 e2e 测试。
 
 ## 5. 本轮完成内容
 
@@ -104,6 +105,13 @@ codex/backend-api-database-foundation
 - 修正 `supertest` import 为 namespace import，以匹配当前 CommonJS 类型导出。
 - 运行 `npm test -- --runTestsByPath test/app.e2e-spec.ts`：通过。
 - 运行 `npm run build`：通过。
+- 按 TDD 追加 development user e2e 测试，并先验证 RED：`/v1/dev/users` 返回 404。
+- 新增统一 API error envelope 类型和全局 exception filter。
+- 新增 validation exception factory，将 class-validator 错误整理为 `{ error: { code, message, fields } }`。
+- 新增 `CreateDevUserDto`、用户 presenter、`DevUsersService` 和 `DevUsersController`。
+- `POST /v1/dev/users` 支持创建本地开发用户、默认 `zh-CN/metric` settings，以及通过 `externalId` 幂等返回已有用户。
+- 再次运行 `npm test -- --runTestsByPath test/app.e2e-spec.ts`：4 个 e2e 全部通过。
+- 再次运行 `npm run build`：通过。
 - 重新阅读项目记忆、目录结构、相关 Android 代码、计划文档和 `git status`。
 - 重新运行 `./gradlew :app:testDebugUnitTest`：通过。
 - 重新运行 `./gradlew :app:assembleDebug`：通过。
@@ -138,6 +146,9 @@ codex/backend-api-database-foundation
 - Plan 2 worktree：`backend/src/app.module.ts`
 - Plan 2 worktree：`backend/src/prisma/`
 - Plan 2 worktree：`backend/src/health/`
+- Plan 2 worktree：`backend/src/common/errors/`
+- Plan 2 worktree：`backend/src/common/validation/`
+- Plan 2 worktree：`backend/src/dev-auth/`
 - Plan 2 worktree：`backend/test/`
 
 ## 7. 当前未完成事项
@@ -146,8 +157,9 @@ codex/backend-api-database-foundation
 - Plan 2 Task 1 已完成。
 - Plan 2 Task 2 已完成。
 - Plan 2 Task 3 已完成。
-- 下一步按 TDD 执行 Task 4：error envelope and development user creation。
-- 之后继续按 TDD 实现 current user/profile API。
+- Plan 2 Task 4 已完成。
+- 下一步按 TDD 执行 Task 5：development auth guard and current user endpoint。
+- 之后继续按 TDD 实现 profile API。
 
 ## 8. 已知 bug 或风险
 
@@ -158,12 +170,12 @@ codex/backend-api-database-foundation
 
 ## 9. 当前暂停点
 
-暂停在 Plan 2 Task 3 完成阶段：Nest app shell、Prisma provider 和 `GET /health` 已完成并验证，下一步按计划执行 Task 4 error envelope and development user creation。
+暂停在 Plan 2 Task 4 完成阶段：统一错误 envelope 和 `POST /v1/dev/users` 已完成并验证，下一步按计划执行 Task 5 development auth guard and current user endpoint。
 
 ## 10. 下一步开发任务
 
-1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 4。
-2. 先追加 development user 和 error envelope e2e 失败测试，再实现 common error filter、validation factory 和 `POST /v1/dev/users`。
+1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 5。
+2. 先追加 `GET /v1/users/me` e2e 失败测试，再实现 `X-Dev-User-Id` guard、current user decorator、users service/controller。
 3. 每个任务完成后更新计划 checkbox，并提交小步 commit。
 
 ## 11. 下一个 AI 会话应该从哪里继续
@@ -182,5 +194,5 @@ git status
 ## 12. 建议 git commit message
 
 ```text
-feat: add development user endpoint
+feat: add current user API
 ```

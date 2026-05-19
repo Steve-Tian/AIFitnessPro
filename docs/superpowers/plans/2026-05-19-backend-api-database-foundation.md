@@ -879,7 +879,7 @@ git commit -m "feat: add backend health endpoint"
 - Modify: `backend/src/app.module.ts`
 - Modify: `backend/test/app.e2e-spec.ts`
 
-- [ ] **Step 1: Add failing development user tests**
+- [x] **Step 1: Add failing development user tests**
 
 Append to `backend/test/app.e2e-spec.ts` inside the existing `describe` block:
 
@@ -927,7 +927,7 @@ Append to `backend/test/app.e2e-spec.ts` inside the existing `describe` block:
   });
 ```
 
-- [ ] **Step 2: Run dev user tests and verify RED**
+- [x] **Step 2: Run dev user tests and verify RED**
 
 Run:
 
@@ -938,7 +938,7 @@ npm test -- --runTestsByPath test/app.e2e-spec.ts
 
 Expected: FAIL because `/v1/dev/users` and the error envelope do not exist.
 
-- [ ] **Step 3: Add API error filter**
+- [x] **Step 3: Add API error filter**
 
 Create `backend/src/common/errors/api-error.ts`:
 
@@ -1037,7 +1037,7 @@ export class ApiErrorFilter implements ExceptionFilter {
 }
 ```
 
-- [ ] **Step 4: Add validation exception factory**
+- [x] **Step 4: Add validation exception factory**
 
 Create `backend/src/common/validation/validation-exception.factory.ts`:
 
@@ -1082,7 +1082,7 @@ import { validationExceptionFactory } from './common/validation/validation-excep
 
 Use `../src/common/...` import paths in `backend/test/test-app.ts`.
 
-- [ ] **Step 5: Add development user DTO and presenter**
+- [x] **Step 5: Add development user DTO and presenter**
 
 Create `backend/src/dev-auth/dev-users.dto.ts`:
 
@@ -1147,7 +1147,7 @@ export function presentUser(user: UserWithRelations) {
 }
 ```
 
-- [ ] **Step 6: Add development user service and controller**
+- [x] **Step 6: Add development user service and controller**
 
 Create `backend/src/dev-auth/dev-users.service.ts`:
 
@@ -1227,7 +1227,7 @@ import { PrismaModule } from './prisma/prisma.module';
 export class AppModule {}
 ```
 
-- [ ] **Step 7: Run development user tests and verify GREEN**
+- [x] **Step 7: Run development user tests and verify GREEN**
 
 Run:
 
@@ -1238,7 +1238,7 @@ npm test -- --runTestsByPath test/app.e2e-spec.ts
 
 Expected: PASS for health and development user tests.
 
-- [ ] **Step 8: Commit development user foundation**
+- [x] **Step 8: Commit development user foundation**
 
 ```bash
 git add backend/src backend/test
