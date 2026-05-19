@@ -12,9 +12,9 @@
 
 项目目标：构建 Kotlin + Jetpack Compose 原生 Android App，并满足国内安卓应用市场合规要求。
 
-当前开发阶段：Plan 2 - Backend API and Database Foundation 实施计划阶段。
+当前开发阶段：Plan 2 - Backend API and Database Foundation 执行阶段。
 
-当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 已确定采用 NestJS + PostgreSQL + Prisma，后端基础设计 spec 和 implementation plan 已写入 worktree，等待进入执行。
+当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 后端基础已开始实现，Task 1 backend tooling scaffold 已完成并安装依赖。
 
 ## 2. 技术栈
 
@@ -74,6 +74,7 @@ codex/backend-api-database-foundation
 - 已批准 Plan 2 技术方向：NestJS + PostgreSQL + Prisma。
 - 已新增 Plan 2 设计规格：`docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`。
 - 已新增 Plan 2 实施计划：`docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md`。
+- 已完成 Plan 2 Task 1：新增 `backend/` tooling scaffold、Docker Compose、env 示例和 npm lockfile。
 
 ## 5. 本轮完成内容
 
@@ -85,6 +86,8 @@ codex/backend-api-database-foundation
 - 编写 Plan 2 后端基础设计 spec。
 - 用户回复“继续”后，编写 Plan 2 后端基础 implementation plan。
 - implementation plan 覆盖后端 tooling、Prisma schema/migration、health、dev user、current user、profile API、测试清理、README 和项目记忆更新。
+- 新增 `backend/package.json`、TypeScript/Nest 配置、`.env.example`、`.gitignore`、`docker-compose.yml`。
+- 运行 `npm install`，生成 `backend/package-lock.json`。
 - 重新阅读项目记忆、目录结构、相关 Android 代码、计划文档和 `git status`。
 - 重新运行 `./gradlew :app:testDebugUnitTest`：通过。
 - 重新运行 `./gradlew :app:assembleDebug`：通过。
@@ -111,26 +114,29 @@ codex/backend-api-database-foundation
 - main：`docs/superpowers/plans/2026-05-18-android-foundation-compliance-shell.md`
 - Plan 2 worktree：`docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`
 - Plan 2 worktree：`docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md`
+- Plan 2 worktree：`backend/`
 
 ## 7. 当前未完成事项
 
 - Plan 1 已合并到 `main`。
-- Plan 2 implementation plan 已写好，下一步进入执行。
-- 按 TDD 实现 `backend/`。
+- Plan 2 Task 1 已完成。
+- 下一步执行 Task 2：Prisma schema and initial migration。
+- 之后按 TDD 实现 health/dev user/current user/profile API。
 
 ## 8. 已知 bug 或风险
 
 - Homebrew 的 `openjdk@17` 是 keg-only，当前验证命令需要显式设置 `JAVA_HOME` 和 `PATH`，或用户后续手动配置 shell。
 - ADB/emulator 命令通常需要在沙箱外运行。
+- `npm install` 报告 18 个 audit vulnerabilities（4 low, 9 moderate, 5 high）；当前未自动修复，避免破坏 Nest/Prisma 依赖版本，后续可单独审计。
 
 ## 9. 当前暂停点
 
-暂停在 Plan 2 implementation plan 完成阶段：设计 spec 和实施计划已写入 worktree，下一步按计划执行 backend 实现。
+暂停在 Plan 2 Task 1 完成阶段：backend tooling scaffold 已完成，下一步按计划执行 Task 2 Prisma schema and initial migration。
 
 ## 10. 下一步开发任务
 
-1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 1。
-2. 按 TDD 实现 `backend/`：NestJS、Prisma schema/migration、Docker Compose、health/dev user/current user/profile API 和测试。
+1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 2。
+2. 新增 Prisma schema，启动 PostgreSQL Docker Compose，生成并验证初始 migration。
 3. 每个任务完成后更新计划 checkbox，并提交小步 commit。
 
 ## 11. 下一个 AI 会话应该从哪里继续
@@ -147,5 +153,5 @@ git status
 ## 12. 建议 git commit message
 
 ```text
-chore: scaffold backend tooling
+feat: add backend database foundation
 ```

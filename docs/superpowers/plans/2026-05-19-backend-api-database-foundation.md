@@ -81,7 +81,7 @@ Responsibilities:
 - Create: `backend/.env.example`
 - Create: `backend/docker-compose.yml`
 
-- [ ] **Step 1: Add backend package manifest**
+- [x] **Step 1: Add backend package manifest**
 
 Create `backend/package.json`:
 
@@ -131,7 +131,7 @@ Create `backend/package.json`:
 }
 ```
 
-- [ ] **Step 2: Add TypeScript config**
+- [x] **Step 2: Add TypeScript config**
 
 Create `backend/tsconfig.json`:
 
@@ -167,7 +167,7 @@ Create `backend/tsconfig.build.json`:
 }
 ```
 
-- [ ] **Step 3: Add Nest CLI config**
+- [x] **Step 3: Add Nest CLI config**
 
 Create `backend/nest-cli.json`:
 
@@ -182,7 +182,7 @@ Create `backend/nest-cli.json`:
 }
 ```
 
-- [ ] **Step 4: Add backend ignores and local env example**
+- [x] **Step 4: Add backend ignores and local env example**
 
 Create `backend/.gitignore`:
 
@@ -201,7 +201,7 @@ DATABASE_URL="postgresql://aifitnesspro:aifitnesspro@127.0.0.1:5432/aifitnesspro
 PORT=8000
 ```
 
-- [ ] **Step 5: Add PostgreSQL Docker Compose**
+- [x] **Step 5: Add PostgreSQL Docker Compose**
 
 Create `backend/docker-compose.yml`:
 
@@ -228,7 +228,7 @@ volumes:
   aifitnesspro_postgres_data:
 ```
 
-- [ ] **Step 6: Install dependencies**
+- [x] **Step 6: Install dependencies**
 
 Run:
 
@@ -239,7 +239,7 @@ npm install
 
 Expected: dependencies install and `backend/package-lock.json` is created.
 
-- [ ] **Step 7: Commit tooling scaffold**
+- [x] **Step 7: Commit tooling scaffold**
 
 ```bash
 git add backend/package.json backend/package-lock.json backend/tsconfig.json backend/tsconfig.build.json backend/nest-cli.json backend/.gitignore backend/.env.example backend/docker-compose.yml
