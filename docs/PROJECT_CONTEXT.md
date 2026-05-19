@@ -14,7 +14,7 @@
 
 当前开发阶段：Plan 2 - Backend API and Database Foundation implemented / verification complete.
 
-当前运行状态：Android Plan 1 已合并；Plan 2 后端基础已实现，包含 NestJS 服务、PostgreSQL Docker Compose、Prisma schema/migration、health/dev user/current user/profile API 和自动化测试。
+当前运行状态：Android Plan 1 已合并；Plan 2 后端基础已实现、验证通过并已合并到 `main`，包含 NestJS 服务、PostgreSQL Docker Compose、Prisma schema/migration、health/dev user/current user/profile API 和自动化测试。
 
 ## 2. 技术栈
 
@@ -82,6 +82,7 @@ codex/backend-api-database-foundation
 - 已完成 Plan 2 Task 6：新增 profile DTO 校验、`PUT /v1/users/me/profile` upsert API，并标记 onboarding complete。
 - 已完成 Plan 2 Task 7：e2e 数据库清理、完整 backend test/build 验证和 backend README。
 - 已完成 Plan 2 Task 8：最终项目记忆和计划状态更新。
+- 已将 Plan 2 分支 `codex/backend-api-database-foundation` fast-forward 合并到 `main`。
 
 ## 5. 本轮完成内容
 
@@ -132,6 +133,10 @@ codex/backend-api-database-foundation
 - 运行完整 `npm test`：10 个 e2e 全部通过。
 - 运行 `npm run build`：通过。
 - 完成 Plan 2 最终上下文更新，当前暂停点改为 Plan 2 可收尾/可合并。
+- 在 `main` 重新安装 backend 依赖，生成 Prisma Client，确认 PostgreSQL 容器 healthy。
+- 在 `main` 运行 `npm run prisma:migrate`：通过，无待应用 migration。
+- 在 `main` 运行 `npm test`：10 个 e2e 全部通过。
+- 在 `main` 运行 `npm run build`：通过。
 - 重新阅读项目记忆、目录结构、相关 Android 代码、计划文档和 `git status`。
 - 重新运行 `./gradlew :app:testDebugUnitTest`：通过。
 - 重新运行 `./gradlew :app:assembleDebug`：通过。
@@ -184,7 +189,7 @@ codex/backend-api-database-foundation
 - Plan 2 Task 7 已完成。
 - Plan 2 Task 8 已完成。
 - 当前未接入 Android networking，生产认证、训练计划生成、训练同步、内容 seed/import 仍在后续计划。
-- 下一步准备 Plan 2 收尾：合并到 `main` 或创建 PR/保留分支继续 Plan 3。
+- 下一步可启动 Plan 3：Android API client/本地 backend 配置、production auth design 或 content seed import。
 
 ## 8. 已知 bug 或风险
 
@@ -195,20 +200,20 @@ codex/backend-api-database-foundation
 
 ## 9. 当前暂停点
 
-暂停在 Plan 2 后端基础完成阶段：backend foundation 已实现并通过最终验证，下一步进入 Plan 2 收尾/合并选择。
+暂停在 Plan 2 后端基础已合并阶段：`main` 已包含 backend foundation，最终 backend verification 已通过。
 
 ## 10. 下一步开发任务
 
-1. 使用 finishing-a-development-branch 流程决定是否合并 `codex/backend-api-database-foundation` 到 `main`。
-2. 后续 Plan 3 建议聚焦 Android API client/本地配置、生产认证设计，或内容 seed/import。
-3. 合并前保留 Docker Desktop 运行，确保 backend final verification 可重复执行。
+1. 清理 Plan 2 worktree 和已合并分支。
+2. 启动 Plan 3，建议优先做 Android API client/本地 backend 配置，让 Android App 能连接本地 NestJS API。
+3. 也可先做 production auth design 或 exercise/recipe seed import。
 
 ## 11. 下一个 AI 会话应该从哪里继续
 
-从 Plan 2 worktree 继续：
+从主仓库继续：
 
 ```bash
-cd "/Users/steve/Desktop/Smart Everything/AIFitnessPro/.worktrees/backend-api-database-foundation"
+cd "/Users/steve/Desktop/Smart Everything/AIFitnessPro"
 git status
 ```
 
@@ -219,5 +224,5 @@ git status
 ## 12. 建议 git commit message
 
 ```text
-docs: update project context after backend foundation
+chore: update project context after Plan 2 merge
 ```
