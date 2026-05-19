@@ -12,9 +12,9 @@
 
 项目目标：构建 Kotlin + Jetpack Compose 原生 Android App，并满足国内安卓应用市场合规要求。
 
-当前开发阶段：Plan 2 - Backend API and Database Foundation implemented / verification complete.
+当前开发阶段：Plan 3 - Android API client / local backend configuration started.
 
-当前运行状态：Android Plan 1 已合并；Plan 2 后端基础已实现、验证通过并已合并到 `main`，包含 NestJS 服务、PostgreSQL Docker Compose、Prisma schema/migration、health/dev user/current user/profile API 和自动化测试。
+当前运行状态：Android Plan 1 已合并；Plan 2 后端基础已实现、验证通过并已合并到 `main`；Plan 3 前置切片已在独立 worktree 中实现 Android API client、本地 NestJS base URL 配置、开发用户 bootstrap 和 Profile 页连接状态展示。
 
 ## 2. 技术栈
 
@@ -60,6 +60,18 @@ Plan 2 分支：
 codex/backend-api-database-foundation
 ```
 
+Plan 3 Android API client worktree：
+
+```text
+/Users/steve/Desktop/Smart Everything/AIFitnessPro/.worktrees/android-api-client-backend-config
+```
+
+Plan 3 Android API client 分支：
+
+```text
+codex/android-api-client-backend-config
+```
+
 ## 4. 当前已完成内容
 
 - 已创建 Android Gradle 工程骨架。
@@ -83,113 +95,52 @@ codex/backend-api-database-foundation
 - 已完成 Plan 2 Task 7：e2e 数据库清理、完整 backend test/build 验证和 backend README。
 - 已完成 Plan 2 Task 8：最终项目记忆和计划状态更新。
 - 已将 Plan 2 分支 `codex/backend-api-database-foundation` fast-forward 合并到 `main`。
+- 已启动 Plan 3 前置切片：Android API client / 本地 backend 配置。
+- 已新增 Android debug 本地 API base URL：`http://10.0.2.2:8000/`。
+- 已新增 Android HTTP transport、NestJS API client、开发用户会话持久化和设备身份生成。
+- 已让 App 在隐私同意后自动 bootstrap 本地开发用户，并在“我的”页显示本地后端连接状态。
 
 ## 5. 本轮完成内容
 
-- 创建 Plan 2 隔离 worktree：`.worktrees/backend-api-database-foundation`。
-- 创建 Plan 2 分支：`codex/backend-api-database-foundation`。
-- 阅读 Plan 2 相关上下文：项目记忆、Android 产品设计、MVP roadmap、历史微信云函数、onboarding/profile/exercise/recipe 数据形状。
-- 与用户确认 Plan 2 数据库采用 PostgreSQL。
-- 与用户确认后端基础采用 NestJS + PostgreSQL + Prisma。
-- 编写 Plan 2 后端基础设计 spec。
-- 用户回复“继续”后，编写 Plan 2 后端基础 implementation plan。
-- implementation plan 覆盖后端 tooling、Prisma schema/migration、health、dev user、current user、profile API、测试清理、README 和项目记忆更新。
-- 新增 `backend/package.json`、TypeScript/Nest 配置、`.env.example`、`.gitignore`、`docker-compose.yml`。
-- 运行 `npm install`，生成 `backend/package-lock.json`。
-- 新增 `backend/prisma/schema.prisma`，覆盖用户、资料、设置、同意日志、训练计划、训练日、训练动作、训练记录、动作反馈、动作调整、动作媒体和食谱基础表。
-- 启动 Docker Desktop 和 `aifitnesspro-postgres` PostgreSQL 16 容器。
-- 运行 `npm run prisma:generate`：通过。
-- 运行 `npm run prisma:migrate:dev -- --name backend_foundation`：生成并应用初始 migration。
-- 将 Prisma 生成的时间戳迁移目录重命名为 `backend/prisma/migrations/0001_backend_foundation`。
-- 运行 `npm run prisma:reset`：成功从 `0001_backend_foundation` 重置并重放数据库。
-- 运行 `npm run prisma:migrate`：通过，无待应用 migration。
-- 按 TDD 新增 `GET /health` e2e 测试，并先验证 RED：缺少 `../src/app.module`。
-- 新增 Nest app shell：`src/main.ts`、`src/app.module.ts`。
-- 新增 Prisma Nest provider：`src/prisma/prisma.module.ts`、`src/prisma/prisma.service.ts`。
-- 新增 health endpoint：`src/health/health.controller.ts`、`src/health/health.service.ts`。
-- 修正 `supertest` import 为 namespace import，以匹配当前 CommonJS 类型导出。
-- 运行 `npm test -- --runTestsByPath test/app.e2e-spec.ts`：通过。
-- 运行 `npm run build`：通过。
-- 按 TDD 追加 development user e2e 测试，并先验证 RED：`/v1/dev/users` 返回 404。
-- 新增统一 API error envelope 类型和全局 exception filter。
-- 新增 validation exception factory，将 class-validator 错误整理为 `{ error: { code, message, fields } }`。
-- 新增 `CreateDevUserDto`、用户 presenter、`DevUsersService` 和 `DevUsersController`。
-- `POST /v1/dev/users` 支持创建本地开发用户、默认 `zh-CN/metric` settings，以及通过 `externalId` 幂等返回已有用户。
-- 再次运行 `npm test -- --runTestsByPath test/app.e2e-spec.ts`：4 个 e2e 全部通过。
-- 再次运行 `npm run build`：通过。
-- 按 TDD 追加 `GET /v1/users/me` e2e 测试，并先验证 RED：`/v1/users/me` 返回 404。
-- 新增 `CurrentUser` decorator 和 `DevAuthGuard`，通过 `X-Dev-User-Id` 读取当前开发用户。
-- 新增 `UsersService` 和 `UsersController`，返回当前用户、profile 和 settings。
-- 再次运行 `npm test -- --runTestsByPath test/app.e2e-spec.ts`：7 个 e2e 全部通过。
-- 再次运行 `npm run build`：通过。
-- 按 TDD 追加 profile create/update/validation e2e 测试，并先验证 RED：`PUT /v1/users/me/profile` 返回 404。
-- 新增 `UpsertProfileDto`，校验 gender、age、heightCm、weightKg、goal、experience、daysPerWeek、equipment 和 persona。
-- 新增 `UsersService.upsertProfile()`，写入/更新 `user_profiles` 并将 `users.onboarding_completed` 置为 true。
-- 新增 `PUT /v1/users/me/profile` endpoint。
-- 再次运行 `npm test -- --runTestsByPath test/app.e2e-spec.ts`：10 个 e2e 全部通过。
-- 再次运行 `npm run build`：通过。
-- 在 e2e 中新增 `beforeEach` 数据库清理 helper，清理用户、设置、资料、训练计划、训练记录和反馈相关表。
-- 新增 `backend/README.md`，记录技术栈、本地启动、迁移、测试和临时开发身份用法。
-- 运行完整 `npm test`：10 个 e2e 全部通过。
-- 运行 `npm run build`：通过。
-- 完成 Plan 2 最终上下文更新，当前暂停点改为 Plan 2 可收尾/可合并。
-- 在 `main` 重新安装 backend 依赖，生成 Prisma Client，确认 PostgreSQL 容器 healthy。
-- 在 `main` 运行 `npm run prisma:migrate`：通过，无待应用 migration。
-- 在 `main` 运行 `npm test`：10 个 e2e 全部通过。
-- 在 `main` 运行 `npm run build`：通过。
-- 重新阅读项目记忆、目录结构、相关 Android 代码、计划文档和 `git status`。
-- 重新运行 `./gradlew :app:testDebugUnitTest`：通过。
-- 重新运行 `./gradlew :app:assembleDebug`：通过。
-- 暂存 Android Plan 1 工程、`.gitignore` 和计划文档，排除 worktree 内未跟踪的 `docs/PROJECT_CONTEXT.md`，避免与主分支项目记忆文件冲突。
-- 已在 worktree 分支提交 Plan 1：`62e15af feat: add Android foundation compliance shell`。
-- 合并 Plan 1 分支到 `main` 时解决计划文档冲突，保留 wrapper/resources 的详细步骤并标记为已完成。
-- 安装 Homebrew `openjdk@17`，确认 `java -version` 为 OpenJDK 17.0.19。
-- 安装 Android command line tools。
-- 安装 Android SDK 35、Build-Tools 35.0.0、Build-Tools 34.0.0、platform-tools、emulator。
-- 修复 Gradle wrapper 脚本启动方式。
-- 跑通 Android 单元测试和 debug APK 构建。
-- 安装 Android 35 arm64 emulator system image。
-- 创建 Pixel 8 AVD：`AIFitnessPro_API35`。
-- 安装 `app-debug.apk` 到模拟器并完成 Plan 1 手动烟测。
-- 明确后续开发主线只做 Android App，小程序仅作迁移参考。
+- 创建 Plan 3 隔离 worktree：`.worktrees/android-api-client-backend-config`。
+- 创建 Plan 3 分支：`codex/android-api-client-backend-config`。
+- 按要求重新阅读 `docs/PROJECT_CONTEXT.md`、项目目录、Android/backend 相关代码、计划文档和 `git status`。
+- 运行 Android 基线测试；首次因 worktree 缺少 SDK 路径失败，设置 `ANDROID_HOME` / `ANDROID_SDK_ROOT` 后通过。
+- 按 TDD 新增 Android API/session 单元测试，并先验证 RED：`ApiConfig`、`AIFitnessApiClient`、`ApiSessionRepository` 等类未实现导致编译失败。
+- 新增 Kotlin serialization 依赖和 BuildConfig 生成。
+- 新增 debug API base URL：`http://10.0.2.2:8000/`；release 暂用占位 HTTPS URL。
+- 新增 manifest cleartext placeholder：debug 允许本地 HTTP，release 禁止 cleartext。
+- 新增 `ApiTransport`、`HttpUrlConnectionTransport`、`AIFitnessApiClient`、API models 和 `ApiException`。
+- 新增 `DevelopmentApi` 接口，覆盖 `POST /v1/dev/users` 和 `GET /v1/users/me`。
+- 新增 `ApiSessionRepository`、`ApiSessionStore`、`DataStoreApiSessionStore` 和 `AndroidDeviceIdentityProvider`。
+- `MainActivity` 现在组装 API client、session repository 和设备身份。
+- `AIFitnessProApp` 在用户完成隐私同意后自动创建或复用本地开发用户。
+- `ProfileScreen` 显示本地后端连接状态、连接失败信息或开发用户短 ID。
+- 运行 `./gradlew :app:testDebugUnitTest`：通过。
+- 运行 `./gradlew :app:assembleDebug`：通过。
 
 ## 6. 本轮修改文件
 
-- 主目录：`docs/PROJECT_CONTEXT.md`
-- worktree：`.gitignore`
-- worktree：`android/`
-- worktree：`docs/superpowers/plans/2026-05-18-android-foundation-compliance-shell.md`
-- worktree：`docs/superpowers/plans/2026-05-18-android-mvp-roadmap.md`
-- main：`docs/superpowers/plans/2026-05-18-android-foundation-compliance-shell.md`
-- Plan 2 worktree：`docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`
-- Plan 2 worktree：`docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md`
-- Plan 2 worktree：`backend/`
-- Plan 2 worktree：`backend/prisma/schema.prisma`
-- Plan 2 worktree：`backend/prisma/migrations/0001_backend_foundation/migration.sql`
-- Plan 2 worktree：`backend/prisma/migrations/migration_lock.toml`
-- Plan 2 worktree：`backend/src/main.ts`
-- Plan 2 worktree：`backend/src/app.module.ts`
-- Plan 2 worktree：`backend/src/prisma/`
-- Plan 2 worktree：`backend/src/health/`
-- Plan 2 worktree：`backend/src/common/errors/`
-- Plan 2 worktree：`backend/src/common/validation/`
-- Plan 2 worktree：`backend/src/dev-auth/`
-- Plan 2 worktree：`backend/src/users/`
-- Plan 2 worktree：`backend/test/`
+- `docs/PROJECT_CONTEXT.md`
+- `android/build.gradle.kts`
+- `android/app/build.gradle.kts`
+- `android/app/src/main/AndroidManifest.xml`
+- `android/app/src/main/java/com/aifitnesspro/android/MainActivity.kt`
+- `android/app/src/main/java/com/aifitnesspro/android/AIFitnessProApp.kt`
+- `android/app/src/main/java/com/aifitnesspro/android/navigation/AppNavHost.kt`
+- `android/app/src/main/java/com/aifitnesspro/android/feature/profile/ProfileScreen.kt`
+- `android/app/src/main/java/com/aifitnesspro/android/core/api/`
+- `android/app/src/main/java/com/aifitnesspro/android/core/session/`
+- `android/app/src/test/java/com/aifitnesspro/android/core/api/`
+- `android/app/src/test/java/com/aifitnesspro/android/core/session/`
 
 ## 7. 当前未完成事项
 
 - Plan 1 已合并到 `main`。
-- Plan 2 Task 1 已完成。
-- Plan 2 Task 2 已完成。
-- Plan 2 Task 3 已完成。
-- Plan 2 Task 4 已完成。
-- Plan 2 Task 5 已完成。
-- Plan 2 Task 6 已完成。
-- Plan 2 Task 7 已完成。
-- Plan 2 Task 8 已完成。
-- 当前未接入 Android networking，生产认证、训练计划生成、训练同步、内容 seed/import 仍在后续计划。
-- 下一步可启动 Plan 3：Android API client/本地 backend 配置、production auth design 或 content seed import。
+- Plan 2 已合并到 `main`。
+- Plan 3 前置切片已实现：Android 可连接本地 NestJS API 并创建/复用开发用户。
+- 仍未实现完整 9 步 onboarding UI、profile 写入 UI、训练计划生成、训练计划本地缓存、生产认证、训练同步和内容 seed/import。
+- 下一步应继续 Plan 3：把 onboarding 表单接到 `PUT /v1/users/me/profile`，再生成 28 天训练计划。
 
 ## 8. 已知 bug 或风险
 
@@ -197,32 +148,35 @@ codex/backend-api-database-foundation
 - ADB/emulator 命令通常需要在沙箱外运行。
 - `npm install` 报告 18 个 audit vulnerabilities（4 low, 9 moderate, 5 high）；当前未自动修复，避免破坏 Nest/Prisma 依赖版本，后续可单独审计。
 - Prisma 和 Docker 命令需要访问本机缓存、Docker socket 和本地 PostgreSQL，通常需要沙箱外权限。
+- Android debug backend URL 固定为模拟器访问宿主机的 `http://10.0.2.2:8000/`；真机调试需要改成局域网 IP 或后续增加环境切换。
+- Release API URL 当前是占位值 `https://api.aifitnesspro.example/`，上线前必须替换。
+- Plan 3 仍使用临时 `X-Dev-User-Id` 开发身份，production auth 尚未设计和实现。
 
 ## 9. 当前暂停点
 
-暂停在 Plan 2 后端基础已合并阶段：`main` 已包含 backend foundation，最终 backend verification 已通过。
+暂停在 Plan 3 前置切片完成阶段：Android debug 包可构建，App 在隐私同意后会尝试连接本地 NestJS API，创建或复用开发用户，并在“我的”页展示连接状态。
 
 ## 10. 下一步开发任务
 
-1. 清理 Plan 2 worktree 和已合并分支。
-2. 启动 Plan 3，建议优先做 Android API client/本地 backend 配置，让 Android App 能连接本地 NestJS API。
-3. 也可先做 production auth design 或 exercise/recipe seed import。
+1. 启动本地 backend 并在 Android 模拟器上手动烟测 Profile 页连接状态。
+2. 继续 Plan 3 onboarding：实现 9 步表单 UI 和本地状态。
+3. 将 onboarding 提交到 `PUT /v1/users/me/profile`，并处理 validation error envelope。
+4. 设计并实现训练计划生成 API 与 Android 本地缓存。
+5. 后续替换临时 dev auth 为 production auth。
 
 ## 11. 下一个 AI 会话应该从哪里继续
 
-从主仓库继续：
+从 Plan 3 worktree 继续：
 
 ```bash
-cd "/Users/steve/Desktop/Smart Everything/AIFitnessPro"
+cd "/Users/steve/Desktop/Smart Everything/AIFitnessPro/.worktrees/android-api-client-backend-config"
 git status
 ```
 
-如需再次烟测：启动 AVD `AIFitnessPro_API35`，安装 `android/app/build/outputs/apk/debug/app-debug.apk`，验证 consent 和四 Tab。
-
-如需继续后端验证：确保 Docker Desktop 运行，然后在 `backend/` 执行 `docker compose up -d postgres`。
+如需手动烟测：确保 Docker Desktop 运行，在 `backend/` 执行 `docker compose up -d postgres`、`npm run prisma:migrate`、启动 NestJS 服务；再启动 AVD `AIFitnessPro_API35`，安装 `android/app/build/outputs/apk/debug/app-debug.apk`，验证同意隐私后“我的”页显示本地后端已连接。
 
 ## 12. 建议 git commit message
 
 ```text
-chore: update project context after Plan 2 merge
+feat: add Android local backend API client
 ```

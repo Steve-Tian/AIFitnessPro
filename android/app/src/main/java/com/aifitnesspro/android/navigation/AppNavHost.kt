@@ -12,13 +12,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.aifitnesspro.android.core.session.ApiConnectionState
 import com.aifitnesspro.android.feature.exercise.ExerciseLibraryScreen
 import com.aifitnesspro.android.feature.home.HomeScreen
 import com.aifitnesspro.android.feature.profile.ProfileScreen
 import com.aifitnesspro.android.feature.training.TrainingScreen
 
 @Composable
-fun AppNavHost() {
+fun AppNavHost(
+    apiConnectionState: ApiConnectionState
+) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route ?: AppDestination.Home.route
@@ -55,7 +58,9 @@ fun AppNavHost() {
             composable(AppDestination.Home.route) { HomeScreen() }
             composable(AppDestination.Training.route) { TrainingScreen() }
             composable(AppDestination.Exercise.route) { ExerciseLibraryScreen() }
-            composable(AppDestination.Profile.route) { ProfileScreen() }
+            composable(AppDestination.Profile.route) {
+                ProfileScreen(apiConnectionState = apiConnectionState)
+            }
         }
     }
 }
