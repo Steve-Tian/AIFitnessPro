@@ -12,9 +12,9 @@
 
 项目目标：构建 Kotlin + Jetpack Compose 原生 Android App，并满足国内安卓应用市场合规要求。
 
-当前开发阶段：Plan 1 - Android foundation and compliance shell 已合并 / Plan 2 准备。
+当前开发阶段：Plan 2 - Backend API and Database Foundation 设计阶段。
 
-当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；JDK、Android Studio SDK、Android SDK 35、Android Emulator、Pixel 8 AVD 已可用。
+当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 已确定采用 NestJS + PostgreSQL + Prisma，后端基础设计 spec 已写入 worktree，等待 review。
 
 ## 2. 技术栈
 
@@ -40,12 +40,25 @@ docs/                           项目文档、产品计划、持续上下文
 docs/superpowers/specs/         Android 产品设计规格
 docs/superpowers/plans/         Android 迁移路线图和 Plan 1
 android/                        当前 Android 原生工程
+backend/                        Plan 2 将新增的独立后端工程目录
 cloudfunctions/                 历史微信云函数，仅作迁移参考
 miniprogram/                    历史微信小程序，仅作迁移参考
 tests/                          历史小程序测试
 ```
 
 Plan 1 开发分支：`codex-android-foundation-compliance-shell`，已合并到 `main`。
+
+Plan 2 开发 worktree：
+
+```text
+/Users/steve/Desktop/Smart Everything/AIFitnessPro/.worktrees/backend-api-database-foundation
+```
+
+Plan 2 分支：
+
+```text
+codex/backend-api-database-foundation
+```
 
 ## 4. 当前已完成内容
 
@@ -58,9 +71,17 @@ Plan 1 开发分支：`codex-android-foundation-compliance-shell`，已合并到
 - 已运行 `./gradlew :app:testDebugUnitTest`：通过。
 - 已运行 `./gradlew :app:assembleDebug`：通过。
 - 已在模拟器 `AIFitnessPro_API35` 完成手动烟测。
+- 已批准 Plan 2 技术方向：NestJS + PostgreSQL + Prisma。
+- 已新增 Plan 2 设计规格：`docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`。
 
 ## 5. 本轮完成内容
 
+- 创建 Plan 2 隔离 worktree：`.worktrees/backend-api-database-foundation`。
+- 创建 Plan 2 分支：`codex/backend-api-database-foundation`。
+- 阅读 Plan 2 相关上下文：项目记忆、Android 产品设计、MVP roadmap、历史微信云函数、onboarding/profile/exercise/recipe 数据形状。
+- 与用户确认 Plan 2 数据库采用 PostgreSQL。
+- 与用户确认后端基础采用 NestJS + PostgreSQL + Prisma。
+- 编写 Plan 2 后端基础设计 spec。
 - 重新阅读项目记忆、目录结构、相关 Android 代码、计划文档和 `git status`。
 - 重新运行 `./gradlew :app:testDebugUnitTest`：通过。
 - 重新运行 `./gradlew :app:assembleDebug`：通过。
@@ -85,11 +106,14 @@ Plan 1 开发分支：`codex-android-foundation-compliance-shell`，已合并到
 - worktree：`docs/superpowers/plans/2026-05-18-android-foundation-compliance-shell.md`
 - worktree：`docs/superpowers/plans/2026-05-18-android-mvp-roadmap.md`
 - main：`docs/superpowers/plans/2026-05-18-android-foundation-compliance-shell.md`
+- Plan 2 worktree：`docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`
 
 ## 7. 当前未完成事项
 
 - Plan 1 已合并到 `main`。
-- 下一阶段可启动 Plan 2：Backend API and Database Foundation。
+- Plan 2 设计 spec 需用户 review。
+- 用户批准 spec 后，需要编写 Plan 2 implementation plan。
+- implementation plan 批准后，按 TDD 实现 `backend/`。
 
 ## 8. 已知 bug 或风险
 
@@ -98,25 +122,21 @@ Plan 1 开发分支：`codex-android-foundation-compliance-shell`，已合并到
 
 ## 9. 当前暂停点
 
-暂停在 Android Plan 1 完成后的 Plan 2 准备阶段：实现、单测、debug 构建、模拟器烟测均已通过，Plan 1 已合并到 `main`，下一步启动 Backend API and Database Foundation。
+暂停在 Plan 2 设计 review 阶段：后端基础设计 spec 已写入 worktree，下一步等待用户 review/批准，然后编写实施计划。
 
 ## 10. 下一步开发任务
 
-1. 启动 Plan 2：Backend API and Database Foundation。
-2. 为后端 API、数据库 schema、健康检查、用户/profile API 制定并执行子计划。
+1. 用户 review `docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`。
+2. 批准后编写 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md`。
+3. 按 TDD 实现 `backend/`：NestJS、Prisma schema/migration、Docker Compose、health/dev user/current user/profile API 和测试。
 
 ## 11. 下一个 AI 会话应该从哪里继续
 
-从主仓库继续：
+从 Plan 2 worktree 继续：
 
 ```bash
-cd "/Users/steve/Desktop/Smart Everything/AIFitnessPro/android"
-export JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
-export PATH=/usr/local/opt/openjdk@17/bin:$PATH
-export ANDROID_HOME=/Users/steve/Library/Android/sdk
-export ANDROID_SDK_ROOT=/Users/steve/Library/Android/sdk
-./gradlew :app:testDebugUnitTest
-./gradlew :app:assembleDebug
+cd "/Users/steve/Desktop/Smart Everything/AIFitnessPro/.worktrees/backend-api-database-foundation"
+git status
 ```
 
 如需再次烟测：启动 AVD `AIFitnessPro_API35`，安装 `android/app/build/outputs/apk/debug/app-debug.apk`，验证 consent 和四 Tab。
@@ -124,5 +144,5 @@ export ANDROID_SDK_ROOT=/Users/steve/Library/Android/sdk
 ## 12. 建议 git commit message
 
 ```text
-feat: add backend API and database foundation
+docs: design backend API and database foundation
 ```
