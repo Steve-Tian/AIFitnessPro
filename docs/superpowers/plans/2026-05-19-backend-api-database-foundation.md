@@ -635,7 +635,7 @@ git commit -m "feat: add backend database foundation"
 - Create: `backend/test/test-app.ts`
 - Create: `backend/test/app.e2e-spec.ts`
 
-- [ ] **Step 1: Write failing health test**
+- [x] **Step 1: Write failing health test**
 
 Create `backend/test/jest-e2e.json`:
 
@@ -706,7 +706,7 @@ describe('AIFitnessPro backend foundation', () => {
 });
 ```
 
-- [ ] **Step 2: Run health test and verify RED**
+- [x] **Step 2: Run health test and verify RED**
 
 Run:
 
@@ -717,7 +717,7 @@ npm test -- --runTestsByPath test/app.e2e-spec.ts
 
 Expected: FAIL because `../src/app.module` or `GET /health` does not exist.
 
-- [ ] **Step 3: Add Prisma provider**
+- [x] **Step 3: Add Prisma provider**
 
 Create `backend/src/prisma/prisma.service.ts`:
 
@@ -751,7 +751,7 @@ import { PrismaService } from './prisma.service';
 export class PrismaModule {}
 ```
 
-- [ ] **Step 4: Add health module code**
+- [x] **Step 4: Add health module code**
 
 Create `backend/src/health/health.service.ts`:
 
@@ -805,7 +805,7 @@ export class HealthController {
 }
 ```
 
-- [ ] **Step 5: Add app module and entrypoint**
+- [x] **Step 5: Add app module and entrypoint**
 
 Create `backend/src/app.module.ts`:
 
@@ -847,7 +847,7 @@ async function bootstrap(): Promise<void> {
 void bootstrap();
 ```
 
-- [ ] **Step 6: Run health test and verify GREEN**
+- [x] **Step 6: Run health test and verify GREEN**
 
 Run:
 
@@ -858,7 +858,7 @@ npm test -- --runTestsByPath test/app.e2e-spec.ts
 
 Expected: PASS for health test.
 
-- [ ] **Step 7: Commit health endpoint**
+- [x] **Step 7: Commit health endpoint**
 
 ```bash
 git add backend/src backend/test
