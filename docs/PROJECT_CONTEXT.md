@@ -12,9 +12,9 @@
 
 项目目标：构建 Kotlin + Jetpack Compose 原生 Android App，并满足国内安卓应用市场合规要求。
 
-当前开发阶段：Plan 2 - Backend API and Database Foundation 设计阶段。
+当前开发阶段：Plan 2 - Backend API and Database Foundation 实施计划阶段。
 
-当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 已确定采用 NestJS + PostgreSQL + Prisma，后端基础设计 spec 已写入 worktree，等待 review。
+当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 已确定采用 NestJS + PostgreSQL + Prisma，后端基础设计 spec 和 implementation plan 已写入 worktree，等待进入执行。
 
 ## 2. 技术栈
 
@@ -73,6 +73,7 @@ codex/backend-api-database-foundation
 - 已在模拟器 `AIFitnessPro_API35` 完成手动烟测。
 - 已批准 Plan 2 技术方向：NestJS + PostgreSQL + Prisma。
 - 已新增 Plan 2 设计规格：`docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`。
+- 已新增 Plan 2 实施计划：`docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md`。
 
 ## 5. 本轮完成内容
 
@@ -82,6 +83,8 @@ codex/backend-api-database-foundation
 - 与用户确认 Plan 2 数据库采用 PostgreSQL。
 - 与用户确认后端基础采用 NestJS + PostgreSQL + Prisma。
 - 编写 Plan 2 后端基础设计 spec。
+- 用户回复“继续”后，编写 Plan 2 后端基础 implementation plan。
+- implementation plan 覆盖后端 tooling、Prisma schema/migration、health、dev user、current user、profile API、测试清理、README 和项目记忆更新。
 - 重新阅读项目记忆、目录结构、相关 Android 代码、计划文档和 `git status`。
 - 重新运行 `./gradlew :app:testDebugUnitTest`：通过。
 - 重新运行 `./gradlew :app:assembleDebug`：通过。
@@ -107,13 +110,13 @@ codex/backend-api-database-foundation
 - worktree：`docs/superpowers/plans/2026-05-18-android-mvp-roadmap.md`
 - main：`docs/superpowers/plans/2026-05-18-android-foundation-compliance-shell.md`
 - Plan 2 worktree：`docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`
+- Plan 2 worktree：`docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md`
 
 ## 7. 当前未完成事项
 
 - Plan 1 已合并到 `main`。
-- Plan 2 设计 spec 需用户 review。
-- 用户批准 spec 后，需要编写 Plan 2 implementation plan。
-- implementation plan 批准后，按 TDD 实现 `backend/`。
+- Plan 2 implementation plan 已写好，下一步进入执行。
+- 按 TDD 实现 `backend/`。
 
 ## 8. 已知 bug 或风险
 
@@ -122,13 +125,13 @@ codex/backend-api-database-foundation
 
 ## 9. 当前暂停点
 
-暂停在 Plan 2 设计 review 阶段：后端基础设计 spec 已写入 worktree，下一步等待用户 review/批准，然后编写实施计划。
+暂停在 Plan 2 implementation plan 完成阶段：设计 spec 和实施计划已写入 worktree，下一步按计划执行 backend 实现。
 
 ## 10. 下一步开发任务
 
-1. 用户 review `docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`。
-2. 批准后编写 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md`。
-3. 按 TDD 实现 `backend/`：NestJS、Prisma schema/migration、Docker Compose、health/dev user/current user/profile API 和测试。
+1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 1。
+2. 按 TDD 实现 `backend/`：NestJS、Prisma schema/migration、Docker Compose、health/dev user/current user/profile API 和测试。
+3. 每个任务完成后更新计划 checkbox，并提交小步 commit。
 
 ## 11. 下一个 AI 会话应该从哪里继续
 
@@ -144,5 +147,5 @@ git status
 ## 12. 建议 git commit message
 
 ```text
-docs: design backend API and database foundation
+chore: scaffold backend tooling
 ```
