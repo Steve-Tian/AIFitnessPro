@@ -1788,7 +1788,7 @@ git commit -m "feat: add user profile API"
 - Modify: `backend/test/app.e2e-spec.ts`
 - Modify: `backend/README.md`
 
-- [ ] **Step 1: Add database cleanup helper to tests**
+- [x] **Step 1: Add database cleanup helper to tests**
 
 Modify the top of `backend/test/app.e2e-spec.ts`:
 
@@ -1828,7 +1828,7 @@ describe('AIFitnessPro backend foundation', () => {
 
 Keep the existing test cases below this header.
 
-- [ ] **Step 2: Run full backend tests**
+- [x] **Step 2: Run full backend tests**
 
 Run:
 
@@ -1839,7 +1839,7 @@ npm test
 
 Expected: all backend e2e tests pass.
 
-- [ ] **Step 3: Run backend build**
+- [x] **Step 3: Run backend build**
 
 Run:
 
@@ -1850,7 +1850,7 @@ npm run build
 
 Expected: NestJS TypeScript build passes.
 
-- [ ] **Step 4: Add backend README**
+- [x] **Step 4: Add backend README**
 
 Create `backend/README.md`:
 
@@ -1892,7 +1892,7 @@ Use the returned user id in `X-Dev-User-Id` for current-user/profile endpoints.
 Production authentication will replace this guard in Plan 3.
 ```
 
-- [ ] **Step 5: Commit verification cleanup and docs**
+- [x] **Step 5: Commit verification cleanup and docs**
 
 ```bash
 git add backend/test/app.e2e-spec.ts backend/README.md

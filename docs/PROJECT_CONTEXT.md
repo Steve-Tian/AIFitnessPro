@@ -14,7 +14,7 @@
 
 当前开发阶段：Plan 2 - Backend API and Database Foundation 执行阶段。
 
-当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 后端基础已开始实现，Task 1 backend tooling scaffold、Task 2 Prisma database foundation、Task 3 health endpoint、Task 4 development user API、Task 5 current user API 和 Task 6 profile API 已完成。
+当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 后端基础已开始实现，Task 1 backend tooling scaffold、Task 2 Prisma database foundation、Task 3 health endpoint、Task 4 development user API、Task 5 current user API、Task 6 profile API 和 Task 7 verification cleanup 已完成。
 
 ## 2. 技术栈
 
@@ -80,6 +80,7 @@ codex/backend-api-database-foundation
 - 已完成 Plan 2 Task 4：新增统一错误 envelope、validation factory、`POST /v1/dev/users` 开发用户创建接口和 e2e 测试。
 - 已完成 Plan 2 Task 5：新增 `X-Dev-User-Id` 开发鉴权、current user decorator 和 `GET /v1/users/me`。
 - 已完成 Plan 2 Task 6：新增 profile DTO 校验、`PUT /v1/users/me/profile` upsert API，并标记 onboarding complete。
+- 已完成 Plan 2 Task 7：e2e 数据库清理、完整 backend test/build 验证和 backend README。
 
 ## 5. 本轮完成内容
 
@@ -125,6 +126,10 @@ codex/backend-api-database-foundation
 - 新增 `PUT /v1/users/me/profile` endpoint。
 - 再次运行 `npm test -- --runTestsByPath test/app.e2e-spec.ts`：10 个 e2e 全部通过。
 - 再次运行 `npm run build`：通过。
+- 在 e2e 中新增 `beforeEach` 数据库清理 helper，清理用户、设置、资料、训练计划、训练记录和反馈相关表。
+- 新增 `backend/README.md`，记录技术栈、本地启动、迁移、测试和临时开发身份用法。
+- 运行完整 `npm test`：10 个 e2e 全部通过。
+- 运行 `npm run build`：通过。
 - 重新阅读项目记忆、目录结构、相关 Android 代码、计划文档和 `git status`。
 - 重新运行 `./gradlew :app:testDebugUnitTest`：通过。
 - 重新运行 `./gradlew :app:assembleDebug`：通过。
@@ -174,8 +179,9 @@ codex/backend-api-database-foundation
 - Plan 2 Task 4 已完成。
 - Plan 2 Task 5 已完成。
 - Plan 2 Task 6 已完成。
-- 下一步执行 Task 7：test database cleanup、full backend verification 和 backend README。
-- 之后更新最终项目记忆并准备 Plan 2 收尾。
+- Plan 2 Task 7 已完成。
+- 下一步执行 Task 8：更新最终项目记忆和计划完成状态。
+- 之后准备 Plan 2 收尾/合并选择。
 
 ## 8. 已知 bug 或风险
 
@@ -186,13 +192,13 @@ codex/backend-api-database-foundation
 
 ## 9. 当前暂停点
 
-暂停在 Plan 2 Task 6 完成阶段：profile upsert API 已完成并验证，下一步按计划执行 Task 7 test database cleanup and full verification。
+暂停在 Plan 2 Task 7 完成阶段：完整 backend test/build 已通过，下一步按计划执行 Task 8 final project context update。
 
 ## 10. 下一步开发任务
 
-1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 7。
-2. 在 e2e 中加入数据库清理 helper，运行完整 `npm test` 和 `npm run build`。
-3. 新增 `backend/README.md`，然后提交 verification/docs 小步 commit。
+1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 8。
+2. 将 Plan 2 标记为 implemented / verification complete。
+3. 运行最终验证后准备收尾 commit 或合并选项。
 
 ## 11. 下一个 AI 会话应该从哪里继续
 
@@ -210,5 +216,5 @@ git status
 ## 12. 建议 git commit message
 
 ```text
-test: verify backend foundation
+docs: update project context after backend foundation
 ```

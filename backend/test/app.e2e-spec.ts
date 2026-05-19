@@ -1,12 +1,29 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { PrismaService } from '../src/prisma/prisma.service';
 import { createTestApp } from './test-app';
 
 describe('AIFitnessPro backend foundation', () => {
   let app: INestApplication;
+  let prisma: PrismaService;
 
   beforeAll(async () => {
     app = await createTestApp();
+    prisma = app.get(PrismaService);
+  });
+
+  beforeEach(async () => {
+    await prisma.exerciseAdjustment.deleteMany();
+    await prisma.exerciseFeedback.deleteMany();
+    await prisma.workoutSet.deleteMany();
+    await prisma.workoutSession.deleteMany();
+    await prisma.planExercise.deleteMany();
+    await prisma.planDay.deleteMany();
+    await prisma.trainingPlan.deleteMany();
+    await prisma.consentLog.deleteMany();
+    await prisma.userProfile.deleteMany();
+    await prisma.userSettings.deleteMany();
+    await prisma.user.deleteMany();
   });
 
   afterAll(async () => {
