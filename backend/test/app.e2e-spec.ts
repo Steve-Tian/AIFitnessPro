@@ -64,4 +64,45 @@ describe('AIFitnessPro backend foundation', () => {
     });
     expect(response.body.error.fields.deviceLabel).toEqual(expect.any(String));
   });
+
+  it('GET /v1/users/me returns the current development user', async () => {
+    const created = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Pixel 8 current user', externalId: 'current-user-device' })
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .get('/v1/users/me')
+      .set('X-Dev-User-Id', created.body.user.id)
+      .expect(200);
+
+    expect(response.body.user).toMatchObject({
+      id: created.body.user.id,
+      deviceLabel: 'Pixel 8 current user',
+      onboardingCompleted: false,
+      profile: null,
+      settings: {
+        locale: 'zh-CN',
+        unit: 'metric',
+      },
+    });
+  });
+
+  it('GET /v1/users/me rejects missing development user header', async () => {
+    const response = await request(app.getHttpServer()).get('/v1/users/me').expect(401);
+
+    expect(response.body.error).toMatchObject({
+      code: 'UNAUTHENTICATED',
+      message: '请先登录',
+    });
+  });
+
+  it('GET /v1/users/me rejects unknown development user id', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/v1/users/me')
+      .set('X-Dev-User-Id', '00000000-0000-0000-0000-000000000000')
+      .expect(401);
+
+    expect(response.body.error.code).toBe('UNAUTHENTICATED');
+  });
 });

@@ -1255,7 +1255,7 @@ git commit -m "feat: add development user API"
 - Modify: `backend/src/app.module.ts`
 - Modify: `backend/test/app.e2e-spec.ts`
 
-- [ ] **Step 1: Add failing current-user tests**
+- [x] **Step 1: Add failing current-user tests**
 
 Append to `backend/test/app.e2e-spec.ts`:
 
@@ -1302,7 +1302,7 @@ Append to `backend/test/app.e2e-spec.ts`:
   });
 ```
 
-- [ ] **Step 2: Run current-user tests and verify RED**
+- [x] **Step 2: Run current-user tests and verify RED**
 
 Run:
 
@@ -1313,7 +1313,7 @@ npm test -- --runTestsByPath test/app.e2e-spec.ts
 
 Expected: FAIL because `/v1/users/me` and auth guard do not exist.
 
-- [ ] **Step 3: Add current user decorator and guard**
+- [x] **Step 3: Add current user decorator and guard**
 
 Create `backend/src/dev-auth/current-user.decorator.ts`:
 
@@ -1359,7 +1359,7 @@ export class DevAuthGuard implements CanActivate {
 }
 ```
 
-- [ ] **Step 4: Add users service and controller**
+- [x] **Step 4: Add users service and controller**
 
 Create `backend/src/users/users.service.ts`:
 
@@ -1427,7 +1427,7 @@ import { UsersService } from './users/users.service';
 export class AppModule {}
 ```
 
-- [ ] **Step 5: Run current-user tests and verify GREEN**
+- [x] **Step 5: Run current-user tests and verify GREEN**
 
 Run:
 
@@ -1438,7 +1438,7 @@ npm test -- --runTestsByPath test/app.e2e-spec.ts
 
 Expected: PASS for health, development user, and current-user tests.
 
-- [ ] **Step 6: Commit current-user endpoint**
+- [x] **Step 6: Commit current-user endpoint**
 
 ```bash
 git add backend/src backend/test
