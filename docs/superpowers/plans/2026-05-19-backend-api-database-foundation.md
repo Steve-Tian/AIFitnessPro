@@ -252,7 +252,7 @@ git commit -m "chore: scaffold backend tooling"
 - Create: `backend/prisma/schema.prisma`
 - Create: `backend/prisma/migrations/0001_backend_foundation/migration.sql`
 
-- [ ] **Step 1: Add Prisma schema**
+- [x] **Step 1: Add Prisma schema**
 
 Create `backend/prisma/schema.prisma`:
 
@@ -576,7 +576,7 @@ model Recipe {
 }
 ```
 
-- [ ] **Step 2: Generate migration SQL**
+- [x] **Step 2: Generate migration SQL**
 
 Run:
 
@@ -593,7 +593,7 @@ Expected:
 - Docker starts `aifitnesspro-postgres`.
 - Prisma creates `backend/prisma/migrations/<timestamp>_backend_foundation/migration.sql`.
 
-- [ ] **Step 3: Rename migration directory for stable plan naming**
+- [x] **Step 3: Rename migration directory for stable plan naming**
 
 Rename the generated migration directory to:
 
@@ -603,7 +603,7 @@ backend/prisma/migrations/0001_backend_foundation
 
 Expected: `backend/prisma/migrations/0001_backend_foundation/migration.sql` exists.
 
-- [ ] **Step 4: Verify migration deploys cleanly**
+- [x] **Step 4: Verify migration deploys cleanly**
 
 Run:
 
@@ -615,7 +615,7 @@ npm run prisma:migrate
 
 Expected: Prisma resets the local database and applies `0001_backend_foundation` without errors.
 
-- [ ] **Step 5: Commit database foundation**
+- [x] **Step 5: Commit database foundation**
 
 ```bash
 git add backend/prisma/schema.prisma backend/prisma/migrations

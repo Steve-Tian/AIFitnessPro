@@ -14,7 +14,7 @@
 
 当前开发阶段：Plan 2 - Backend API and Database Foundation 执行阶段。
 
-当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 后端基础已开始实现，Task 1 backend tooling scaffold 已完成并安装依赖。
+当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 后端基础已开始实现，Task 1 backend tooling scaffold 和 Task 2 Prisma database foundation 已完成。
 
 ## 2. 技术栈
 
@@ -75,6 +75,7 @@ codex/backend-api-database-foundation
 - 已新增 Plan 2 设计规格：`docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`。
 - 已新增 Plan 2 实施计划：`docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md`。
 - 已完成 Plan 2 Task 1：新增 `backend/` tooling scaffold、Docker Compose、env 示例和 npm lockfile。
+- 已完成 Plan 2 Task 2：新增 Prisma schema、初始 PostgreSQL migration，并验证 reset/deploy。
 
 ## 5. 本轮完成内容
 
@@ -88,6 +89,13 @@ codex/backend-api-database-foundation
 - implementation plan 覆盖后端 tooling、Prisma schema/migration、health、dev user、current user、profile API、测试清理、README 和项目记忆更新。
 - 新增 `backend/package.json`、TypeScript/Nest 配置、`.env.example`、`.gitignore`、`docker-compose.yml`。
 - 运行 `npm install`，生成 `backend/package-lock.json`。
+- 新增 `backend/prisma/schema.prisma`，覆盖用户、资料、设置、同意日志、训练计划、训练日、训练动作、训练记录、动作反馈、动作调整、动作媒体和食谱基础表。
+- 启动 Docker Desktop 和 `aifitnesspro-postgres` PostgreSQL 16 容器。
+- 运行 `npm run prisma:generate`：通过。
+- 运行 `npm run prisma:migrate:dev -- --name backend_foundation`：生成并应用初始 migration。
+- 将 Prisma 生成的时间戳迁移目录重命名为 `backend/prisma/migrations/0001_backend_foundation`。
+- 运行 `npm run prisma:reset`：成功从 `0001_backend_foundation` 重置并重放数据库。
+- 运行 `npm run prisma:migrate`：通过，无待应用 migration。
 - 重新阅读项目记忆、目录结构、相关 Android 代码、计划文档和 `git status`。
 - 重新运行 `./gradlew :app:testDebugUnitTest`：通过。
 - 重新运行 `./gradlew :app:assembleDebug`：通过。
@@ -115,28 +123,33 @@ codex/backend-api-database-foundation
 - Plan 2 worktree：`docs/superpowers/specs/2026-05-19-backend-api-database-foundation-design.md`
 - Plan 2 worktree：`docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md`
 - Plan 2 worktree：`backend/`
+- Plan 2 worktree：`backend/prisma/schema.prisma`
+- Plan 2 worktree：`backend/prisma/migrations/0001_backend_foundation/migration.sql`
+- Plan 2 worktree：`backend/prisma/migrations/migration_lock.toml`
 
 ## 7. 当前未完成事项
 
 - Plan 1 已合并到 `main`。
 - Plan 2 Task 1 已完成。
-- 下一步执行 Task 2：Prisma schema and initial migration。
-- 之后按 TDD 实现 health/dev user/current user/profile API。
+- Plan 2 Task 2 已完成。
+- 下一步按 TDD 执行 Task 3：Nest app shell and health endpoint。
+- 之后继续按 TDD 实现 dev user/current user/profile API。
 
 ## 8. 已知 bug 或风险
 
 - Homebrew 的 `openjdk@17` 是 keg-only，当前验证命令需要显式设置 `JAVA_HOME` 和 `PATH`，或用户后续手动配置 shell。
 - ADB/emulator 命令通常需要在沙箱外运行。
 - `npm install` 报告 18 个 audit vulnerabilities（4 low, 9 moderate, 5 high）；当前未自动修复，避免破坏 Nest/Prisma 依赖版本，后续可单独审计。
+- Prisma 和 Docker 命令需要访问本机缓存、Docker socket 和本地 PostgreSQL，通常需要沙箱外权限。
 
 ## 9. 当前暂停点
 
-暂停在 Plan 2 Task 1 完成阶段：backend tooling scaffold 已完成，下一步按计划执行 Task 2 Prisma schema and initial migration。
+暂停在 Plan 2 Task 2 完成阶段：Prisma schema 和初始 migration 已完成并验证，下一步按计划执行 Task 3 Nest app shell and health endpoint。
 
 ## 10. 下一步开发任务
 
-1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 2。
-2. 新增 Prisma schema，启动 PostgreSQL Docker Compose，生成并验证初始 migration。
+1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 3。
+2. 先写 `GET /health` e2e 失败测试，再新增 Nest app shell、Prisma provider 和 health endpoint。
 3. 每个任务完成后更新计划 checkbox，并提交小步 commit。
 
 ## 11. 下一个 AI 会话应该从哪里继续
@@ -150,8 +163,10 @@ git status
 
 如需再次烟测：启动 AVD `AIFitnessPro_API35`，安装 `android/app/build/outputs/apk/debug/app-debug.apk`，验证 consent 和四 Tab。
 
+如需继续后端验证：确保 Docker Desktop 运行，然后在 `backend/` 执行 `docker compose up -d postgres`。
+
 ## 12. 建议 git commit message
 
 ```text
-feat: add backend database foundation
+feat: add backend health endpoint
 ```
