@@ -12,9 +12,9 @@
 
 项目目标：构建 Kotlin + Jetpack Compose 原生 Android App，并满足国内安卓应用市场合规要求。
 
-当前开发阶段：Plan 2 - Backend API and Database Foundation 执行阶段。
+当前开发阶段：Plan 2 - Backend API and Database Foundation implemented / verification complete.
 
-当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 后端基础已开始实现，Task 1 backend tooling scaffold、Task 2 Prisma database foundation、Task 3 health endpoint、Task 4 development user API、Task 5 current user API、Task 6 profile API 和 Task 7 verification cleanup 已完成。
+当前运行状态：Android Plan 1 已合并；Plan 2 后端基础已实现，包含 NestJS 服务、PostgreSQL Docker Compose、Prisma schema/migration、health/dev user/current user/profile API 和自动化测试。
 
 ## 2. 技术栈
 
@@ -81,6 +81,7 @@ codex/backend-api-database-foundation
 - 已完成 Plan 2 Task 5：新增 `X-Dev-User-Id` 开发鉴权、current user decorator 和 `GET /v1/users/me`。
 - 已完成 Plan 2 Task 6：新增 profile DTO 校验、`PUT /v1/users/me/profile` upsert API，并标记 onboarding complete。
 - 已完成 Plan 2 Task 7：e2e 数据库清理、完整 backend test/build 验证和 backend README。
+- 已完成 Plan 2 Task 8：最终项目记忆和计划状态更新。
 
 ## 5. 本轮完成内容
 
@@ -130,6 +131,7 @@ codex/backend-api-database-foundation
 - 新增 `backend/README.md`，记录技术栈、本地启动、迁移、测试和临时开发身份用法。
 - 运行完整 `npm test`：10 个 e2e 全部通过。
 - 运行 `npm run build`：通过。
+- 完成 Plan 2 最终上下文更新，当前暂停点改为 Plan 2 可收尾/可合并。
 - 重新阅读项目记忆、目录结构、相关 Android 代码、计划文档和 `git status`。
 - 重新运行 `./gradlew :app:testDebugUnitTest`：通过。
 - 重新运行 `./gradlew :app:assembleDebug`：通过。
@@ -180,8 +182,9 @@ codex/backend-api-database-foundation
 - Plan 2 Task 5 已完成。
 - Plan 2 Task 6 已完成。
 - Plan 2 Task 7 已完成。
-- 下一步执行 Task 8：更新最终项目记忆和计划完成状态。
-- 之后准备 Plan 2 收尾/合并选择。
+- Plan 2 Task 8 已完成。
+- 当前未接入 Android networking，生产认证、训练计划生成、训练同步、内容 seed/import 仍在后续计划。
+- 下一步准备 Plan 2 收尾：合并到 `main` 或创建 PR/保留分支继续 Plan 3。
 
 ## 8. 已知 bug 或风险
 
@@ -192,13 +195,13 @@ codex/backend-api-database-foundation
 
 ## 9. 当前暂停点
 
-暂停在 Plan 2 Task 7 完成阶段：完整 backend test/build 已通过，下一步按计划执行 Task 8 final project context update。
+暂停在 Plan 2 后端基础完成阶段：backend foundation 已实现并通过最终验证，下一步进入 Plan 2 收尾/合并选择。
 
 ## 10. 下一步开发任务
 
-1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 8。
-2. 将 Plan 2 标记为 implemented / verification complete。
-3. 运行最终验证后准备收尾 commit 或合并选项。
+1. 使用 finishing-a-development-branch 流程决定是否合并 `codex/backend-api-database-foundation` 到 `main`。
+2. 后续 Plan 3 建议聚焦 Android API client/本地配置、生产认证设计，或内容 seed/import。
+3. 合并前保留 Docker Desktop 运行，确保 backend final verification 可重复执行。
 
 ## 11. 下一个 AI 会话应该从哪里继续
 

@@ -1905,11 +1905,11 @@ git commit -m "test: verify backend foundation"
 - Modify: `docs/PROJECT_CONTEXT.md`
 - Modify: `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md`
 
-- [ ] **Step 1: Mark completed plan tasks**
+- [x] **Step 1: Mark completed plan tasks**
 
 As tasks complete, update this plan file's checkboxes from `[ ]` to `[x]`.
 
-- [ ] **Step 2: Update project memory**
+- [x] **Step 2: Update project memory**
 
 Update `docs/PROJECT_CONTEXT.md` with:
 
@@ -1932,7 +1932,7 @@ Also update:
 - 下一个 AI 会话应该从哪里继续
 - 建议 git commit message
 
-- [ ] **Step 3: Run final verification**
+- [x] **Step 3: Run final verification**
 
 Run:
 
@@ -1944,7 +1944,7 @@ npm run build
 
 Expected: both commands pass.
 
-- [ ] **Step 4: Commit context update**
+- [x] **Step 4: Commit context update**
 
 ```bash
 git add docs/PROJECT_CONTEXT.md docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md
