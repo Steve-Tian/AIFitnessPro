@@ -1453,7 +1453,7 @@ git commit -m "feat: add current user API"
 - Modify: `backend/src/users/users.controller.ts`
 - Modify: `backend/test/app.e2e-spec.ts`
 
-- [ ] **Step 1: Add failing profile tests**
+- [x] **Step 1: Add failing profile tests**
 
 Append to `backend/test/app.e2e-spec.ts`:
 
@@ -1572,7 +1572,7 @@ Append to `backend/test/app.e2e-spec.ts`:
   });
 ```
 
-- [ ] **Step 2: Run profile tests and verify RED**
+- [x] **Step 2: Run profile tests and verify RED**
 
 Run:
 
@@ -1583,7 +1583,7 @@ npm test -- --runTestsByPath test/app.e2e-spec.ts
 
 Expected: FAIL because `PUT /v1/users/me/profile` does not exist.
 
-- [ ] **Step 3: Add profile DTO**
+- [x] **Step 3: Add profile DTO**
 
 Create `backend/src/users/profile.dto.ts`:
 
@@ -1671,7 +1671,7 @@ export class UpsertProfileDto {
 }
 ```
 
-- [ ] **Step 4: Add profile upsert service method**
+- [x] **Step 4: Add profile upsert service method**
 
 Modify `backend/src/users/users.service.ts`:
 
@@ -1732,7 +1732,7 @@ export class UsersService {
 }
 ```
 
-- [ ] **Step 5: Add profile endpoint**
+- [x] **Step 5: Add profile endpoint**
 
 Modify `backend/src/users/users.controller.ts`:
 
@@ -1764,7 +1764,7 @@ export class UsersController {
 }
 ```
 
-- [ ] **Step 6: Run profile tests and verify GREEN**
+- [x] **Step 6: Run profile tests and verify GREEN**
 
 Run:
 
@@ -1775,7 +1775,7 @@ npm test -- --runTestsByPath test/app.e2e-spec.ts
 
 Expected: PASS for all e2e tests.
 
-- [ ] **Step 7: Commit profile endpoint**
+- [x] **Step 7: Commit profile endpoint**
 
 ```bash
 git add backend/src backend/test

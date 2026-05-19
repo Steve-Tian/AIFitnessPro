@@ -14,7 +14,7 @@
 
 当前开发阶段：Plan 2 - Backend API and Database Foundation 执行阶段。
 
-当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 后端基础已开始实现，Task 1 backend tooling scaffold、Task 2 Prisma database foundation、Task 3 health endpoint、Task 4 development user API 和 Task 5 current user API 已完成。
+当前运行状态：Android Plan 1 合规壳已实现、验证通过，并已合并到 `main`；Plan 2 后端基础已开始实现，Task 1 backend tooling scaffold、Task 2 Prisma database foundation、Task 3 health endpoint、Task 4 development user API、Task 5 current user API 和 Task 6 profile API 已完成。
 
 ## 2. 技术栈
 
@@ -79,6 +79,7 @@ codex/backend-api-database-foundation
 - 已完成 Plan 2 Task 3：新增 Nest app shell、Prisma provider、`GET /health` endpoint 和 e2e 测试。
 - 已完成 Plan 2 Task 4：新增统一错误 envelope、validation factory、`POST /v1/dev/users` 开发用户创建接口和 e2e 测试。
 - 已完成 Plan 2 Task 5：新增 `X-Dev-User-Id` 开发鉴权、current user decorator 和 `GET /v1/users/me`。
+- 已完成 Plan 2 Task 6：新增 profile DTO 校验、`PUT /v1/users/me/profile` upsert API，并标记 onboarding complete。
 
 ## 5. 本轮完成内容
 
@@ -117,6 +118,12 @@ codex/backend-api-database-foundation
 - 新增 `CurrentUser` decorator 和 `DevAuthGuard`，通过 `X-Dev-User-Id` 读取当前开发用户。
 - 新增 `UsersService` 和 `UsersController`，返回当前用户、profile 和 settings。
 - 再次运行 `npm test -- --runTestsByPath test/app.e2e-spec.ts`：7 个 e2e 全部通过。
+- 再次运行 `npm run build`：通过。
+- 按 TDD 追加 profile create/update/validation e2e 测试，并先验证 RED：`PUT /v1/users/me/profile` 返回 404。
+- 新增 `UpsertProfileDto`，校验 gender、age、heightCm、weightKg、goal、experience、daysPerWeek、equipment 和 persona。
+- 新增 `UsersService.upsertProfile()`，写入/更新 `user_profiles` 并将 `users.onboarding_completed` 置为 true。
+- 新增 `PUT /v1/users/me/profile` endpoint。
+- 再次运行 `npm test -- --runTestsByPath test/app.e2e-spec.ts`：10 个 e2e 全部通过。
 - 再次运行 `npm run build`：通过。
 - 重新阅读项目记忆、目录结构、相关 Android 代码、计划文档和 `git status`。
 - 重新运行 `./gradlew :app:testDebugUnitTest`：通过。
@@ -166,8 +173,9 @@ codex/backend-api-database-foundation
 - Plan 2 Task 3 已完成。
 - Plan 2 Task 4 已完成。
 - Plan 2 Task 5 已完成。
-- 下一步按 TDD 执行 Task 6：profile upsert endpoint and validation。
-- 之后继续补 README 和最终验证。
+- Plan 2 Task 6 已完成。
+- 下一步执行 Task 7：test database cleanup、full backend verification 和 backend README。
+- 之后更新最终项目记忆并准备 Plan 2 收尾。
 
 ## 8. 已知 bug 或风险
 
@@ -178,13 +186,13 @@ codex/backend-api-database-foundation
 
 ## 9. 当前暂停点
 
-暂停在 Plan 2 Task 5 完成阶段：开发鉴权和 `GET /v1/users/me` 已完成并验证，下一步按计划执行 Task 6 profile upsert endpoint and validation。
+暂停在 Plan 2 Task 6 完成阶段：profile upsert API 已完成并验证，下一步按计划执行 Task 7 test database cleanup and full verification。
 
 ## 10. 下一步开发任务
 
-1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 6。
-2. 先追加 profile upsert/validation e2e 失败测试，再实现 `PUT /v1/users/me/profile`。
-3. 每个任务完成后更新计划 checkbox，并提交小步 commit。
+1. 按 `docs/superpowers/plans/2026-05-19-backend-api-database-foundation.md` 执行 Task 7。
+2. 在 e2e 中加入数据库清理 helper，运行完整 `npm test` 和 `npm run build`。
+3. 新增 `backend/README.md`，然后提交 verification/docs 小步 commit。
 
 ## 11. 下一个 AI 会话应该从哪里继续
 
@@ -202,5 +210,5 @@ git status
 ## 12. 建议 git commit message
 
 ```text
-feat: add profile API
+test: verify backend foundation
 ```

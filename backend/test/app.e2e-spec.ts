@@ -105,4 +105,117 @@ describe('AIFitnessPro backend foundation', () => {
 
     expect(response.body.error.code).toBe('UNAUTHENTICATED');
   });
+
+  it('PUT /v1/users/me/profile creates a profile and marks onboarding complete', async () => {
+    const created = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Profile device', externalId: 'profile-device' })
+      .expect(201);
+
+    const profile = {
+      gender: 'male',
+      age: 25,
+      heightCm: 175,
+      weightKg: 70,
+      goal: 'strength',
+      experience: 'beginner',
+      daysPerWeek: 4,
+      equipment: ['full_gym', 'dumbbell_only'],
+      persona: 'coach',
+    };
+
+    const response = await request(app.getHttpServer())
+      .put('/v1/users/me/profile')
+      .set('X-Dev-User-Id', created.body.user.id)
+      .send(profile)
+      .expect(200);
+
+    expect(response.body.user).toMatchObject({
+      id: created.body.user.id,
+      onboardingCompleted: true,
+      profile,
+    });
+  });
+
+  it('PUT /v1/users/me/profile updates an existing profile', async () => {
+    const created = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Update profile device', externalId: 'update-profile-device' })
+      .expect(201);
+
+    await request(app.getHttpServer())
+      .put('/v1/users/me/profile')
+      .set('X-Dev-User-Id', created.body.user.id)
+      .send({
+        gender: 'female',
+        age: 28,
+        heightCm: 168,
+        weightKg: 62,
+        goal: 'fitness',
+        experience: 'intermediate',
+        daysPerWeek: 3,
+        equipment: ['bodyweight'],
+        persona: 'buddy',
+      })
+      .expect(200);
+
+    const response = await request(app.getHttpServer())
+      .put('/v1/users/me/profile')
+      .set('X-Dev-User-Id', created.body.user.id)
+      .send({
+        gender: 'female',
+        age: 29,
+        heightCm: 168,
+        weightKg: 61.5,
+        goal: 'cut',
+        experience: 'intermediate',
+        daysPerWeek: 5,
+        equipment: ['bodyweight', 'dumbbell_only'],
+        persona: 'beauty_coach',
+      })
+      .expect(200);
+
+    expect(response.body.user.profile).toMatchObject({
+      age: 29,
+      weightKg: 61.5,
+      goal: 'cut',
+      daysPerWeek: 5,
+      persona: 'beauty_coach',
+    });
+  });
+
+  it('PUT /v1/users/me/profile rejects invalid onboarding fields', async () => {
+    const created = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Invalid profile device', externalId: 'invalid-profile-device' })
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .put('/v1/users/me/profile')
+      .set('X-Dev-User-Id', created.body.user.id)
+      .send({
+        gender: 'male',
+        age: 12,
+        heightCm: 120,
+        weightKg: 20,
+        goal: 'strength',
+        experience: 'beginner',
+        daysPerWeek: 2,
+        equipment: [],
+        persona: 'coach',
+      })
+      .expect(400);
+
+    expect(response.body.error).toMatchObject({
+      code: 'VALIDATION_ERROR',
+      message: '请求参数不合法',
+    });
+    expect(response.body.error.fields).toMatchObject({
+      age: expect.any(String),
+      heightCm: expect.any(String),
+      weightKg: expect.any(String),
+      daysPerWeek: expect.any(String),
+      equipment: expect.any(String),
+    });
+  });
 });
