@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.aifitnesspro.android.core.plan.PlanRepository
 import com.aifitnesspro.android.core.session.ApiConnectionState
 import com.aifitnesspro.android.feature.exercise.ExerciseLibraryScreen
 import com.aifitnesspro.android.feature.home.HomeScreen
@@ -20,11 +21,13 @@ import com.aifitnesspro.android.feature.training.TrainingScreen
 
 @Composable
 fun AppNavHost(
-    apiConnectionState: ApiConnectionState
+    apiConnectionState: ApiConnectionState,
+    planRepository: PlanRepository
 ) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route ?: AppDestination.Home.route
+    val devUserId = (apiConnectionState as? ApiConnectionState.Connected)?.user?.id
 
     Scaffold(
         bottomBar = {
@@ -35,9 +38,7 @@ fun AppNavHost(
                         onClick = {
                             if (currentRoute != destination.route) {
                                 navController.navigate(destination.route) {
-                                    popUpTo(AppDestination.Home.route) {
-                                        saveState = true
-                                    }
+                                    popUpTo(AppDestination.Home.route) { saveState = true }
                                     launchSingleTop = true
                                     restoreState = true
                                 }
@@ -55,7 +56,9 @@ fun AppNavHost(
             startDestination = AppDestination.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(AppDestination.Home.route) { HomeScreen() }
+            composable(AppDestination.Home.route) {
+                HomeScreen(planRepository = planRepository, devUserId = devUserId)
+            }
             composable(AppDestination.Training.route) { TrainingScreen() }
             composable(AppDestination.Exercise.route) { ExerciseLibraryScreen() }
             composable(AppDestination.Profile.route) {

@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { createTestApp } from './test-app';
+import { seedTestExercises } from './seed-helpers';
 
 describe('AIFitnessPro backend foundation', () => {
   let app: INestApplication;
@@ -10,6 +11,7 @@ describe('AIFitnessPro backend foundation', () => {
   beforeAll(async () => {
     app = await createTestApp();
     prisma = app.get(PrismaService);
+    await seedTestExercises(prisma);
   });
 
   beforeEach(async () => {
@@ -234,5 +236,135 @@ describe('AIFitnessPro backend foundation', () => {
       daysPerWeek: expect.any(String),
       equipment: expect.any(String),
     });
+  });
+
+  it('POST /v1/plans/generate creates a 28-day plan and returns it', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Plan device', externalId: 'plan-gen-device' })
+      .expect(201);
+    const userId = userRes.body.user.id;
+
+    await request(app.getHttpServer())
+      .put('/v1/users/me/profile')
+      .set('X-Dev-User-Id', userId)
+      .send({
+        gender: 'male', age: 25, heightCm: 175, weightKg: 70,
+        goal: 'strength', experience: 'beginner', daysPerWeek: 3,
+        equipment: ['full_gym'], persona: 'coach',
+      })
+      .expect(200);
+
+    const response = await request(app.getHttpServer())
+      .post('/v1/plans/generate')
+      .set('X-Dev-User-Id', userId)
+      .expect(201);
+
+    expect(response.body.plan.status).toBe('active');
+    expect(response.body.plan.days).toHaveLength(28);
+
+    const trainingDays = response.body.plan.days.filter((d: { dayType: string }) => d.dayType !== 'rest');
+    expect(trainingDays).toHaveLength(12);
+    expect(trainingDays[0].dayType).toBe('push');
+    expect(trainingDays[1].dayType).toBe('pull');
+    expect(trainingDays[2].dayType).toBe('legs');
+    expect(trainingDays[0].exercises.length).toBeGreaterThan(0);
+    expect(trainingDays[0].exercises[0]).toMatchObject({
+      nameCn: expect.any(String),
+      targetSets: 3,
+      targetReps: 10,
+      targetRestSeconds: 90,
+    });
+  });
+
+  it('POST /v1/plans/generate archives the previous active plan', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Archive device', externalId: 'archive-plan-device' })
+      .expect(201);
+    const userId = userRes.body.user.id;
+
+    await request(app.getHttpServer())
+      .put('/v1/users/me/profile')
+      .set('X-Dev-User-Id', userId)
+      .send({
+        gender: 'female', age: 28, heightCm: 168, weightKg: 60,
+        goal: 'fitness', experience: 'intermediate', daysPerWeek: 4,
+        equipment: ['full_gym'], persona: 'buddy',
+      })
+      .expect(200);
+
+    const first = await request(app.getHttpServer())
+      .post('/v1/plans/generate')
+      .set('X-Dev-User-Id', userId)
+      .expect(201);
+
+    const second = await request(app.getHttpServer())
+      .post('/v1/plans/generate')
+      .set('X-Dev-User-Id', userId)
+      .expect(201);
+
+    expect(second.body.plan.id).not.toBe(first.body.plan.id);
+    expect(second.body.plan.status).toBe('active');
+  });
+
+  it('POST /v1/plans/generate returns 400 when profile is missing', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'No profile device', externalId: 'no-profile-device' })
+      .expect(201);
+    const userId = userRes.body.user.id;
+
+    const response = await request(app.getHttpServer())
+      .post('/v1/plans/generate')
+      .set('X-Dev-User-Id', userId)
+      .expect(400);
+
+    expect(response.body.error.code).toBe('VALIDATION_ERROR');
+  });
+
+  it('GET /v1/plans/active returns the current active plan', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Active plan device', externalId: 'active-plan-device' })
+      .expect(201);
+    const userId = userRes.body.user.id;
+
+    await request(app.getHttpServer())
+      .put('/v1/users/me/profile')
+      .set('X-Dev-User-Id', userId)
+      .send({
+        gender: 'male', age: 30, heightCm: 180, weightKg: 80,
+        goal: 'bulk', experience: 'advanced', daysPerWeek: 5,
+        equipment: ['full_gym'], persona: 'coach',
+      })
+      .expect(200);
+
+    const generated = await request(app.getHttpServer())
+      .post('/v1/plans/generate')
+      .set('X-Dev-User-Id', userId)
+      .expect(201);
+
+    const active = await request(app.getHttpServer())
+      .get('/v1/plans/active')
+      .set('X-Dev-User-Id', userId)
+      .expect(200);
+
+    expect(active.body.plan.id).toBe(generated.body.plan.id);
+    expect(active.body.plan.days).toHaveLength(28);
+  });
+
+  it('GET /v1/plans/active returns 404 when no active plan exists', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'No plan device', externalId: 'no-plan-device' })
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .get('/v1/plans/active')
+      .set('X-Dev-User-Id', userRes.body.user.id)
+      .expect(404);
+
+    expect(response.body.error.code).toBe('NOT_FOUND');
   });
 });

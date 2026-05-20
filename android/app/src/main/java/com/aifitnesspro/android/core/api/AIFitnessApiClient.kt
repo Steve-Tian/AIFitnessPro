@@ -9,7 +9,7 @@ class AIFitnessApiClient(
         ignoreUnknownKeys = true
         explicitNulls = false
     }
-) : DevelopmentApi {
+) : DevelopmentApi, ProfileApi, PlanApi {
     suspend fun health(): HealthResponse {
         val response = transport.execute(ApiRequest(method = "GET", path = "health"))
         return decodeOrThrow(response)
@@ -36,6 +36,47 @@ class AIFitnessApiClient(
             )
         )
         return decodeOrThrow<UserEnvelope>(response).user
+    }
+
+    override suspend fun upsertProfile(devUserId: String, request: UpsertProfileRequest): ApiUser {
+        val response = transport.execute(
+            ApiRequest(
+                method = "PUT",
+                path = "v1/users/me/profile",
+                headers = mapOf(
+                    "Content-Type" to "application/json; charset=utf-8",
+                    "X-Dev-User-Id" to devUserId
+                ),
+                body = json.encodeToString(request)
+            )
+        )
+        return decodeOrThrow<UserEnvelope>(response).user
+    }
+
+    override suspend fun generatePlan(devUserId: String): ApiActivePlan {
+        val response = transport.execute(
+            ApiRequest(
+                method = "POST",
+                path = "v1/plans/generate",
+                headers = mapOf(
+                    "Content-Type" to "application/json; charset=utf-8",
+                    "X-Dev-User-Id" to devUserId
+                ),
+                body = "{}"
+            )
+        )
+        return decodeOrThrow<PlanEnvelope>(response).plan
+    }
+
+    override suspend fun getActivePlan(devUserId: String): ApiActivePlan {
+        val response = transport.execute(
+            ApiRequest(
+                method = "GET",
+                path = "v1/plans/active",
+                headers = mapOf("X-Dev-User-Id" to devUserId)
+            )
+        )
+        return decodeOrThrow<PlanEnvelope>(response).plan
     }
 
     private inline fun <reified T> decodeOrThrow(response: ApiResponse): T {

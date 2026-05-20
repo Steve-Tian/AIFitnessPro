@@ -47,6 +47,59 @@ class AIFitnessApiClientTest {
     }
 
     @Test
+    fun upsertProfileReturnsUserOnSuccess() = runTest {
+        val transport = RecordingTransport(
+            ApiResponse(
+                statusCode = 200,
+                body = """{"user":{"id":"u1","deviceLabel":"Pixel","onboardingCompleted":true,"createdAt":"2026-05-20T00:00:00Z"}}"""
+            )
+        )
+        val client = AIFitnessApiClient(transport)
+
+        val result = client.upsertProfile(
+            devUserId = "u1",
+            request = UpsertProfileRequest(
+                gender = "male", age = 25, heightCm = 175, weightKg = 70.0,
+                goal = "strength", experience = "beginner", daysPerWeek = 3,
+                equipment = listOf("full_gym"), persona = "coach"
+            )
+        )
+
+        assertEquals("u1", result.id)
+        assertEquals(true, result.onboardingCompleted)
+        assertEquals("PUT", transport.lastRequest.method)
+        assertEquals("v1/users/me/profile", transport.lastRequest.path)
+        assertEquals("u1", transport.lastRequest.headers["X-Dev-User-Id"])
+    }
+
+    @Test
+    fun generatePlanReturnsPlanOnSuccess() = runTest {
+        val planJson = """{"plan":{"id":"p1","status":"active","startDate":"2026-05-20","days":[]}}"""
+        val transport = RecordingTransport(ApiResponse(statusCode = 201, body = planJson))
+        val client = AIFitnessApiClient(transport)
+
+        val result = client.generatePlan("u1")
+
+        assertEquals("p1", result.id)
+        assertEquals("active", result.status)
+        assertEquals("POST", transport.lastRequest.method)
+        assertEquals("v1/plans/generate", transport.lastRequest.path)
+    }
+
+    @Test
+    fun getActivePlanReturnsPlanOnSuccess() = runTest {
+        val planJson = """{"plan":{"id":"p2","status":"active","startDate":"2026-05-20","days":[]}}"""
+        val transport = RecordingTransport(ApiResponse(statusCode = 200, body = planJson))
+        val client = AIFitnessApiClient(transport)
+
+        val result = client.getActivePlan("u1")
+
+        assertEquals("p2", result.id)
+        assertEquals("GET", transport.lastRequest.method)
+        assertEquals("v1/plans/active", transport.lastRequest.path)
+    }
+
+    @Test
     fun getCurrentUserSendsDevelopmentUserHeader() = runTest {
         val transport = RecordingTransport(userResponse("dev-user-2", onboardingCompleted = true))
         val client = AIFitnessApiClient(transport)

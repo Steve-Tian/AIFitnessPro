@@ -151,6 +151,7 @@ model PlanDay {
   dayIndex       Int              @map("day_index")
   scheduledDate  DateTime?        @map("scheduled_date") @db.Date
   dayType        String           @map("day_type")
+  dayNote        String?          @map("day_note")
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @updatedAt @map("updated_at")
   trainingPlan   TrainingPlan     @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)

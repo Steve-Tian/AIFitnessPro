@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import com.aifitnesspro.android.core.api.AIFitnessApiClient
 import com.aifitnesspro.android.core.api.ApiConfig
 import com.aifitnesspro.android.core.api.HttpUrlConnectionTransport
+import com.aifitnesspro.android.core.plan.DataStorePlanStore
+import com.aifitnesspro.android.core.plan.PlanRepository
 import com.aifitnesspro.android.core.session.AndroidDeviceIdentityProvider
 import com.aifitnesspro.android.core.session.ApiSessionRepository
 import com.aifitnesspro.android.core.session.DataStoreApiSessionStore
@@ -24,11 +26,17 @@ class MainActivity : ComponentActivity() {
             store = DataStoreApiSessionStore(applicationContext),
             deviceIdentity = AndroidDeviceIdentityProvider(applicationContext).get()
         )
+        val planRepository = PlanRepository(
+            store = DataStorePlanStore(applicationContext),
+            api = apiClient
+        )
         setContent {
             AIFitnessProTheme {
                 AIFitnessProApp(
                     consentRepository = consentRepository,
-                    apiSessionRepository = apiSessionRepository
+                    apiSessionRepository = apiSessionRepository,
+                    apiClient = apiClient,
+                    planRepository = planRepository
                 )
             }
         }

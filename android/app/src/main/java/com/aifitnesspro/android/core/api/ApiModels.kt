@@ -16,6 +16,19 @@ data class CreateDevelopmentUserRequest(
 )
 
 @Serializable
+data class UpsertProfileRequest(
+    val gender: String,
+    val age: Int,
+    val heightCm: Int,
+    val weightKg: Double,
+    val goal: String,
+    val experience: String,
+    val daysPerWeek: Int,
+    val equipment: List<String>,
+    val persona: String
+)
+
+@Serializable
 data class ApiUser(
     val id: String,
     val deviceLabel: String,
