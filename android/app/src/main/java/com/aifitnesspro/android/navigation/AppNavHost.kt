@@ -8,45 +8,53 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.aifitnesspro.android.core.plan.PlanRepository
 import com.aifitnesspro.android.core.session.ApiConnectionState
+import com.aifitnesspro.android.core.workout.WorkoutSessionRepository
 import com.aifitnesspro.android.feature.exercise.ExerciseLibraryScreen
 import com.aifitnesspro.android.feature.home.HomeScreen
 import com.aifitnesspro.android.feature.profile.ProfileScreen
 import com.aifitnesspro.android.feature.training.TrainingScreen
+import com.aifitnesspro.android.feature.workout.WorkoutSessionScreen
 
 @Composable
 fun AppNavHost(
     apiConnectionState: ApiConnectionState,
-    planRepository: PlanRepository
+    planRepository: PlanRepository,
+    workoutRepository: WorkoutSessionRepository
 ) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route ?: AppDestination.Home.route
     val devUserId = (apiConnectionState as? ApiConnectionState.Connected)?.user?.id
+    val showBottomBar = !currentRoute.startsWith("workout_session")
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
-                AppDestination.bottomTabs.forEach { destination ->
-                    NavigationBarItem(
-                        selected = currentRoute == destination.route,
-                        onClick = {
-                            if (currentRoute != destination.route) {
-                                navController.navigate(destination.route) {
-                                    popUpTo(AppDestination.Home.route) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
+            if (showBottomBar) {
+                NavigationBar {
+                    AppDestination.bottomTabs.forEach { destination ->
+                        NavigationBarItem(
+                            selected = currentRoute == destination.route,
+                            onClick = {
+                                if (currentRoute != destination.route) {
+                                    navController.navigate(destination.route) {
+                                        popUpTo(AppDestination.Home.route) { saveState = true }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                 }
-                            }
-                        },
-                        label = { Text(destination.label) },
-                        icon = { Text(destination.label.take(1)) }
-                    )
+                            },
+                            label = { Text(destination.label) },
+                            icon = { Text(destination.label.take(1)) }
+                        )
+                    }
                 }
             }
         }
@@ -57,12 +65,48 @@ fun AppNavHost(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(AppDestination.Home.route) {
-                HomeScreen(planRepository = planRepository, devUserId = devUserId)
+                HomeScreen(
+                    planRepository = planRepository,
+                    devUserId = devUserId,
+                    onStartWorkout = { dayIndex ->
+                        navController.navigate(AppDestination.workoutRoute(dayIndex))
+                    },
+                    onResumeWorkout = { dayIndex ->
+                        navController.navigate(AppDestination.workoutRoute(dayIndex))
+                    },
+                    workoutRepository = workoutRepository
+                )
             }
-            composable(AppDestination.Training.route) { TrainingScreen() }
+            composable(AppDestination.Training.route) {
+                TrainingScreen(
+                    planRepository = planRepository,
+                    workoutRepository = workoutRepository,
+                    onStartWorkout = { dayIndex ->
+                        navController.navigate(AppDestination.workoutRoute(dayIndex))
+                    }
+                )
+            }
             composable(AppDestination.Exercise.route) { ExerciseLibraryScreen() }
             composable(AppDestination.Profile.route) {
                 ProfileScreen(apiConnectionState = apiConnectionState)
+            }
+            composable(
+                route = AppDestination.WorkoutSessionRoute,
+                arguments = listOf(navArgument("dayIndex") { type = NavType.IntType })
+            ) { entry ->
+                val dayIndex = entry.arguments?.getInt("dayIndex") ?: 0
+                WorkoutSessionScreen(
+                    dayIndex = dayIndex,
+                    planRepository = planRepository,
+                    workoutRepository = workoutRepository,
+                    onFinished = {
+                        navController.navigate(AppDestination.Home.route) {
+                            popUpTo(AppDestination.Home.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    onBack = { navController.popBackStack() }
+                )
             }
         }
     }

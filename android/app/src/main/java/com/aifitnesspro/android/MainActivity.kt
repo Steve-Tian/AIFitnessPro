@@ -13,6 +13,8 @@ import com.aifitnesspro.android.core.session.ApiSessionRepository
 import com.aifitnesspro.android.core.session.DataStoreApiSessionStore
 import com.aifitnesspro.android.core.settings.ConsentRepository
 import com.aifitnesspro.android.core.ui.AIFitnessProTheme
+import com.aifitnesspro.android.core.workout.WorkoutSessionRepository
+import com.aifitnesspro.android.core.workout.local.WorkoutDatabase
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,13 +32,17 @@ class MainActivity : ComponentActivity() {
             store = DataStorePlanStore(applicationContext),
             api = apiClient
         )
+        val workoutRepository = WorkoutSessionRepository(
+            dao = WorkoutDatabase.create(applicationContext).workoutDao()
+        )
         setContent {
             AIFitnessProTheme {
                 AIFitnessProApp(
                     consentRepository = consentRepository,
                     apiSessionRepository = apiSessionRepository,
                     apiClient = apiClient,
-                    planRepository = planRepository
+                    planRepository = planRepository,
+                    workoutRepository = workoutRepository
                 )
             }
         }

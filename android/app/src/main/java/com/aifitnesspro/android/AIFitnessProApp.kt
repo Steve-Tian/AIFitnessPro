@@ -14,6 +14,7 @@ import com.aifitnesspro.android.core.session.ApiConnectionState
 import com.aifitnesspro.android.core.session.ApiSessionRepository
 import com.aifitnesspro.android.core.settings.ConsentRepository
 import com.aifitnesspro.android.core.settings.ConsentState
+import com.aifitnesspro.android.core.workout.WorkoutSessionRepository
 import com.aifitnesspro.android.feature.consent.ConsentScreen
 import com.aifitnesspro.android.feature.onboarding.OnboardingScreen
 import com.aifitnesspro.android.navigation.AppNavHost
@@ -27,7 +28,8 @@ fun AIFitnessProApp(
     consentRepository: ConsentRepository,
     apiSessionRepository: ApiSessionRepository,
     apiClient: AIFitnessApiClient,
-    planRepository: PlanRepository
+    planRepository: PlanRepository,
+    workoutRepository: WorkoutSessionRepository
 ) {
     val scope = rememberCoroutineScope()
     val consent by consentRepository.consentState.collectAsState(initial = ConsentState.Empty)
@@ -58,7 +60,8 @@ fun AIFitnessProApp(
         } else {
             AppNavHost(
                 apiConnectionState = apiConnectionState,
-                planRepository = planRepository
+                planRepository = planRepository,
+                workoutRepository = workoutRepository
             )
         }
     } else {

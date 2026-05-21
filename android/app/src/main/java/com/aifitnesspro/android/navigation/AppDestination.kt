@@ -10,6 +10,10 @@ data class AppDestination(
         val Exercise = AppDestination("exercise", "动作库")
         val Profile = AppDestination("profile", "我的")
 
+        const val WorkoutSessionRoute = "workout_session/{dayIndex}"
+
+        fun workoutRoute(dayIndex: Int) = "workout_session/$dayIndex"
+
         val bottomTabs = listOf(Home, Training, Exercise, Profile)
     }
 }

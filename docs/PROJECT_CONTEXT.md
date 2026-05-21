@@ -12,140 +12,122 @@
 
 项目目标：构建 Kotlin + Jetpack Compose 原生 Android App，并满足国内安卓应用市场合规要求。
 
-当前开发阶段：Plan 3 - Onboarding + Training Plan Generation 已实现（待手动烟测）。
+当前开发阶段：Plan 4 - Native Workout Session Loop 已实现（本地 Room + 状态机 + UI，待手动烟测）。
 
-当前运行状态：Plan 1 + Plan 2 + Plan 3 API client 已合并 `main`；Plan 3 完整用户路径（6 步 Onboarding → Profile → 28 天 PPL 计划 → 首页今日卡片）已在 `main` 工作区实现并通过自动化测试，尚未手动烟测。
+当前运行状态：Plan 1–3 已合并 `main`；Plan 4 训练 Session 循环已在 `main` 工作区实现：Room 本地持久化、状态机、组/次/重量录入、休息计时、暂停/恢复、完成摘要、首页/训练 Tab 入口与中断恢复。
 
 ## 2. 技术栈
 
-Android：Kotlin、Gradle、Android Gradle Plugin、Jetpack Compose、Navigation Compose、DataStore、JUnit。
+Android：Kotlin、Gradle、Jetpack Compose、Navigation Compose、DataStore、Room、JUnit。
 
 本地构建环境：
 
 - JDK：Homebrew `openjdk@17`
 - `JAVA_HOME`：`/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home`
 - Android Studio SDK：`/Users/steve/Library/Android/sdk`
-- 已安装 SDK 组件：`platforms;android-35`、`build-tools;35.0.0`、`platform-tools`、`emulator`、`system-images;android-35;google_apis;arm64-v8a`
-- AVD：`AIFitnessPro_API35`，设备为 Pixel 8，Android 15 / API 35。
-- Gradle：使用本机 `GRADLE_USER_HOME=~/.gradle`（Cursor 沙箱缓存可能导致 wrapper zip 损坏）。
+- AVD：`AIFitnessPro_API35`（Pixel 8，Android 15 / API 35）
+- Gradle：本机构建请用 `GRADLE_USER_HOME=$HOME/.gradle`
 
-后端：NestJS + PostgreSQL + Prisma + `@anthropic-ai/sdk`（Claude 日备注，可选）。
+后端：NestJS + PostgreSQL + Prisma（训练同步 API 尚未实现）。
 
-本地数据：DataStore 用于隐私同意、开发用户会话、激活计划 JSON 缓存；Room 留待 Plan 4。
+本地数据：DataStore（隐私同意、开发用户、计划 JSON）；Room（训练 Session 与组记录）。
 
 ## 3. 当前主要目录结构
 
 ```text
-docs/                           项目文档、产品计划、持续上下文
-docs/superpowers/specs/         设计规格
-docs/superpowers/plans/         实施计划
+docs/                           项目文档、持续上下文
 android/                        Android 原生工程
-backend/                        NestJS 后端
-  src/plans/                    计划生成模块（规则引擎 + API）
-  prisma/seed.ts                10 条核心动作 seed
-cloudfunctions/                 历史微信云函数（参考）
-miniprogram/                    历史微信小程序（参考）
+  core/workout/                 状态机、Room、WorkoutSessionRepository
+  feature/workout/              WorkoutSessionScreen
+backend/                        NestJS 后端（plans 模块已完成）
 ```
 
 ## 4. 当前已完成内容
 
-**Plan 1（已合并）**
-- Android Gradle 工程、隐私同意页、四 Tab 壳、DataStore 同意持久化。
+**Plan 1–3（已合并）**
+- Android 壳、后端基础、Onboarding、28 天 PPL 计划生成、首页今日卡片。
 
-**Plan 2（已合并）**
-- NestJS 后端、`GET /health`、`POST /v1/dev/users`、`GET /v1/users/me`、`PUT /v1/users/me/profile`、Prisma schema + migration。
-
-**Plan 3 切片 1（已合并，`184d852`）**
-- Android API client、本地 `http://10.0.2.2:8000/`、开发用户 bootstrap、「我的」页连接状态。
-
-**Plan 3 完整版（本轮，`main` 工作区）**
-- 后端：`dayNote` migration、10 动作 seed、PPL 规则引擎、`POST /v1/plans/generate`、`GET /v1/plans/active`、Claude 异步日备注。
-- Android：6 步 `OnboardingScreen`、`ProfileApi`/`PlanApi`、`PlanRepository`（DataStore）、`HomeScreen` 今日卡片、按 `onboardingCompleted` 路由。
-- 测试：backend e2e 15 项 + unit 11 项通过；`npm run build` 通过；Android `:app:testDebugUnitTest` + `:app:assembleDebug` 通过。
+**Plan 4（本轮）**
+- `WorkoutStateMachine`：NotStarted → InProgress ↔ Resting ↔ Paused → Completed / Abandoned
+- Room：`workout_sessions`、`workout_sets` 表，每完成一组立即写入
+- `WorkoutSessionRepository`：prepare/start/completeSet/skipRest/pause/resume/discard
+- `WorkoutSessionScreen`：准备页、组数录入、休息倒计时、完成摘要、放弃确认
+- 首页「开始训练」、进行中「继续训练」、训练 Tab 计划日列表
+- 后台切应用自动 Pause，回到前台 Resume
+- 单元测试：`WorkoutStateMachineTest`（6 项）
+- `./gradlew :app:testDebugUnitTest :app:assembleDebug` 通过
 
 ## 5. 本轮完成内容
 
-- 实现后端 plans 模块（规则引擎、presenter、service、controller、Claude notes）。
-- 新增 migration `0002_add_plan_day_note`、seed 脚本、`test:unit`、e2e 计划生成测试。
-- 扩展 Android API client（upsertProfile、generatePlan、getActivePlan）。
-- 新增 `PlanRepository`、`OnboardingScreen`、首页今日训练/休息卡片。
-- 接线 `AIFitnessProApp` / `MainActivity` / `AppNavHost`。
-- 验证：backend `npm test` + `npm run test:unit` + `npm run build`；Android gradle 测试与 debug 构建。
+- 新增 Room + KSP 依赖与 `WorkoutDatabase`
+- 实现训练状态机与 Room 持久化
+- 实现 `WorkoutSessionScreen` 全屏训练流程
+- 接线 `AppNavHost`、`HomeScreen`、`TrainingScreen`、`MainActivity`
+- Android 单元测试与 debug 构建验证通过
 
 ## 6. 本轮修改文件
 
 - `docs/PROJECT_CONTEXT.md`
-- `backend/prisma/schema.prisma`、`backend/prisma/migrations/0002_add_plan_day_note/`、`backend/prisma/seed.ts`
-- `backend/package.json`、`backend/package-lock.json`、`backend/.env.example`
-- `backend/src/plans/`、`backend/src/app.module.ts`
-- `backend/test/app.e2e-spec.ts`、`backend/test/seed-helpers.ts`、`backend/test/jest-unit.json`
-- `android/app/src/main/java/.../core/api/`（ProfileApi、PlanApi、PlanModels、AIFitnessApiClient、ApiModels）
-- `android/app/src/main/java/.../core/plan/PlanRepository.kt`
-- `android/app/src/main/java/.../feature/onboarding/OnboardingScreen.kt`
+- `android/build.gradle.kts`、`android/app/build.gradle.kts`
+- `android/app/src/main/java/.../core/workout/`
+- `android/app/src/main/java/.../feature/workout/WorkoutSessionScreen.kt`
 - `android/app/src/main/java/.../feature/home/HomeScreen.kt`
-- `android/app/src/main/java/.../AIFitnessProApp.kt`、`MainActivity.kt`、`navigation/AppNavHost.kt`
-- `android/app/src/test/java/.../core/api/`、`android/app/src/test/java/.../core/plan/`
+- `android/app/src/main/java/.../feature/training/TrainingScreen.kt`
+- `android/app/src/main/java/.../navigation/AppDestination.kt`、`AppNavHost.kt`
+- `android/app/src/main/java/.../AIFitnessProApp.kt`、`MainActivity.kt`
+- `android/app/src/test/java/.../core/workout/WorkoutStateMachineTest.kt`
 
 ## 7. 当前未完成事项
 
-- 手动烟测：模拟器走完 Onboarding，验证首页今日计划卡片。
-- 生产认证（仍使用 `X-Dev-User-Id` 开发身份）。
-- Plan 4：训练 Session 循环（状态机、组/次/重量、休息计时器、Room）。
+- 手动烟测：从首页开始训练，完成若干组，切后台再恢复，验证 Room 持久化。
+- 后端训练同步 API（`workout_sessions` / `workout_sets` POST）与 Android 同步队列。
+- 动作级 RPE 反馈、训练 Tab 完成状态标记。
 - Plan 5：动作库 70+ 内容与媒体。
 - Plan 6：营养、成就、账号注销。
-- Plan 7：国内应用市场提交。
+- 生产认证（仍用 `X-Dev-User-Id`）。
 
 ## 8. 已知 bug 或风险
 
-- Android debug URL 固定 `http://10.0.2.2:8000/`；真机需局域网 IP 或环境切换。
-- Release API URL 占位 `https://api.aifitnesspro.example/`。
-- Cursor 沙箱内 Gradle 可能下载损坏的 wrapper zip；本机构建请用 `GRADLE_USER_HOME=$HOME/.gradle`。
-- `npm audit` 仍有 18 个漏洞，未自动修复。
-- Claude 日备注无 `ANTHROPIC_API_KEY` 时静默跳过，不影响主流程。
-- Onboarding 中途杀进程会从头开始（无中途持久化，符合设计）。
+- 训练数据仅存本地 Room，卸载 App 或清数据会丢失；后端 sync 未实现。
+- 休息倒计时 LaunchedEffect 在重组时可能重启；烟测时留意计时准确性。
+- Android debug URL 固定 `http://10.0.2.2:8000/`。
+- Cursor 沙箱 Gradle 可能损坏 wrapper zip；本机构建用 `GRADLE_USER_HOME=$HOME/.gradle`。
 
 ## 9. 当前暂停点
 
-Plan 3 代码与自动化测试已完成，暂停在**手动烟测前**：需用户本机启动 Docker + 后端 + 模拟器验证完整 Onboarding → 首页今日卡片流程。
+Plan 4 本地训练循环已实现并通过自动化测试，暂停在**手动烟测前**。
 
 ## 10. 下一步开发任务
 
-1. 手动烟测（见下方命令）。
-2. 继续 Plan 4：原生训练 Session 循环。
-3. 后续：生产 auth、动作库内容、营养与成就。
+1. 手动烟测完整训练流程（开始 → 完成组 → 休息 → 完成训练 → 中断恢复）。
+2. 后端 + Android：训练 Session 同步 API 与离线队列。
+3. 继续 Plan 5：动作库内容与媒体。
 
 ## 11. 下一个 AI 会话应该从哪里继续
-
-从 `main` 继续 Plan 4，或先协助烟测问题排查：
 
 ```bash
 cd "/Users/steve/Desktop/Smart Everything/AIFitnessPro"
 git status
 ```
 
-手动烟测步骤：
+烟测命令：
 
 ```bash
-# 1. 后端
-cd backend
-docker compose up -d postgres
-npm run prisma:migrate
-npm run seed
-npm start
+# 后端
+cd backend && docker compose up -d postgres && npm run prisma:migrate && npm run seed && npm start
 
-# 2. Android（另开终端，使用本机 Gradle）
-cd android
-GRADLE_USER_HOME=$HOME/.gradle \
-ANDROID_HOME=$HOME/Library/Android/sdk \
-JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home \
-./gradlew :app:assembleDebug
-
-# 3. 模拟器安装 APK 后：同意隐私 → 完成 6 步 Onboarding → 首页应显示今日训练或休息卡片
+# Android
+cd android && GRADLE_USER_HOME=$HOME/.gradle \
+  ANDROID_HOME=$HOME/Library/Android/sdk \
+  JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home \
+  ./gradlew :app:assembleDebug
 adb -s emulator-5554 install -r app/build/outputs/apk/debug/app-debug.apk
 ```
+
+验证：首页点「开始训练」→ 录入组数 → 休息倒计时 → 完成全部组 → 摘要页 → 杀进程重开 → 「继续训练」恢复。
 
 ## 12. 建议 git commit message
 
 ```text
-feat: add onboarding flow and 28-day training plan generation
+feat: add native workout session loop with Room persistence
 ```

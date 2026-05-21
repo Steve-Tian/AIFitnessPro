@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,14 +22,19 @@ import androidx.compose.ui.unit.dp
 import com.aifitnesspro.android.core.api.ApiPlanDay
 import com.aifitnesspro.android.core.plan.PlanRepository
 import com.aifitnesspro.android.core.plan.findTodayDay
+import com.aifitnesspro.android.core.workout.WorkoutSessionRepository
 import java.time.LocalDate
 
 @Composable
 fun HomeScreen(
     planRepository: PlanRepository,
-    devUserId: String?
+    devUserId: String?,
+    workoutRepository: WorkoutSessionRepository,
+    onStartWorkout: (Int) -> Unit,
+    onResumeWorkout: (Int) -> Unit
 ) {
     val plan by planRepository.getActivePlan().collectAsState(initial = null)
+    val activeSession by workoutRepository.observeActiveSession().collectAsState(initial = null)
     val todayDate = remember { LocalDate.now().toString() }
     val todayDay = plan?.let { findTodayDay(it, todayDate) }
 
@@ -46,10 +52,33 @@ fun HomeScreen(
         Text("今日训练", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
 
+        activeSession?.takeIf { it.status.isActive() }?.let { session ->
+            ResumeSessionCard(
+                dayIndex = session.planDayIndex,
+                dayType = session.dayType,
+                onResume = { onResumeWorkout(session.planDayIndex) }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
         when {
             plan == null -> NoPlanCard()
             todayDay == null || todayDay.dayType == "rest" -> RestDayCard()
-            else -> TodayWorkoutCard(day = todayDay)
+            else -> TodayWorkoutCard(day = todayDay, onStartWorkout = onStartWorkout)
+        }
+    }
+}
+
+@Composable
+private fun ResumeSessionCard(dayIndex: Int, dayType: String, onResume: () -> Unit) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Text("有进行中的训练", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text("Day ${dayIndex + 1} · $dayType")
+            Spacer(modifier = Modifier.height(12.dp))
+            Button(onClick = onResume, modifier = Modifier.fillMaxWidth()) {
+                Text("继续训练")
+            }
         }
     }
 }
@@ -81,7 +110,7 @@ private fun RestDayCard() {
 }
 
 @Composable
-private fun TodayWorkoutCard(day: ApiPlanDay) {
+private fun TodayWorkoutCard(day: ApiPlanDay, onStartWorkout: (Int) -> Unit) {
     val dayLabel = when (day.dayType) {
         "push" -> "Push 推力日"
         "pull" -> "Pull 拉力日"
@@ -114,7 +143,7 @@ private fun TodayWorkoutCard(day: ApiPlanDay) {
                 Text(note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = {}, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { onStartWorkout(day.dayIndex) }, modifier = Modifier.fillMaxWidth()) {
                 Text("开始训练")
             }
         }
