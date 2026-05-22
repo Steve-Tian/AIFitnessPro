@@ -8,9 +8,11 @@ import { PlansModule } from './plans/plans.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
+import { WorkoutsModule } from './workouts/workouts.module';
+import { ExercisesModule } from './exercises/exercises.module';
 
 @Module({
-  imports: [PrismaModule, PlansModule],
+  imports: [PrismaModule, PlansModule, WorkoutsModule, ExercisesModule],
   controllers: [HealthController, DevUsersController, UsersController],
   providers: [HealthService, DevUsersService, DevAuthGuard, UsersService],
 })

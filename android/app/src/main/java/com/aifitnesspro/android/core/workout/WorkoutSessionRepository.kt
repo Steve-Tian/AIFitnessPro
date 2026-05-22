@@ -17,6 +17,9 @@ class WorkoutSessionRepository(
     fun observeActiveSession(): Flow<WorkoutSessionSnapshot?> =
         dao.observeActiveSession().map { entity -> entity?.toSnapshot(json) }
 
+    fun observeCompletedDayIndices(planId: String): Flow<Set<Int>> =
+        dao.observeCompletedDayIndices(planId).map { indices -> indices.toSet() }
+
     suspend fun getActiveSession(): WorkoutSessionSnapshot? =
         dao.getActiveSession()?.toSnapshot(json)
 
@@ -115,11 +118,19 @@ class WorkoutSessionRepository(
         dao.getSetsForSession(sessionId)
 
     private suspend fun saveSnapshot(snapshot: WorkoutSessionSnapshot) {
-        dao.upsertSession(snapshot.toEntity(json))
+        val existing = dao.getSession(snapshot.sessionId)
+        val syncStatus = when {
+            existing?.syncStatus == WorkoutSyncStatus.SYNCED.storageValue() -> WorkoutSyncStatus.SYNCED.storageValue()
+            existing?.syncStatus == WorkoutSyncStatus.FAILED.storageValue() -> WorkoutSyncStatus.FAILED.storageValue()
+            snapshot.status == WorkoutStatus.COMPLETED || snapshot.status == WorkoutStatus.ABANDONED ->
+                WorkoutSyncStatus.PENDING.storageValue()
+            else -> WorkoutSyncStatus.NONE.storageValue()
+        }
+        dao.upsertSession(snapshot.toEntity(json, syncStatus))
     }
 }
 
-private fun WorkoutSessionSnapshot.toEntity(json: Json): WorkoutSessionEntity =
+private fun WorkoutSessionSnapshot.toEntity(json: Json, syncStatus: String): WorkoutSessionEntity =
     WorkoutSessionEntity(
         id = sessionId,
         planId = planId,
@@ -135,7 +146,8 @@ private fun WorkoutSessionSnapshot.toEntity(json: Json): WorkoutSessionEntity =
         repsInput = repsInput,
         startedAtEpochMs = startedAtEpochMs,
         completedAtEpochMs = completedAtEpochMs,
-        updatedAtEpochMs = System.currentTimeMillis()
+        updatedAtEpochMs = System.currentTimeMillis(),
+        syncStatus = syncStatus
     )
 
 private fun WorkoutSessionEntity.toSnapshot(json: Json): WorkoutSessionSnapshot {

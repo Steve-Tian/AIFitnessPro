@@ -367,4 +367,229 @@ describe('AIFitnessPro backend foundation', () => {
 
     expect(response.body.error.code).toBe('NOT_FOUND');
   });
+
+  it('POST /v1/workouts/sessions/sync upserts a completed workout session with sets', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Workout sync device', externalId: 'workout-sync-device' })
+      .expect(201);
+    const userId = userRes.body.user.id;
+
+    await request(app.getHttpServer())
+      .put('/v1/users/me/profile')
+      .set('X-Dev-User-Id', userId)
+      .send({
+        gender: 'male', age: 25, heightCm: 175, weightKg: 70,
+        goal: 'strength', experience: 'beginner', daysPerWeek: 3,
+        equipment: ['full_gym'], persona: 'coach',
+      })
+      .expect(200);
+
+    const generated = await request(app.getHttpServer())
+      .post('/v1/plans/generate')
+      .set('X-Dev-User-Id', userId)
+      .expect(201);
+
+    const trainingDay = generated.body.plan.days.find((day: { dayType: string }) => day.dayType !== 'rest');
+    const exercise = trainingDay.exercises[0];
+    const sessionId = '11111111-1111-4111-8111-111111111111';
+    const setId = '22222222-2222-4222-8222-222222222222';
+
+    const response = await request(app.getHttpServer())
+      .post('/v1/workouts/sessions/sync')
+      .set('X-Dev-User-Id', userId)
+      .send({
+        session: {
+          id: sessionId,
+          trainingPlanId: generated.body.plan.id,
+          planDayIndex: trainingDay.dayIndex,
+          status: 'completed',
+          startedAt: '2026-05-20T08:00:00.000Z',
+          completedAt: '2026-05-20T09:00:00.000Z',
+          durationSeconds: 3600,
+        },
+        sets: [
+          {
+            id: setId,
+            exerciseId: exercise.exerciseId,
+            setIndex: 1,
+            targetReps: exercise.targetReps,
+            actualReps: exercise.targetReps,
+            weightKg: 40,
+            completedAt: '2026-05-20T08:15:00.000Z',
+          },
+        ],
+      })
+      .expect(200);
+
+    expect(response.body.session).toMatchObject({
+      id: sessionId,
+      status: 'completed',
+      durationSeconds: 3600,
+    });
+    expect(response.body.session.sets).toHaveLength(1);
+    expect(response.body.session.sets[0]).toMatchObject({
+      exerciseId: exercise.exerciseId,
+      setIndex: 1,
+      actualReps: exercise.targetReps,
+      weightKg: 40,
+    });
+
+    const stored = await prisma.workoutSession.findUnique({
+      where: { id: sessionId },
+      include: { sets: true },
+    });
+    expect(stored?.userId).toBe(userId);
+    expect(stored?.sets).toHaveLength(1);
+  });
+
+  it('POST /v1/workouts/sessions/sync rejects invalid exercise id', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Invalid workout device', externalId: 'invalid-workout-device' })
+      .expect(201);
+    const userId = userRes.body.user.id;
+
+    await request(app.getHttpServer())
+      .put('/v1/users/me/profile')
+      .set('X-Dev-User-Id', userId)
+      .send({
+        gender: 'male', age: 25, heightCm: 175, weightKg: 70,
+        goal: 'strength', experience: 'beginner', daysPerWeek: 3,
+        equipment: ['full_gym'], persona: 'coach',
+      })
+      .expect(200);
+
+    const generated = await request(app.getHttpServer())
+      .post('/v1/plans/generate')
+      .set('X-Dev-User-Id', userId)
+      .expect(201);
+
+    const trainingDay = generated.body.plan.days.find((day: { dayType: string }) => day.dayType !== 'rest');
+
+    const response = await request(app.getHttpServer())
+      .post('/v1/workouts/sessions/sync')
+      .set('X-Dev-User-Id', userId)
+      .send({
+        session: {
+          id: '33333333-3333-4333-8333-333333333333',
+          trainingPlanId: generated.body.plan.id,
+          planDayIndex: trainingDay.dayIndex,
+          status: 'completed',
+        },
+        sets: [
+          {
+            id: '44444444-4444-4444-8444-444444444444',
+            exerciseId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+            setIndex: 1,
+            actualReps: 10,
+          },
+        ],
+      })
+      .expect(404);
+
+    expect(response.body.error.code).toBe('NOT_FOUND');
+  });
+
+  it('GET /v1/exercises returns published exercise summaries', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Exercise list device', externalId: 'exercise-list-device' })
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .get('/v1/exercises')
+      .set('X-Dev-User-Id', userRes.body.user.id)
+      .expect(200);
+
+    expect(response.body.exercises.length).toBeGreaterThanOrEqual(70);
+    expect(response.body.exercises[0]).toMatchObject({
+      slug: expect.any(String),
+      nameCn: expect.any(String),
+      category: expect.any(String),
+      difficulty: expect.any(String),
+    });
+  });
+
+  it('GET /v1/exercises filters by category and keyword', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Exercise filter device', externalId: 'exercise-filter-device' })
+      .expect(201);
+    const userId = userRes.body.user.id;
+
+    const pushResponse = await request(app.getHttpServer())
+      .get('/v1/exercises?category=push')
+      .set('X-Dev-User-Id', userId)
+      .expect(200);
+
+    expect(pushResponse.body.exercises.length).toBeGreaterThan(0);
+    expect(pushResponse.body.exercises.every((item: { category: string }) => item.category === 'push')).toBe(true);
+
+    const searchResponse = await request(app.getHttpServer())
+      .get(`/v1/exercises?q=${encodeURIComponent('卧推')}`)
+      .set('X-Dev-User-Id', userId)
+      .expect(200);
+
+    expect(searchResponse.body.exercises.some((item: { slug: string }) => item.slug === 'bench_press')).toBe(true);
+  });
+
+  it('GET /v1/exercises/:slug returns exercise detail', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Exercise detail device', externalId: 'exercise-detail-device' })
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .get('/v1/exercises/bench_press')
+      .set('X-Dev-User-Id', userRes.body.user.id)
+      .expect(200);
+
+    expect(response.body.exercise).toMatchObject({
+      slug: 'bench_press',
+      nameCn: expect.any(String),
+      instructions: expect.any(Array),
+      commonMistakes: expect.any(Array),
+      safetyNotes: expect.any(Array),
+      previewMediaUrl: 'https://media.aifitnesspro.dev/bench_press.gif',
+      previewMediaType: 'gif',
+      media: expect.arrayContaining([
+        expect.objectContaining({
+          mediaType: 'gif',
+          url: 'https://media.aifitnesspro.dev/bench_press.gif',
+        }),
+      ]),
+    });
+  });
+
+  it('GET /v1/exercises returns preview media for core exercises', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Exercise media device', externalId: 'exercise-media-device' })
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .get('/v1/exercises')
+      .set('X-Dev-User-Id', userRes.body.user.id)
+      .expect(200);
+
+    const withMedia = response.body.exercises.filter(
+      (item: { previewMediaUrl: string | null }) => item.previewMediaUrl,
+    );
+    expect(withMedia.length).toBeGreaterThanOrEqual(30);
+  });
+
+  it('GET /v1/exercises/:slug returns 404 for unknown slug', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Exercise missing device', externalId: 'exercise-missing-device' })
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .get('/v1/exercises/not-a-real-exercise')
+      .set('X-Dev-User-Id', userRes.body.user.id)
+      .expect(404);
+
+    expect(response.body.error.code).toBe('NOT_FOUND');
+  });
 });

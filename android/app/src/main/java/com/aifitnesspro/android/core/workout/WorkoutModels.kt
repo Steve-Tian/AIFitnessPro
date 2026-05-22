@@ -15,6 +15,29 @@ enum class WorkoutStatus {
     fun isActive(): Boolean = this == IN_PROGRESS || this == RESTING || this == PAUSED
 }
 
+enum class WorkoutSyncStatus {
+    NONE,
+    PENDING,
+    SYNCED,
+    FAILED;
+
+    fun storageValue(): String = name.lowercase()
+
+    companion object {
+        fun fromTerminalStatus(status: WorkoutStatus): WorkoutSyncStatus =
+            if (status == WorkoutStatus.COMPLETED || status == WorkoutStatus.ABANDONED) PENDING else NONE
+    }
+}
+
+fun WorkoutStatus.toApiStatus(): String = when (this) {
+    WorkoutStatus.NOT_STARTED -> "not_started"
+    WorkoutStatus.IN_PROGRESS -> "in_progress"
+    WorkoutStatus.RESTING -> "resting"
+    WorkoutStatus.PAUSED -> "paused"
+    WorkoutStatus.COMPLETED -> "completed"
+    WorkoutStatus.ABANDONED -> "abandoned"
+}
+
 @Serializable
 data class WorkoutExercisePlan(
     val exerciseId: String,

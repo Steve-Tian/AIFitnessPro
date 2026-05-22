@@ -9,7 +9,7 @@ class AIFitnessApiClient(
         ignoreUnknownKeys = true
         explicitNulls = false
     }
-) : DevelopmentApi, ProfileApi, PlanApi {
+) : DevelopmentApi, ProfileApi, PlanApi, WorkoutApi, ExerciseApi {
     suspend fun health(): HealthResponse {
         val response = transport.execute(ApiRequest(method = "GET", path = "health"))
         return decodeOrThrow(response)
@@ -77,6 +77,56 @@ class AIFitnessApiClient(
             )
         )
         return decodeOrThrow<PlanEnvelope>(response).plan
+    }
+
+    override suspend fun syncWorkoutSession(devUserId: String, request: SyncWorkoutRequest): ApiWorkoutSession {
+        val response = transport.execute(
+            ApiRequest(
+                method = "POST",
+                path = "v1/workouts/sessions/sync",
+                headers = mapOf(
+                    "Content-Type" to "application/json; charset=utf-8",
+                    "X-Dev-User-Id" to devUserId
+                ),
+                body = json.encodeToString(request)
+            )
+        )
+        return decodeOrThrow<WorkoutSessionEnvelope>(response).session
+    }
+
+    override suspend fun listExercises(
+        devUserId: String,
+        category: String?,
+        difficulty: String?,
+        equipment: String?,
+        query: String?
+    ): List<ApiExerciseSummary> {
+        val params = buildList {
+            category?.takeIf { it.isNotBlank() }?.let { add("category=$it") }
+            difficulty?.takeIf { it.isNotBlank() }?.let { add("difficulty=$it") }
+            equipment?.takeIf { it.isNotBlank() }?.let { add("equipment=$it") }
+            query?.takeIf { it.isNotBlank() }?.let { add("q=${java.net.URLEncoder.encode(it, Charsets.UTF_8.name())}") }
+        }.joinToString("&")
+        val path = if (params.isEmpty()) "v1/exercises" else "v1/exercises?$params"
+        val response = transport.execute(
+            ApiRequest(
+                method = "GET",
+                path = path,
+                headers = mapOf("X-Dev-User-Id" to devUserId)
+            )
+        )
+        return decodeOrThrow<ExerciseListEnvelope>(response).exercises
+    }
+
+    override suspend fun getExercise(devUserId: String, slug: String): ApiExerciseDetail {
+        val response = transport.execute(
+            ApiRequest(
+                method = "GET",
+                path = "v1/exercises/$slug",
+                headers = mapOf("X-Dev-User-Id" to devUserId)
+            )
+        )
+        return decodeOrThrow<ExerciseDetailEnvelope>(response).exercise
     }
 
     private inline fun <reified T> decodeOrThrow(response: ApiResponse): T {

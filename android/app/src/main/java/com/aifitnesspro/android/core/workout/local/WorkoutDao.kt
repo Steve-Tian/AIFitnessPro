@@ -42,4 +42,26 @@ interface WorkoutDao {
 
     @Query("DELETE FROM workout_sets WHERE sessionId = :sessionId")
     suspend fun deleteSetsForSession(sessionId: String)
+
+    @Query(
+        """
+        SELECT * FROM workout_sessions
+        WHERE syncStatus IN ('pending', 'failed')
+          AND status IN ('COMPLETED', 'ABANDONED')
+        ORDER BY updatedAtEpochMs ASC
+        """
+    )
+    suspend fun getPendingSyncSessions(): List<WorkoutSessionEntity>
+
+    @Query("UPDATE workout_sessions SET syncStatus = :syncStatus WHERE id = :sessionId")
+    suspend fun updateSyncStatus(sessionId: String, syncStatus: String)
+
+    @Query(
+        """
+        SELECT DISTINCT planDayIndex FROM workout_sessions
+        WHERE planId = :planId AND status = 'COMPLETED'
+        ORDER BY planDayIndex ASC
+        """
+    )
+    fun observeCompletedDayIndices(planId: String): Flow<List<Int>>
 }

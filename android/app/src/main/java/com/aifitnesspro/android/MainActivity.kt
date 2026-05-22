@@ -14,6 +14,8 @@ import com.aifitnesspro.android.core.session.DataStoreApiSessionStore
 import com.aifitnesspro.android.core.settings.ConsentRepository
 import com.aifitnesspro.android.core.ui.AIFitnessProTheme
 import com.aifitnesspro.android.core.workout.WorkoutSessionRepository
+import com.aifitnesspro.android.core.workout.WorkoutSyncRepository
+import com.aifitnesspro.android.core.exercise.ExerciseRepository
 import com.aifitnesspro.android.core.workout.local.WorkoutDatabase
 
 class MainActivity : ComponentActivity() {
@@ -32,9 +34,13 @@ class MainActivity : ComponentActivity() {
             store = DataStorePlanStore(applicationContext),
             api = apiClient
         )
-        val workoutRepository = WorkoutSessionRepository(
-            dao = WorkoutDatabase.create(applicationContext).workoutDao()
+        val workoutDao = WorkoutDatabase.create(applicationContext).workoutDao()
+        val workoutRepository = WorkoutSessionRepository(dao = workoutDao)
+        val workoutSyncRepository = WorkoutSyncRepository(
+            dao = workoutDao,
+            workoutApi = apiClient
         )
+        val exerciseRepository = ExerciseRepository(api = apiClient)
         setContent {
             AIFitnessProTheme {
                 AIFitnessProApp(
@@ -42,7 +48,9 @@ class MainActivity : ComponentActivity() {
                     apiSessionRepository = apiSessionRepository,
                     apiClient = apiClient,
                     planRepository = planRepository,
-                    workoutRepository = workoutRepository
+                    workoutRepository = workoutRepository,
+                    workoutSyncRepository = workoutSyncRepository,
+                    exerciseRepository = exerciseRepository
                 )
             }
         }

@@ -100,6 +100,58 @@ class AIFitnessApiClientTest {
     }
 
     @Test
+    fun syncWorkoutSessionPostsCompletedSession() = runTest {
+        val body = """
+            {"session":{"id":"s1","status":"completed","trainingPlanId":"p1","planDayId":"d1","sets":[{"id":"set1","exerciseId":"e1","nameCn":"卧推","setIndex":1,"actualReps":10,"weightKg":40.0}]}}
+        """.trimIndent()
+        val transport = RecordingTransport(ApiResponse(statusCode = 200, body = body))
+        val client = AIFitnessApiClient(transport)
+
+        val result = client.syncWorkoutSession(
+            devUserId = "u1",
+            request = SyncWorkoutRequest(
+                session = SyncWorkoutSessionRequest(
+                    id = "s1",
+                    trainingPlanId = "p1",
+                    planDayIndex = 0,
+                    status = "completed"
+                ),
+                sets = listOf(
+                    SyncWorkoutSetRequest(
+                        id = "set1",
+                        exerciseId = "e1",
+                        setIndex = 1,
+                        actualReps = 10,
+                        weightKg = 40.0
+                    )
+                )
+            )
+        )
+
+        assertEquals("s1", result.id)
+        assertEquals("POST", transport.lastRequest.method)
+        assertEquals("v1/workouts/sessions/sync", transport.lastRequest.path)
+        assertEquals("u1", transport.lastRequest.headers["X-Dev-User-Id"])
+    }
+
+    @Test
+    fun listExercisesReturnsSummaries() = runTest {
+        val body = """
+            {"exercises":[{"slug":"bench_press","nameCn":"杠铃卧推","category":"push","difficulty":"intermediate","equipment":["full_gym"],"primaryMuscles":["chest"]}]}
+        """.trimIndent()
+        val transport = RecordingTransport(ApiResponse(statusCode = 200, body = body))
+        val client = AIFitnessApiClient(transport)
+
+        val result = client.listExercises(devUserId = "u1", category = "push", query = "卧推")
+
+        assertEquals(1, result.size)
+        assertEquals("bench_press", result[0].slug)
+        assertEquals("GET", transport.lastRequest.method)
+        assertTrue(transport.lastRequest.path.startsWith("v1/exercises?"))
+        assertEquals("u1", transport.lastRequest.headers["X-Dev-User-Id"])
+    }
+
+    @Test
     fun getCurrentUserSendsDevelopmentUserHeader() = runTest {
         val transport = RecordingTransport(userResponse("dev-user-2", onboardingCompleted = true))
         val client = AIFitnessApiClient(transport)

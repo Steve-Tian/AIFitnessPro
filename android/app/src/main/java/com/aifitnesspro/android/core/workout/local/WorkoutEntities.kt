@@ -19,7 +19,8 @@ data class WorkoutSessionEntity(
     val repsInput: String,
     val startedAtEpochMs: Long?,
     val completedAtEpochMs: Long?,
-    val updatedAtEpochMs: Long
+    val updatedAtEpochMs: Long,
+    val syncStatus: String = "none"
 )
 
 @Entity(tableName = "workout_sets")

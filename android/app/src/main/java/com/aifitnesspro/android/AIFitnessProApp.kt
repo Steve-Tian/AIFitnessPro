@@ -15,6 +15,8 @@ import com.aifitnesspro.android.core.session.ApiSessionRepository
 import com.aifitnesspro.android.core.settings.ConsentRepository
 import com.aifitnesspro.android.core.settings.ConsentState
 import com.aifitnesspro.android.core.workout.WorkoutSessionRepository
+import com.aifitnesspro.android.core.workout.WorkoutSyncRepository
+import com.aifitnesspro.android.core.exercise.ExerciseRepository
 import com.aifitnesspro.android.feature.consent.ConsentScreen
 import com.aifitnesspro.android.feature.onboarding.OnboardingScreen
 import com.aifitnesspro.android.navigation.AppNavHost
@@ -29,7 +31,9 @@ fun AIFitnessProApp(
     apiSessionRepository: ApiSessionRepository,
     apiClient: AIFitnessApiClient,
     planRepository: PlanRepository,
-    workoutRepository: WorkoutSessionRepository
+    workoutRepository: WorkoutSessionRepository,
+    workoutSyncRepository: WorkoutSyncRepository,
+    exerciseRepository: ExerciseRepository
 ) {
     val scope = rememberCoroutineScope()
     val consent by consentRepository.consentState.collectAsState(initial = ConsentState.Empty)
@@ -49,6 +53,12 @@ fun AIFitnessProApp(
         }
 
         val connected = apiConnectionState as? ApiConnectionState.Connected
+        LaunchedEffect(connected?.user?.id) {
+            connected?.user?.id?.let { userId ->
+                runCatching { workoutSyncRepository.syncPendingSessions(userId) }
+            }
+        }
+
         if (connected != null && !onboardingCompleted) {
             OnboardingScreen(
                 onComplete = { formState ->
@@ -61,7 +71,9 @@ fun AIFitnessProApp(
             AppNavHost(
                 apiConnectionState = apiConnectionState,
                 planRepository = planRepository,
-                workoutRepository = workoutRepository
+                workoutRepository = workoutRepository,
+                workoutSyncRepository = workoutSyncRepository,
+                exerciseRepository = exerciseRepository
             )
         }
     } else {

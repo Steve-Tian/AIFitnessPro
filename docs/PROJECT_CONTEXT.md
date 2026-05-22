@@ -12,13 +12,13 @@
 
 项目目标：构建 Kotlin + Jetpack Compose 原生 Android App，并满足国内安卓应用市场合规要求。
 
-当前开发阶段：Plan 4 - Native Workout Session Loop 已实现（本地 Room + 状态机 + UI，待手动烟测）。
+当前开发阶段：Plan 4 训练同步 + Plan 5 动作库（70 条 + 核心 30 媒体 seed）已实现；待手动烟测与真实媒体文件上线。
 
-当前运行状态：Plan 1–3 已合并 `main`；Plan 4 训练 Session 循环已在 `main` 工作区实现：Room 本地持久化、状态机、组/次/重量录入、休息计时、暂停/恢复、完成摘要、首页/训练 Tab 入口与中断恢复。
+当前运行状态：后端 e2e 22 项全通过；Android 编译通过；`npm run seed` 写入 70 动作 + 30 媒体。
 
 ## 2. 技术栈
 
-Android：Kotlin、Gradle、Jetpack Compose、Navigation Compose、DataStore、Room、JUnit。
+Android：Kotlin、Gradle、Jetpack Compose、Navigation Compose、DataStore、Room、Coil、JUnit。
 
 本地构建环境：
 
@@ -28,106 +28,94 @@ Android：Kotlin、Gradle、Jetpack Compose、Navigation Compose、DataStore、R
 - AVD：`AIFitnessPro_API35`（Pixel 8，Android 15 / API 35）
 - Gradle：本机构建请用 `GRADLE_USER_HOME=$HOME/.gradle`
 
-后端：NestJS + PostgreSQL + Prisma（训练同步 API 尚未实现）。
+后端：NestJS + PostgreSQL + Prisma。
 
-本地数据：DataStore（隐私同意、开发用户、计划 JSON）；Room（训练 Session 与组记录）。
+媒体 CDN（占位）：`https://media.aifitnesspro.dev/{slug}.gif`
 
 ## 3. 当前主要目录结构
 
 ```text
 docs/                           项目文档、持续上下文
 android/                        Android 原生工程
-  core/workout/                 状态机、Room、WorkoutSessionRepository
-  feature/workout/              WorkoutSessionScreen
-backend/                        NestJS 后端（plans 模块已完成）
+  feature/exercise/             列表/详情/ExerciseMediaPreview（Coil）
+  core/workout/                 状态机、Room、Session/Sync Repository
+backend/
+  prisma/data/                  exercise-catalog.json、exercise-media.json
+  prisma/seed-media.ts          核心 30 媒体 seed 逻辑
+  src/exercises/                动作库 API
+  src/workouts/                 训练同步 API
 ```
 
 ## 4. 当前已完成内容
 
-**Plan 1–3（已合并）**
-- Android 壳、后端基础、Onboarding、28 天 PPL 计划生成、首页今日卡片。
+**Plan 1–3（已合并）**：Android 壳、后端基础、Onboarding、28 天 PPL 计划。
 
-**Plan 4（本轮）**
-- `WorkoutStateMachine`：NotStarted → InProgress ↔ Resting ↔ Paused → Completed / Abandoned
-- Room：`workout_sessions`、`workout_sets` 表，每完成一组立即写入
-- `WorkoutSessionRepository`：prepare/start/completeSet/skipRest/pause/resume/discard
-- `WorkoutSessionScreen`：准备页、组数录入、休息倒计时、完成摘要、放弃确认
-- 首页「开始训练」、进行中「继续训练」、训练 Tab 计划日列表
-- 后台切应用自动 Pause，回到前台 Resume
-- 单元测试：`WorkoutStateMachineTest`（6 项）
-- `./gradlew :app:testDebugUnitTest :app:assembleDebug` 通过
+**Plan 4**：训练 Session 循环 + `POST /v1/workouts/sessions/sync` + Android 离线同步队列。
+
+**Plan 5 动作库**
+- 70 条 `exercise-catalog.json`
+- `GET /v1/exercises` 列表/筛选、`GET /v1/exercises/:slug` 详情
+- Android 动作库 Tab、搜索、分类、详情、返回
+- **核心 30 媒体**：`exercise-media.json` + `seedExerciseMedia()`；API 返回 `previewMediaUrl`
+- Android **Coil** 加载预览图（列表缩略图 + 详情大图）；无媒体时显示「动图同步中」占位
+- e2e：bench_press 媒体断言、列表 ≥30 条带 preview
 
 ## 5. 本轮完成内容
 
-- 新增 Room + KSP 依赖与 `WorkoutDatabase`
-- 实现训练状态机与 Room 持久化
-- 实现 `WorkoutSessionScreen` 全屏训练流程
-- 接线 `AppNavHost`、`HomeScreen`、`TrainingScreen`、`MainActivity`
-- Android 单元测试与 debug 构建验证通过
+- **训练 Tab 完成状态**：Room 查询 `COMPLETED` 的 `planDayIndex`；卡片显示「已完成」、次要底色、「再练一次」
+- **同步修复**：无组记录的 pending Session 标记为 `synced`，不再永久重试
+- 单元测试：`WorkoutSyncRepositoryTest` 新增空组跳过用例
 
 ## 6. 本轮修改文件
 
+- `android/.../core/workout/local/WorkoutDao.kt`
+- `android/.../core/workout/WorkoutSessionRepository.kt`
+- `android/.../core/workout/WorkoutSyncRepository.kt`
+- `android/.../feature/training/TrainingScreen.kt`
+- `android/.../test/.../WorkoutSyncRepositoryTest.kt`
 - `docs/PROJECT_CONTEXT.md`
-- `android/build.gradle.kts`、`android/app/build.gradle.kts`
-- `android/app/src/main/java/.../core/workout/`
-- `android/app/src/main/java/.../feature/workout/WorkoutSessionScreen.kt`
-- `android/app/src/main/java/.../feature/home/HomeScreen.kt`
-- `android/app/src/main/java/.../feature/training/TrainingScreen.kt`
-- `android/app/src/main/java/.../navigation/AppDestination.kt`、`AppNavHost.kt`
-- `android/app/src/main/java/.../AIFitnessProApp.kt`、`MainActivity.kt`
-- `android/app/src/test/java/.../core/workout/WorkoutStateMachineTest.kt`
 
 ## 7. 当前未完成事项
 
-- 手动烟测：从首页开始训练，完成若干组，切后台再恢复，验证 Room 持久化。
-- 后端训练同步 API（`workout_sessions` / `workout_sets` POST）与 Android 同步队列。
-- 动作级 RPE 反馈、训练 Tab 完成状态标记。
-- Plan 5：动作库 70+ 内容与媒体。
+- 手动烟测：动作库媒体、训练完成 → 训练 Tab 显示已完成。
+- 上传真实 GIF/视频到 CDN，替换占位 URL。
+- 动作级 RPE 反馈。
 - Plan 6：营养、成就、账号注销。
-- 生产认证（仍用 `X-Dev-User-Id`）。
 
 ## 8. 已知 bug 或风险
 
-- 训练数据仅存本地 Room，卸载 App 或清数据会丢失；后端 sync 未实现。
-- 休息倒计时 LaunchedEffect 在重组时可能重启；烟测时留意计时准确性。
+- 媒体 URL 为占位域名，若 CDN 未部署，App 显示「预览暂不可用」但步骤文案仍可用。
+- Room `fallbackToDestructiveMigration()` 会清本地训练数据。
 - Android debug URL 固定 `http://10.0.2.2:8000/`。
-- Cursor 沙箱 Gradle 可能损坏 wrapper zip；本机构建用 `GRADLE_USER_HOME=$HOME/.gradle`。
 
 ## 9. 当前暂停点
 
-Plan 4 本地训练循环已实现并通过自动化测试，暂停在**手动烟测前**。
+Plan 4/5 功能与训练 Tab 完成状态已实现，暂停在**手动烟测 + 提交未 commit 工作区前**。
 
 ## 10. 下一步开发任务
 
-1. 手动烟测完整训练流程（开始 → 完成组 → 休息 → 完成训练 → 中断恢复）。
-2. 后端 + Android：训练 Session 同步 API 与离线队列。
-3. 继续 Plan 5：动作库内容与媒体。
+1. 手动烟测：完成训练 → 训练 Tab 对应 Day 显示「已完成」；动作库预览。
+2. 部署 `media.aifitnesspro.dev` 或更新 seed URL。
+3. 提交工作区变更（建议一个 feat commit 涵盖 sync + library + media + training status）。
+4. Plan 6 或动作级 RPE。
 
 ## 11. 下一个 AI 会话应该从哪里继续
 
 ```bash
 cd "/Users/steve/Desktop/Smart Everything/AIFitnessPro"
 git status
+cd backend && npm run seed && npm test
 ```
 
-烟测命令：
-
-```bash
-# 后端
-cd backend && docker compose up -d postgres && npm run prisma:migrate && npm run seed && npm start
-
-# Android
-cd android && GRADLE_USER_HOME=$HOME/.gradle \
-  ANDROID_HOME=$HOME/Library/Android/sdk \
-  JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home \
-  ./gradlew :app:assembleDebug
-adb -s emulator-5554 install -r app/build/outputs/apk/debug/app-debug.apk
-```
-
-验证：首页点「开始训练」→ 录入组数 → 休息倒计时 → 完成全部组 → 摘要页 → 杀进程重开 → 「继续训练」恢复。
+烟测：完成 Day 1 训练 → 训练 Tab 显示「已完成」；动作库卧推详情预览。
 
 ## 12. 建议 git commit message
 
 ```text
-feat: add native workout session loop with Room persistence
+feat: workout sync, exercise library, media previews, and training completion UI
+
+- Workout sync API with Android offline queue
+- 70-exercise catalog, core 30 media seed, Coil previews
+- Training tab marks completed plan days from local Room
+- Skip empty abandoned sessions in sync queue
 ```

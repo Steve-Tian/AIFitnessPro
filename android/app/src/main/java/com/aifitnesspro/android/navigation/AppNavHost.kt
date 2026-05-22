@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,23 +18,30 @@ import androidx.navigation.navArgument
 import com.aifitnesspro.android.core.plan.PlanRepository
 import com.aifitnesspro.android.core.session.ApiConnectionState
 import com.aifitnesspro.android.core.workout.WorkoutSessionRepository
+import com.aifitnesspro.android.core.workout.WorkoutSyncRepository
+import com.aifitnesspro.android.core.exercise.ExerciseRepository
 import com.aifitnesspro.android.feature.exercise.ExerciseLibraryScreen
+import com.aifitnesspro.android.feature.exercise.ExerciseDetailScreen
 import com.aifitnesspro.android.feature.home.HomeScreen
 import com.aifitnesspro.android.feature.profile.ProfileScreen
 import com.aifitnesspro.android.feature.training.TrainingScreen
 import com.aifitnesspro.android.feature.workout.WorkoutSessionScreen
+import kotlinx.coroutines.launch
 
 @Composable
 fun AppNavHost(
     apiConnectionState: ApiConnectionState,
     planRepository: PlanRepository,
-    workoutRepository: WorkoutSessionRepository
+    workoutRepository: WorkoutSessionRepository,
+    workoutSyncRepository: WorkoutSyncRepository,
+    exerciseRepository: ExerciseRepository
 ) {
+    val scope = rememberCoroutineScope()
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route ?: AppDestination.Home.route
     val devUserId = (apiConnectionState as? ApiConnectionState.Connected)?.user?.id
-    val showBottomBar = !currentRoute.startsWith("workout_session")
+    val showBottomBar = !currentRoute.startsWith("workout_session") && !currentRoute.startsWith("exercise_detail")
 
     Scaffold(
         bottomBar = {
@@ -86,7 +94,15 @@ fun AppNavHost(
                     }
                 )
             }
-            composable(AppDestination.Exercise.route) { ExerciseLibraryScreen() }
+            composable(AppDestination.Exercise.route) {
+                ExerciseLibraryScreen(
+                    devUserId = devUserId,
+                    exerciseRepository = exerciseRepository,
+                    onOpenExercise = { slug ->
+                        navController.navigate(AppDestination.exerciseDetailRoute(slug))
+                    }
+                )
+            }
             composable(AppDestination.Profile.route) {
                 ProfileScreen(apiConnectionState = apiConnectionState)
             }
@@ -100,11 +116,28 @@ fun AppNavHost(
                     planRepository = planRepository,
                     workoutRepository = workoutRepository,
                     onFinished = {
+                        devUserId?.let { userId ->
+                            scope.launch {
+                                runCatching { workoutSyncRepository.syncPendingSessions(userId) }
+                            }
+                        }
                         navController.navigate(AppDestination.Home.route) {
                             popUpTo(AppDestination.Home.route) { inclusive = true }
                             launchSingleTop = true
                         }
                     },
+                    onBack = { navController.popBackStack() }
+                )
+            }
+            composable(
+                route = AppDestination.ExerciseDetailRoute,
+                arguments = listOf(navArgument("slug") { type = NavType.StringType })
+            ) { entry ->
+                val slug = entry.arguments?.getString("slug").orEmpty()
+                ExerciseDetailScreen(
+                    slug = slug,
+                    devUserId = devUserId,
+                    exerciseRepository = exerciseRepository,
                     onBack = { navController.popBackStack() }
                 )
             }
