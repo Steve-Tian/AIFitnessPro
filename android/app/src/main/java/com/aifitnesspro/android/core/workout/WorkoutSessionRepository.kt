@@ -154,7 +154,7 @@ private fun WorkoutSessionSnapshot.toEntity(json: Json, syncStatus: String): Wor
         completedAtEpochMs = completedAtEpochMs,
         updatedAtEpochMs = System.currentTimeMillis(),
         syncStatus = syncStatus,
-        exerciseFeedbackJson = json.encodeToString(snapshot.exerciseFeedbacks)
+        exerciseFeedbackJson = json.encodeToString(exerciseFeedbacks)
     )
 
 private fun WorkoutSessionEntity.toSnapshot(json: Json): WorkoutSessionSnapshot {

@@ -67,7 +67,7 @@ fun TrainingScreen(
                 TrainingDayCard(
                     day = day,
                     isCompleted = day.dayIndex in completedDays,
-                    isActive = activeSession?.planDayIndex == day.dayIndex && activeSession.status.isActive(),
+                    isActive = activeSession?.let { it.planDayIndex == day.dayIndex && it.status.isActive() } ?: false,
                     onStartWorkout = onStartWorkout
                 )
             }

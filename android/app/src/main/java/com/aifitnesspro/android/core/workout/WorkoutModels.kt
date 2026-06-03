@@ -36,6 +36,7 @@ fun WorkoutStatus.toApiStatus(): String = when (this) {
     WorkoutStatus.IN_PROGRESS -> "in_progress"
     WorkoutStatus.RESTING -> "resting"
     WorkoutStatus.PAUSED -> "paused"
+    WorkoutStatus.AWAITING_EXERCISE_RPE -> "in_progress"
     WorkoutStatus.COMPLETED -> "completed"
     WorkoutStatus.ABANDONED -> "abandoned"
 }

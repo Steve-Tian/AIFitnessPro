@@ -25,9 +25,10 @@ class MainActivity : ComponentActivity() {
         val apiClient = AIFitnessApiClient(
             transport = HttpUrlConnectionTransport(ApiConfig.backendBaseUrl)
         )
+        val apiSessionStore = DataStoreApiSessionStore(applicationContext)
         val apiSessionRepository = ApiSessionRepository(
             api = apiClient,
-            store = DataStoreApiSessionStore(applicationContext),
+            store = apiSessionStore,
             deviceIdentity = AndroidDeviceIdentityProvider(applicationContext).get()
         )
         val planRepository = PlanRepository(
@@ -46,6 +47,7 @@ class MainActivity : ComponentActivity() {
                 AIFitnessProApp(
                     consentRepository = consentRepository,
                     apiSessionRepository = apiSessionRepository,
+                    apiSessionStore = apiSessionStore,
                     apiClient = apiClient,
                     planRepository = planRepository,
                     workoutRepository = workoutRepository,

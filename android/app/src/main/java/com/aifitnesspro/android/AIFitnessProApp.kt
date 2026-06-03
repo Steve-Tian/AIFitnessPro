@@ -9,14 +9,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.aifitnesspro.android.core.api.AIFitnessApiClient
+import com.aifitnesspro.android.core.exercise.ExerciseRepository
 import com.aifitnesspro.android.core.plan.PlanRepository
 import com.aifitnesspro.android.core.session.ApiConnectionState
 import com.aifitnesspro.android.core.session.ApiSessionRepository
+import com.aifitnesspro.android.core.session.ApiSessionStore
 import com.aifitnesspro.android.core.settings.ConsentRepository
 import com.aifitnesspro.android.core.settings.ConsentState
 import com.aifitnesspro.android.core.workout.WorkoutSessionRepository
 import com.aifitnesspro.android.core.workout.WorkoutSyncRepository
-import com.aifitnesspro.android.core.exercise.ExerciseRepository
 import com.aifitnesspro.android.feature.consent.ConsentScreen
 import com.aifitnesspro.android.feature.onboarding.OnboardingScreen
 import com.aifitnesspro.android.navigation.AppNavHost
@@ -29,6 +30,7 @@ private const val TERMS_VERSION = "2026-05-18"
 fun AIFitnessProApp(
     consentRepository: ConsentRepository,
     apiSessionRepository: ApiSessionRepository,
+    apiSessionStore: ApiSessionStore,
     apiClient: AIFitnessApiClient,
     planRepository: PlanRepository,
     workoutRepository: WorkoutSessionRepository,
@@ -70,10 +72,18 @@ fun AIFitnessProApp(
         } else {
             AppNavHost(
                 apiConnectionState = apiConnectionState,
+                apiClient = apiClient,
                 planRepository = planRepository,
                 workoutRepository = workoutRepository,
                 workoutSyncRepository = workoutSyncRepository,
-                exerciseRepository = exerciseRepository
+                exerciseRepository = exerciseRepository,
+                onAccountDeleted = {
+                    scope.launch {
+                        apiSessionStore.clearUserId()
+                        apiConnectionState = ApiConnectionState.Idle
+                        onboardingCompleted = false
+                    }
+                }
             )
         }
     } else {

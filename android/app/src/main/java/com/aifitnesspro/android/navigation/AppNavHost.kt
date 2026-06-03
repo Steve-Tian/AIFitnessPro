@@ -15,13 +15,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.aifitnesspro.android.core.api.AIFitnessApiClient
+import com.aifitnesspro.android.core.exercise.ExerciseRepository
 import com.aifitnesspro.android.core.plan.PlanRepository
 import com.aifitnesspro.android.core.session.ApiConnectionState
 import com.aifitnesspro.android.core.workout.WorkoutSessionRepository
 import com.aifitnesspro.android.core.workout.WorkoutSyncRepository
-import com.aifitnesspro.android.core.exercise.ExerciseRepository
-import com.aifitnesspro.android.feature.exercise.ExerciseLibraryScreen
 import com.aifitnesspro.android.feature.exercise.ExerciseDetailScreen
+import com.aifitnesspro.android.feature.exercise.ExerciseLibraryScreen
 import com.aifitnesspro.android.feature.home.HomeScreen
 import com.aifitnesspro.android.feature.profile.ProfileScreen
 import com.aifitnesspro.android.feature.training.TrainingScreen
@@ -31,10 +32,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun AppNavHost(
     apiConnectionState: ApiConnectionState,
+    apiClient: AIFitnessApiClient,
     planRepository: PlanRepository,
     workoutRepository: WorkoutSessionRepository,
     workoutSyncRepository: WorkoutSyncRepository,
-    exerciseRepository: ExerciseRepository
+    exerciseRepository: ExerciseRepository,
+    onAccountDeleted: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
@@ -104,7 +107,11 @@ fun AppNavHost(
                 )
             }
             composable(AppDestination.Profile.route) {
-                ProfileScreen(apiConnectionState = apiConnectionState)
+                ProfileScreen(
+                    devUserId = devUserId,
+                    apiClient = apiClient,
+                    onAccountDeleted = onAccountDeleted
+                )
             }
             composable(
                 route = AppDestination.WorkoutSessionRoute,

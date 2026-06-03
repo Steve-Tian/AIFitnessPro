@@ -53,6 +53,48 @@ class AIFitnessApiClient(
         return decodeOrThrow<UserEnvelope>(response).user
     }
 
+    override suspend fun getUserStats(devUserId: String): ApiUserStats {
+        val response = transport.execute(
+            ApiRequest(
+                method = "GET",
+                path = "v1/users/me/stats",
+                headers = mapOf("X-Dev-User-Id" to devUserId)
+            )
+        )
+        return decodeOrThrow<StatsEnvelope>(response).stats
+    }
+
+    override suspend fun listAchievements(devUserId: String): List<ApiAchievement> {
+        val response = transport.execute(
+            ApiRequest(
+                method = "GET",
+                path = "v1/achievements",
+                headers = mapOf("X-Dev-User-Id" to devUserId)
+            )
+        )
+        return decodeOrThrow<AchievementListEnvelope>(response).achievements
+    }
+
+    override suspend fun deleteAccount(devUserId: String) {
+        val response = transport.execute(
+            ApiRequest(
+                method = "DELETE",
+                path = "v1/users/me",
+                headers = mapOf("X-Dev-User-Id" to devUserId)
+            )
+        )
+        if (response.statusCode !in 200..299) {
+            val apiError = runCatching {
+                json.decodeFromString<ApiErrorEnvelope>(response.body).error
+            }.getOrNull()
+            throw ApiException(
+                statusCode = response.statusCode,
+                code = apiError?.code ?: "HTTP_${response.statusCode}",
+                message = apiError?.message ?: "账号注销失败"
+            )
+        }
+    }
+
     override suspend fun generatePlan(devUserId: String): ApiActivePlan {
         val response = transport.execute(
             ApiRequest(

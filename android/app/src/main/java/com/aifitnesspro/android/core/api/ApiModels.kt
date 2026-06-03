@@ -58,6 +58,25 @@ data class ApiUserSettings(
 )
 
 @Serializable
+data class ApiAchievement(
+    val id: String,
+    val slug: String,
+    val nameCn: String,
+    val descCn: String,
+    val iconEmoji: String,
+    val sortOrder: Int,
+    val unlockedAt: String? = null
+)
+
+@Serializable
+data class ApiUserStats(
+    val completedSessions: Int,
+    val currentStreak: Int,
+    val longestStreak: Int,
+    val totalDurationSeconds: Int
+)
+
+@Serializable
 internal data class UserEnvelope(
     val user: ApiUser
 )
@@ -71,4 +90,14 @@ internal data class ApiErrorEnvelope(
 internal data class ApiErrorBody(
     val code: String,
     val message: String
+)
+
+@Serializable
+internal data class AchievementListEnvelope(
+    val achievements: List<ApiAchievement>
+)
+
+@Serializable
+internal data class StatsEnvelope(
+    val stats: ApiUserStats
 )

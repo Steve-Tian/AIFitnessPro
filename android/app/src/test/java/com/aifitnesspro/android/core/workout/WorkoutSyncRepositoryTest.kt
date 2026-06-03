@@ -6,6 +6,7 @@ import com.aifitnesspro.android.core.api.WorkoutApi
 import com.aifitnesspro.android.core.workout.local.WorkoutDao
 import com.aifitnesspro.android.core.workout.local.WorkoutSessionEntity
 import com.aifitnesspro.android.core.workout.local.WorkoutSetEntity
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -122,5 +123,5 @@ private class FakeWorkoutDao(
         syncStatuses[sessionId] = syncStatus
     }
 
-    override fun observeCompletedDayIndices(planId: String) = flowOf(emptyList())
+    override fun observeCompletedDayIndices(planId: String): Flow<List<Int>> = flowOf(emptyList())
 }
