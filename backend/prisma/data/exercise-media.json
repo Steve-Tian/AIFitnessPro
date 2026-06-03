@@ -1022,5 +1022,613 @@
     "source": "free-exercise-db",
     "license": "Unlicense",
     "sortOrder": 1
+  },
+  {
+    "slug": "decline_bench_press",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_Barbell_Bench_Press/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "decline_bench_press",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_Barbell_Bench_Press/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "incline_dumbbell_fly",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Flyes/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "incline_dumbbell_fly",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Flyes/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "flat_bench_cable_fly",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Flat_Bench_Cable_Flyes/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "flat_bench_cable_fly",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Flat_Bench_Cable_Flyes/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "close_grip_lat_pulldown",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Close-Grip_Front_Lat_Pulldown/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "close_grip_lat_pulldown",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Close-Grip_Front_Lat_Pulldown/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "underhand_lat_pulldown",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Underhand_Cable_Pulldowns/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "underhand_lat_pulldown",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Underhand_Cable_Pulldowns/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "straight_arm_pulldown",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rope_Straight-Arm_Pulldown/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "straight_arm_pulldown",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rope_Straight-Arm_Pulldown/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "incline_dumbbell_row",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Incline_Row/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "incline_dumbbell_row",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Incline_Row/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "dumbbell_pullover",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent-Arm_Dumbbell_Pullover/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "dumbbell_pullover",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent-Arm_Dumbbell_Pullover/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "barbell_rear_delt_row",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Rear_Delt_Row/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "barbell_rear_delt_row",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Rear_Delt_Row/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "cable_rear_delt_fly",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Rear_Delt_Fly/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "cable_rear_delt_fly",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Rear_Delt_Fly/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "low_pulley_rear_delt",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Low-Pulley_Side_Lateral/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "low_pulley_rear_delt",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Low-Pulley_Side_Lateral/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "cable_lateral_raise",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Seated_Lateral_Raise/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "cable_lateral_raise",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Seated_Lateral_Raise/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "seated_dumbbell_shoulder_press",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Shoulder_Press/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "seated_dumbbell_shoulder_press",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Shoulder_Press/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "overhead_cable_tricep",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Rope_Overhead_Triceps_Extension/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "overhead_cable_tricep",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Rope_Overhead_Triceps_Extension/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "barbell_overhead_tricep",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Overhead_Barbell_Triceps_Extension/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "barbell_overhead_tricep",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Overhead_Barbell_Triceps_Extension/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "incline_dumbbell_curl",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Curl/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "incline_dumbbell_curl",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Curl/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "spider_curl",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Spider_Curl/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "spider_curl",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Spider_Curl/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "zottman_curl",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Zottman_Curl/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "zottman_curl",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Zottman_Curl/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "cross_body_hammer_curl",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cross_Body_Hammer_Curl/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "cross_body_hammer_curl",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cross_Body_Hammer_Curl/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "single_leg_glute_bridge",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Single_Leg_Glute_Bridge/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "single_leg_glute_bridge",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Single_Leg_Glute_Bridge/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "cable_glute_kickback",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Legged_Cable_Kickback/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "cable_glute_kickback",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Legged_Cable_Kickback/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "glute_kickback",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Glute_Kickback/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "glute_kickback",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Glute_Kickback/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "good_morning",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Good_Morning/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "good_morning",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Good_Morning/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "kettlebell_swing",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Kettlebell_Swings/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "kettlebell_swing",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Kettlebell_Swings/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "barbell_hack_squat",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hack_Squat/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "barbell_hack_squat",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hack_Squat/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "front_squat",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Squat_Clean_Grip/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "front_squat",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Squat_Clean_Grip/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "walking_lunge",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Walking_Lunge/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "walking_lunge",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Walking_Lunge/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "seated_calf_raise",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Calf_Raise/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "seated_calf_raise",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Calf_Raise/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "donkey_calf_raise",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Donkey_Calf_Raises/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "donkey_calf_raise",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Donkey_Calf_Raises/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "single_leg_calf_raise",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rocking_Standing_Calf_Raise/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "single_leg_calf_raise",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rocking_Standing_Calf_Raise/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "flat_bench_leg_raise",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Flat_Bench_Lying_Leg_Raise/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "flat_bench_leg_raise",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Flat_Bench_Lying_Leg_Raise/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "decline_crunch",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_Crunch/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "decline_crunch",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_Crunch/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "pallof_press",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pallof_Press/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "pallof_press",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pallof_Press/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "cable_crunch",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crunch/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "cable_crunch",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crunch/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "reverse_crunch",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Reverse_Crunch/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "reverse_crunch",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Reverse_Crunch/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "box_jump",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Box_Jump/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "box_jump",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Box_Jump/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "inverted_row",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Inverted_Row/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "inverted_row",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Inverted_Row/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
+  },
+  {
+    "slug": "dumbbell_rear_lunge",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Rear_Lunge/0.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 0
+  },
+  {
+    "slug": "dumbbell_rear_lunge",
+    "mediaType": "image",
+    "url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Rear_Lunge/1.jpg",
+    "source": "free-exercise-db",
+    "license": "Unlicense",
+    "sortOrder": 1
   }
 ]

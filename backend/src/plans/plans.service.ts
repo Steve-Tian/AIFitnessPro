@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { Exercise, PlanDay, PlanExercise, TrainingPlan } from '@prisma/client';
 import {
   buildPlanBlueprint,
-  EXERCISE_SLUGS_BY_DAY_TYPE,
+  selectExerciseSlugsForDay,
   TARGETS_BY_EXPERIENCE,
   TrainingDayType,
 } from './plan-rule-engine';
@@ -45,12 +45,9 @@ export class PlansService {
       where: { status: 'published', equipment: { hasSome: profile.equipment } },
     });
 
-    const exercisesByDayType: Record<string, typeof allExercises> = {};
-    for (const [dayType, slugs] of Object.entries(EXERCISE_SLUGS_BY_DAY_TYPE)) {
-      exercisesByDayType[dayType] = allExercises
-        .filter(e => slugs.includes(e.slug))
-        .slice(0, 3);
-    }
+    // Build a slug → Exercise lookup for fast access during rotation
+    const exerciseBySlug = new Map(allExercises.map(e => [e.slug, e]));
+    const availableSlugs = new Set(allExercises.map(e => e.slug));
 
     const plan = await this.prisma.trainingPlan.create({
       data: { userId, status: 'active', source: 'rule_engine', startDate, endDate },
@@ -59,9 +56,15 @@ export class PlansService {
     const createdDays: PlanWithDays['days'] = [];
 
     for (const dayBlueprint of blueprint) {
-      const exForDay =
+      const exForDay: typeof allExercises =
         dayBlueprint.dayType !== 'rest'
-          ? (exercisesByDayType[dayBlueprint.dayType] ?? [])
+          ? selectExerciseSlugsForDay(
+              dayBlueprint.dayType as TrainingDayType,
+              dayBlueprint.occurrenceIndex,
+              availableSlugs,
+            )
+              .map(slug => exerciseBySlug.get(slug))
+              .filter((e): e is NonNullable<typeof e> => e !== undefined)
           : [];
 
       const day = await this.prisma.planDay.create({

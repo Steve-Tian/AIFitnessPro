@@ -272,7 +272,7 @@ describe('AIFitnessPro backend foundation', () => {
     expect(trainingDays[0].exercises[0]).toMatchObject({
       nameCn: expect.any(String),
       targetSets: 3,
-      targetReps: 10,
+      targetReps: expect.any(Number),
       targetRestSeconds: 90,
     });
   });

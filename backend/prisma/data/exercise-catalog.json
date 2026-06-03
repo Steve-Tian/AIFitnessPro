@@ -2038,5 +2038,1119 @@
     "safetyNotes": [
       "选择适合重量，控制动作节奏"
     ]
+  },
+  {
+    "slug": "decline_bench_press",
+    "nameCn": "下斜卧推",
+    "aliases": [
+      "下斜杠铃卧推",
+      "下坡卧推"
+    ],
+    "category": "push",
+    "primaryMuscles": [
+      "chest"
+    ],
+    "equipment": [
+      "barbell",
+      "bench"
+    ],
+    "difficulty": "intermediate",
+    "instructions": [
+      "将卧推凳调至下斜约 15–30 度，躺上去固定双脚。",
+      "双手比肩略宽握住杠铃，从架上取下，置于锁骨正上方。",
+      "吸气，将杠铃匀速下放至胸部下方（乳头偏下）。",
+      "呼气，发力将杠铃推回至起始位置。",
+      "全程保持核心收紧，下背部自然弓起。"
+    ],
+    "commonMistakes": [
+      "弓背过度借力",
+      "肘部完全锁定",
+      "杠铃下落过快失控"
+    ],
+    "safetyNotes": [
+      "使用保护架或请人保护",
+      "重量过大时先在平板练熟再换下斜"
+    ]
+  },
+  {
+    "slug": "incline_dumbbell_fly",
+    "nameCn": "上斜哑铃飞鸟",
+    "aliases": [
+      "上斜哑铃夹胸",
+      "斜板飞鸟"
+    ],
+    "category": "push",
+    "primaryMuscles": [
+      "chest"
+    ],
+    "equipment": [
+      "dumbbells",
+      "bench"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将卧推凳调至 30–45 度上斜，双手各握一个哑铃坐上去。",
+      "仰躺后将哑铃推至胸部正上方，掌心相对，微屈肘。",
+      "吸气，双臂向两侧展开，下放至与胸部齐平，感受胸大肌拉伸。",
+      "呼气，像抱树一样将双臂收回至起始位置。",
+      "全程保持肘部略弯，不要完全伸直。"
+    ],
+    "commonMistakes": [
+      "重量过大导致肩膀代偿",
+      "肘关节锁死",
+      "下放幅度不足"
+    ],
+    "safetyNotes": [
+      "重量宜轻，以感受胸肌拉伸为主",
+      "肩膀不适时停止"
+    ]
+  },
+  {
+    "slug": "flat_bench_cable_fly",
+    "nameCn": "绳索夹胸",
+    "aliases": [
+      "平板绳索飞鸟",
+      "低位绳索夹胸"
+    ],
+    "category": "push",
+    "primaryMuscles": [
+      "chest"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将两侧绳索设置在低位（地面附近），手持 D 形把手。",
+      "站在两个绳索架中间，一脚前迈，微微前倾。",
+      "双臂向前画弧至胸前交叉，掌心向上，感受胸肌收缩。",
+      "缓慢还原，全程保持肘关节微弯固定不变。"
+    ],
+    "commonMistakes": [
+      "用手臂力量而非胸肌发力",
+      "躯干前倾幅度过大"
+    ],
+    "safetyNotes": [
+      "重量宜轻，动作流畅优先于重量"
+    ]
+  },
+  {
+    "slug": "close_grip_lat_pulldown",
+    "nameCn": "窄握高位下拉",
+    "aliases": [
+      "窄距高拉",
+      "近握下拉"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "latissimus_dorsi"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "坐在高拉机前，双手窄于肩宽正握（或中立握）横杆。",
+      "固定大腿于护垫下，上身微微后仰 10–15 度。",
+      "呼气，用背阔肌发力将横杆拉至锁骨位置，手肘下沉并向身体中线收。",
+      "吸气，缓慢控制重量回到起始位置，感受背阔肌充分拉伸。"
+    ],
+    "commonMistakes": [
+      "用手臂而非背部发力",
+      "身体后仰过多借力"
+    ],
+    "safetyNotes": [
+      "感受背阔肌收缩而非手臂疲劳"
+    ]
+  },
+  {
+    "slug": "underhand_lat_pulldown",
+    "nameCn": "反握高位下拉",
+    "aliases": [
+      "supinated下拉",
+      "反手高拉"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "latissimus_dorsi"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "坐在高拉机前，双手反握（掌心朝向自己）比肩略窄抓住横杆。",
+      "固定大腿，上身微后仰。",
+      "呼气，将横杆拉至锁骨下方，手肘贴近身体两侧。",
+      "吸气，缓慢还原，全程控制节奏。",
+      "反握使二头肌参与更多，对初学者友好。"
+    ],
+    "commonMistakes": [
+      "重量过大导致耸肩",
+      "身体过度摇摆"
+    ],
+    "safetyNotes": [
+      "反握对手腕角度要求低，但仍需避免过度抬头"
+    ]
+  },
+  {
+    "slug": "straight_arm_pulldown",
+    "nameCn": "直臂下压",
+    "aliases": [
+      "直臂绳索下压",
+      "直臂下拉"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "latissimus_dorsi"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "站在高位绳索架前约一步距离，双手正握绳索或横杆，与肩同宽。",
+      "保持手臂伸直（微屈肘），核心收紧，上身前倾约 30 度。",
+      "呼气，用背阔肌发力将绳索向下、向身体方向压，直至大腿两侧。",
+      "吸气，缓慢还原至头顶位置，感受背阔肌完全拉伸。"
+    ],
+    "commonMistakes": [
+      "弯曲手肘变成划船",
+      "用腰部发力而非背部"
+    ],
+    "safetyNotes": [
+      "这是背阔肌孤立练习，重量无需很大"
+    ]
+  },
+  {
+    "slug": "incline_dumbbell_row",
+    "nameCn": "上斜哑铃划船",
+    "aliases": [
+      "俯身哑铃划船（上斜凳）",
+      "上斜划船"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "latissimus_dorsi"
+    ],
+    "equipment": [
+      "dumbbells",
+      "bench"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将凳面调至 30–45 度，俯卧在凳上（胸部贴凳面），双手各握一个哑铃自然下垂。",
+      "呼气，用背部发力将哑铃向上拉至腰部两侧，手肘向后上方移动。",
+      "在顶端停顿 1 秒，感受背部充分收缩。",
+      "吸气，缓慢将哑铃放回下垂位置。"
+    ],
+    "commonMistakes": [
+      "用手臂而非背部拉",
+      "头部过度抬起"
+    ],
+    "safetyNotes": [
+      "俯卧固定避免腰部代偿，对腰伤者友好"
+    ]
+  },
+  {
+    "slug": "dumbbell_pullover",
+    "nameCn": "哑铃直臂上拉",
+    "aliases": [
+      "哑铃胸扩展",
+      "哑铃过头拉"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "latissimus_dorsi"
+    ],
+    "equipment": [
+      "dumbbells",
+      "bench"
+    ],
+    "difficulty": "intermediate",
+    "instructions": [
+      "横躺在平板凳上，只让上背部和肩膀接触凳面，臀部略低。",
+      "双手握住同一个哑铃，伸直手臂置于胸口正上方。",
+      "吸气，将哑铃缓慢向头顶方向后放，直到上臂与地面平行。",
+      "呼气，收缩背阔肌和胸肌将哑铃拉回起始位置。"
+    ],
+    "commonMistakes": [
+      "手臂弯曲变成三头练习",
+      "重量过大肩膀疼痛"
+    ],
+    "safetyNotes": [
+      "肩膀活动度不足者慎用，感到肩关节疼痛立即停止"
+    ]
+  },
+  {
+    "slug": "barbell_rear_delt_row",
+    "nameCn": "杠铃后束划船",
+    "aliases": [
+      "宽握俯身划船",
+      "杠铃后肩划船"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "rear_deltoid"
+    ],
+    "equipment": [
+      "barbell"
+    ],
+    "difficulty": "intermediate",
+    "instructions": [
+      "站立，双手宽于肩宽正握杠铃，身体前倾至几乎平行于地面。",
+      "手肘向两侧展开（而非向后），将杠铃拉至腹部上方。",
+      "在顶端停顿，感受后束三角肌强烈收缩。",
+      "缓慢下放还原，保持躯干稳定不摇摆。"
+    ],
+    "commonMistakes": [
+      "手肘方向错误（应向外而非向后）",
+      "借用腰部弹力"
+    ],
+    "safetyNotes": [
+      "重量宜轻，肩关节健康者适用"
+    ]
+  },
+  {
+    "slug": "cable_rear_delt_fly",
+    "nameCn": "绳索后束飞鸟",
+    "aliases": [
+      "绳索后束",
+      "绳索后肩飞鸟"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "rear_deltoid"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将两侧绳索设置在高位，交叉握住（右手握左侧绳索，左手握右侧）。",
+      "双臂向两侧打开展开，直至手臂与地面平行。",
+      "感受后束三角肌强烈收缩，在顶端停顿 1 秒。",
+      "缓慢还原。"
+    ],
+    "commonMistakes": [
+      "肘关节弯曲变成划船",
+      "重量过大斜方肌代偿"
+    ],
+    "safetyNotes": [
+      "选择能维持动作质量的轻重量"
+    ]
+  },
+  {
+    "slug": "low_pulley_rear_delt",
+    "nameCn": "低位绳索侧平举（后束）",
+    "aliases": [
+      "绳索俯身侧平举",
+      "弯腰绳索后束"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "rear_deltoid"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将绳索设置在低位，侧身站立，用远离机器的手握住把手。",
+      "身体略微前倾，手臂向侧上方弧形提拉，直至与地面平行。",
+      "慢慢还原，重复。完成后换边。"
+    ],
+    "commonMistakes": [
+      "用腰部借力",
+      "动作过快"
+    ],
+    "safetyNotes": [
+      "轻重量、慢节奏是关键"
+    ]
+  },
+  {
+    "slug": "cable_lateral_raise",
+    "nameCn": "绳索侧平举",
+    "aliases": [
+      "绳索单手侧平举",
+      "坐姿绳索侧平举"
+    ],
+    "category": "push",
+    "primaryMuscles": [
+      "deltoids"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "侧身站在绳索机旁，用远侧手握住低位把手。",
+      "将手臂向侧方举起至肩膀高度，手肘微弯保持固定。",
+      "在顶端停顿 1 秒感受三角肌中束收缩。",
+      "缓慢还原，完成后换边。"
+    ],
+    "commonMistakes": [
+      "手肘弯曲减少刺激",
+      "身体侧倾借力"
+    ],
+    "safetyNotes": [
+      "绳索比哑铃在底部有持续张力，对肩部刺激更均匀"
+    ]
+  },
+  {
+    "slug": "seated_dumbbell_shoulder_press",
+    "nameCn": "坐姿哑铃肩推",
+    "aliases": [
+      "坐姿肩推",
+      "哑铃坐姿推举"
+    ],
+    "category": "push",
+    "primaryMuscles": [
+      "deltoids"
+    ],
+    "equipment": [
+      "dumbbells",
+      "bench"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "坐在有靠背的凳子上（或背部支撑），双手各握哑铃置于耳旁。",
+      "呼气，将哑铃向上推举至手臂伸直，但不完全锁定肘关节。",
+      "吸气，缓慢下放哑铃回到耳旁位置。",
+      "保持核心收紧，背部靠在靠背上以减少腰部压力。"
+    ],
+    "commonMistakes": [
+      "重量过大弓腰借力",
+      "哑铃路径向内收束"
+    ],
+    "safetyNotes": [
+      "坐姿比站姿更稳定，适合大重量训练"
+    ]
+  },
+  {
+    "slug": "overhead_cable_tricep",
+    "nameCn": "绳索头上三头伸展",
+    "aliases": [
+      "绳索过头三头",
+      "绳索头顶三头"
+    ],
+    "category": "push",
+    "primaryMuscles": [
+      "triceps"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将绳索设置在高位，背对机器站立，用双手抓住绳索把手置于颈后。",
+      "身体前倾约 45 度，上臂贴近耳旁保持固定。",
+      "呼气，向前伸直手臂，感受三头肌长头充分收缩。",
+      "吸气，弯曲手肘将绳索还原至颈后位置。"
+    ],
+    "commonMistakes": [
+      "上臂随动作移动",
+      "肘关节向外展开"
+    ],
+    "safetyNotes": [
+      "这个动作特别针对三头肌长头，是三头增大的关键动作"
+    ]
+  },
+  {
+    "slug": "barbell_overhead_tricep",
+    "nameCn": "杠铃过头三头伸展",
+    "aliases": [
+      "杠铃头上三头",
+      "法式推举"
+    ],
+    "category": "push",
+    "primaryMuscles": [
+      "triceps"
+    ],
+    "equipment": [
+      "barbell"
+    ],
+    "difficulty": "intermediate",
+    "instructions": [
+      "站立或坐立，双手正握 EZ 杆或直杠，比肩略窄，将杠置于头顶正上方。",
+      "上臂保持竖直贴近头部，吸气弯曲肘关节将杠缓慢下放至颈后。",
+      "呼气，用三头肌发力将杠推回头顶位置。",
+      "全程保持上臂稳定不晃动。"
+    ],
+    "commonMistakes": [
+      "肘关节向外扩",
+      "上臂向前或向后倒"
+    ],
+    "safetyNotes": [
+      "从轻重量开始，EZ 杆对手腕更友好"
+    ]
+  },
+  {
+    "slug": "incline_dumbbell_curl",
+    "nameCn": "上斜哑铃弯举",
+    "aliases": [
+      "斜板弯举",
+      "斜躺弯举"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "biceps"
+    ],
+    "equipment": [
+      "dumbbells",
+      "bench"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将凳面调至 45–60 度，背部靠凳斜坐，双手各握哑铃自然垂于两侧。",
+      "这个姿势使二头肌处于拉伸状态，刺激更强。",
+      "呼气，弯曲肘关节将哑铃弯举至肩膀高度，避免上臂前摆。",
+      "吸气，缓慢还原至手臂自然伸直。"
+    ],
+    "commonMistakes": [
+      "上臂前摆借力",
+      "下放过快失去控制"
+    ],
+    "safetyNotes": [
+      "拉伸位刺激强，初次尝试重量比平板弯举轻 20-30%"
+    ]
+  },
+  {
+    "slug": "spider_curl",
+    "nameCn": "蜘蛛式弯举",
+    "aliases": [
+      "俯卧弯举",
+      "胸垫弯举"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "biceps"
+    ],
+    "equipment": [
+      "dumbbells"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将凳面调至 45 度，俯卧于上（胸部贴凳），双手各握哑铃自然下垂。",
+      "上臂固定垂直于地面，弯曲肘关节将哑铃弯举至最高点。",
+      "在顶端停顿 1 秒，感受二头肌收缩峰。",
+      "缓慢还原，保持上臂不动。"
+    ],
+    "commonMistakes": [
+      "上臂前摆",
+      "动作过快"
+    ],
+    "safetyNotes": [
+      "这是孤立二头肌的极佳动作，重量宜轻"
+    ]
+  },
+  {
+    "slug": "zottman_curl",
+    "nameCn": "旋转弯举",
+    "aliases": [
+      "左右旋弯举",
+      "Zottman弯举"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "biceps"
+    ],
+    "equipment": [
+      "dumbbells"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "站立，双手各握哑铃掌心向前（正握）。",
+      "弯举哑铃至肩膀高度，然后在顶端将双手旋转为掌心向后（反握）。",
+      "用反握姿势缓慢下放哑铃（此时肱桡肌和前臂得到刺激）。",
+      "在底部再次旋转回正握，重复。"
+    ],
+    "commonMistakes": [
+      "下放太快",
+      "上臂前摆"
+    ],
+    "safetyNotes": [
+      "同时训练二头、肱桡肌和前臂屈肌，是高效率弯举变体"
+    ]
+  },
+  {
+    "slug": "cross_body_hammer_curl",
+    "nameCn": "交叉锤式弯举",
+    "aliases": [
+      "对角锤式弯举",
+      "跨体弯举"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "biceps"
+    ],
+    "equipment": [
+      "dumbbells"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "站立，双手各握哑铃，掌心相对（中立握）。",
+      "弯举左手哑铃越过身体中线，拉向右侧肩膀方向。",
+      "缓慢还原，换右手做同样动作。交替进行。"
+    ],
+    "commonMistakes": [
+      "上臂晃动",
+      "过度旋转躯干"
+    ],
+    "safetyNotes": [
+      "肱桡肌和二头肌外侧头刺激更强，与标准锤式弯举轮换使用"
+    ]
+  },
+  {
+    "slug": "single_leg_glute_bridge",
+    "nameCn": "单腿臀桥",
+    "aliases": [
+      "单腿臀桥式",
+      "单边臀桥"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "glutes"
+    ],
+    "equipment": [
+      "bodyweight"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "仰卧于垫上，双脚踩地与肩同宽，膝盖弯曲。",
+      "将左脚提起，伸直或交叉于右膝上。",
+      "用右脚踩地，臀部发力将骨盆顶起，直至身体成一条直线。",
+      "在顶端停顿 1 秒，缓慢下放。完成后换边。"
+    ],
+    "commonMistakes": [
+      "腰部过度弓起",
+      "支撑腿向外歪"
+    ],
+    "safetyNotes": [
+      "单腿版比双腿版强度更高，适合进阶者"
+    ]
+  },
+  {
+    "slug": "cable_glute_kickback",
+    "nameCn": "绳索臀部后踢",
+    "aliases": [
+      "绳索后踢腿",
+      "绳索臀后踢"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "glutes"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将绳索设置在低位，将脚踝固定带套在脚踝上。",
+      "面向机器站立，双手扶住机器保持平衡，上身微前倾。",
+      "绷紧核心，用臀肌发力将腿向后方踢出，至臀肌充分收缩。",
+      "缓慢还原，完成后换腿。"
+    ],
+    "commonMistakes": [
+      "腰部过度后弓",
+      "以速度替代幅度"
+    ],
+    "safetyNotes": [
+      "专注于臀部收缩感，重量不需要很大"
+    ]
+  },
+  {
+    "slug": "glute_kickback",
+    "nameCn": "四点跪姿后踢腿",
+    "aliases": [
+      "俯撑后踢腿",
+      "臀部后踢（徒手）"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "glutes"
+    ],
+    "equipment": [
+      "bodyweight"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "四点跪姿（手膝着地），核心收紧，背部水平。",
+      "保持膝关节弯曲 90 度，右腿向后上方踢起，至大腿与地面平行。",
+      "在最高点停顿 1 秒挤压臀肌，缓慢还原。",
+      "完成规定次数后换左腿。"
+    ],
+    "commonMistakes": [
+      "腰部旋转代偿",
+      "膝盖角度改变"
+    ],
+    "safetyNotes": [
+      "是臀肌孤立训练的经典入门动作"
+    ]
+  },
+  {
+    "slug": "good_morning",
+    "nameCn": "早安式",
+    "aliases": [
+      "早安体前屈",
+      "杠铃早安"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "hamstrings"
+    ],
+    "equipment": [
+      "barbell"
+    ],
+    "difficulty": "intermediate",
+    "instructions": [
+      "将杠铃放在上背部（斜方肌处），站立与肩同宽。",
+      "膝盖微弯，核心收紧，脊柱保持中立。",
+      "慢慢将臀部向后推，上身向前倾直至与地面接近平行，感受腘绳肌强烈拉伸。",
+      "臀肌和腘绳肌发力将躯干还原至站立位。"
+    ],
+    "commonMistakes": [
+      "脊柱弯曲成猫背",
+      "膝盖过度弯曲变成蹲动作"
+    ],
+    "safetyNotes": [
+      "从极轻重量开始，掌握动作模式后再加重；腰背有伤者慎用"
+    ]
+  },
+  {
+    "slug": "kettlebell_swing",
+    "nameCn": "壶铃摆动",
+    "aliases": [
+      "壶铃荡秋千",
+      "KB摆动"
+    ],
+    "category": "full_body",
+    "primaryMuscles": [
+      "hamstrings"
+    ],
+    "equipment": [
+      "kettlebells"
+    ],
+    "difficulty": "intermediate",
+    "instructions": [
+      "双手握壶铃站立，脚比肩略宽，壶铃置于两脚间前方。",
+      "臀部后推将壶铃在两腿间向后摆动，积蓄弹性势能。",
+      "用臀部和腘绳肌发力猛然向前弹，带动壶铃摆到肩膀高度。",
+      "让壶铃自然弧线落回，立刻再次后摆，保持节奏。"
+    ],
+    "commonMistakes": [
+      "用手臂举壶铃而非臀部发力",
+      "弯腰成深蹲而非髋铰链"
+    ],
+    "safetyNotes": [
+      "先练好硬拉再做壶铃摆动；穿防滑鞋"
+    ]
+  },
+  {
+    "slug": "barbell_hack_squat",
+    "nameCn": "哈克深蹲",
+    "aliases": [
+      "杠铃哈克深蹲",
+      "杠铃背后蹲"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "equipment": [
+      "barbell"
+    ],
+    "difficulty": "advanced",
+    "instructions": [
+      "将杠铃放在小腿后方（腿后），双手反握杠铃。",
+      "双脚与肩同宽，脚尖略外八。",
+      "核心收紧，下蹲直至大腿平行地面，保持上身尽量竖直。",
+      "用股四头肌发力站起，重复。"
+    ],
+    "commonMistakes": [
+      "重心后移",
+      "膝盖向内扣"
+    ],
+    "safetyNotes": [
+      "难度较高，建议先在腿举机上练高量，再进阶到哈克"
+    ]
+  },
+  {
+    "slug": "front_squat",
+    "nameCn": "前蹲",
+    "aliases": [
+      "杠铃前蹲",
+      "前置深蹲"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "equipment": [
+      "barbell"
+    ],
+    "difficulty": "advanced",
+    "instructions": [
+      "将杠铃置于锁骨和前三角肌上，双手交叉支撑（或clean握法）。",
+      "脚与肩同宽，脚尖外八约 30 度。",
+      "下蹲时上身保持尽量直立，膝盖随脚尖方向前推。",
+      "下蹲至大腿平行地面，用股四头肌发力站起。"
+    ],
+    "commonMistakes": [
+      "手肘下沉导致杠铃滚落",
+      "上身前倾过多"
+    ],
+    "safetyNotes": [
+      "对踝关节灵活性要求高，可先练高脚杯深蹲代替"
+    ]
+  },
+  {
+    "slug": "walking_lunge",
+    "nameCn": "行走弓步蹲",
+    "aliases": [
+      "行走弓步",
+      "步行弓步"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "equipment": [
+      "dumbbells"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "双手各握哑铃或空手，站立。",
+      "右脚向前迈一大步，下蹲至后膝接近地面。",
+      "用前脚掌发力站起，同时将左脚跟上并继续向前迈出。",
+      "保持躯干直立，交替前进。"
+    ],
+    "commonMistakes": [
+      "步幅太小导致膝盖越过脚尖",
+      "上身前倾"
+    ],
+    "safetyNotes": [
+      "确保有足够的行走空间；膝关节不适者先做静态弓步"
+    ]
+  },
+  {
+    "slug": "seated_calf_raise",
+    "nameCn": "坐姿提踵",
+    "aliases": [
+      "坐式小腿提踵",
+      "机械坐姿提踵"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "calves"
+    ],
+    "equipment": [
+      "machine"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "坐在坐姿提踵机上，将护垫置于大腿根部，前脚掌踩在脚踏板边缘。",
+      "脚跟自然下垂至最低点，感受小腿腓肠肌（比目鱼肌）拉伸。",
+      "踮脚尖将脚跟提起至最高点，在顶端停顿 1 秒。",
+      "缓慢还原。"
+    ],
+    "commonMistakes": [
+      "动作幅度不完整",
+      "节奏过快失去控制"
+    ],
+    "safetyNotes": [
+      "坐姿主要刺激比目鱼肌（小腿深层），与站姿提踵互补"
+    ]
+  },
+  {
+    "slug": "donkey_calf_raise",
+    "nameCn": "驴式提踵",
+    "aliases": [
+      "俯身驴踢提踵",
+      "驴子提踵"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "calves"
+    ],
+    "equipment": [
+      "bodyweight"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "前倾约 90 度，双手扶住固定物（如凳面），背部水平。",
+      "前脚掌踩在台阶或垫高处，脚跟自然下垂。",
+      "踮起脚尖将脚跟提至最高，停顿 1 秒。",
+      "缓慢下放，感受小腿充分拉伸后再次提起。"
+    ],
+    "commonMistakes": [
+      "动作幅度不足",
+      "身体晃动"
+    ],
+    "safetyNotes": [
+      "可让搭档坐在腰部增加阻力"
+    ]
+  },
+  {
+    "slug": "single_leg_calf_raise",
+    "nameCn": "单腿提踵",
+    "aliases": [
+      "单侧提踵",
+      "单脚提踵"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "calves"
+    ],
+    "equipment": [
+      "bodyweight"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "单脚站在台阶边缘，脚跟悬空，另一脚弯曲勾起。",
+      "单手扶住固定物保持平衡。",
+      "踮起站立脚至脚尖，顶端停顿 1 秒。",
+      "缓慢下放至脚跟低于台阶，感受小腿充分拉伸。"
+    ],
+    "commonMistakes": [
+      "动作过快",
+      "幅度不完整"
+    ],
+    "safetyNotes": [
+      "比双腿提踵强度更大，注意脚踝稳定"
+    ]
+  },
+  {
+    "slug": "flat_bench_leg_raise",
+    "nameCn": "仰卧举腿",
+    "aliases": [
+      "平板举腿",
+      "仰卧抬腿"
+    ],
+    "category": "core",
+    "primaryMuscles": [
+      "core"
+    ],
+    "equipment": [
+      "bench"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "仰卧于平凳或垫上，双手置于臀部两侧扶住凳边。",
+      "双腿伸直并拢，从地面举起直至与地面垂直（或感受腹部充分收缩）。",
+      "缓慢将双腿下放，但不接触地面即再次举起。",
+      "全程保持腰部贴凳，不要弓腰悬空。"
+    ],
+    "commonMistakes": [
+      "腰部弓离地面",
+      "借助惯性摆动"
+    ],
+    "safetyNotes": [
+      "腰部不适者可先练卷腹或死虫式"
+    ]
+  },
+  {
+    "slug": "decline_crunch",
+    "nameCn": "下斜卷腹",
+    "aliases": [
+      "斜板卷腹",
+      "下斜仰卧起坐"
+    ],
+    "category": "core",
+    "primaryMuscles": [
+      "core"
+    ],
+    "equipment": [
+      "bench"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "仰卧在下斜板凳上，双脚固定，膝盖弯曲。",
+      "双手轻轻放在太阳穴旁或交叉于胸前（不要扣脖子）。",
+      "呼气，用腹肌发力将上身卷起约 30–45 度。",
+      "吸气，缓慢还原，不要完全平躺（保持腹肌张力）。"
+    ],
+    "commonMistakes": [
+      "双手用力拉脖子",
+      "身体完全躺平失去张力"
+    ],
+    "safetyNotes": [
+      "倾角越大难度越高；颈椎不适者慎用"
+    ]
+  },
+  {
+    "slug": "pallof_press",
+    "nameCn": "帕洛夫推举",
+    "aliases": [
+      "绳索抗旋推举",
+      "反旋推举"
+    ],
+    "category": "core",
+    "primaryMuscles": [
+      "core"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将绳索设置在胸部高度，侧身站立约一步距离，双手握住把手置于胸前。",
+      "核心完全收紧，将把手向前方推出直至手臂伸直。",
+      "保持 1–2 秒，感受核心抵抗绳索拉力的张力。",
+      "将手臂收回至胸前。重复后换边。"
+    ],
+    "commonMistakes": [
+      "身体转向绳索方向",
+      "呼吸屏住不换气"
+    ],
+    "safetyNotes": [
+      "这是核心抗旋转训练，比卷腹更安全有效"
+    ]
+  },
+  {
+    "slug": "cable_crunch",
+    "nameCn": "绳索卷腹",
+    "aliases": [
+      "绳索仰卧起坐",
+      "高位绳索卷腹"
+    ],
+    "category": "core",
+    "primaryMuscles": [
+      "core"
+    ],
+    "equipment": [
+      "cable"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "跪在绳索机前，将绳索设置在高位，双手握绳置于头部两侧。",
+      "呼气，用腹肌发力将头和上身向膝盖方向弯曲（卷腹）。",
+      "在最低点停顿 1 秒感受腹肌收缩。",
+      "吸气，缓慢还原至起始位。"
+    ],
+    "commonMistakes": [
+      "用手臂向下拉",
+      "动作过快失去控制"
+    ],
+    "safetyNotes": [
+      "可调节重量，适合各级别训练者"
+    ]
+  },
+  {
+    "slug": "reverse_crunch",
+    "nameCn": "反向卷腹",
+    "aliases": [
+      "仰卧反向卷腹",
+      "倒卷腹"
+    ],
+    "category": "core",
+    "primaryMuscles": [
+      "core"
+    ],
+    "equipment": [
+      "bodyweight"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "仰卧于垫上，双手置于臀部两侧或握住凳边，双膝弯曲约 90 度抬起。",
+      "呼气，用下腹部发力将臀部卷离地面，膝盖向胸部方向靠近。",
+      "在顶端停顿 1 秒，感受下腹收缩。",
+      "吸气，缓慢将臀部落回地面（不要放松腹肌张力）。"
+    ],
+    "commonMistakes": [
+      "借助惯性摆腿",
+      "腰部弓起发力"
+    ],
+    "safetyNotes": [
+      "主要针对下腹部，与普通卷腹配合使用效果好"
+    ]
+  },
+  {
+    "slug": "box_jump",
+    "nameCn": "跳箱",
+    "aliases": [
+      "箱跳",
+      "跳台阶"
+    ],
+    "category": "full_body",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "equipment": [
+      "box"
+    ],
+    "difficulty": "intermediate",
+    "instructions": [
+      "站在跳箱前约一步距离，双脚与肩同宽。",
+      "快速弯膝并向后摆臂蓄力，然后同时发力向上跳。",
+      "双脚落在箱子上，膝盖微弯缓冲落地冲击力。",
+      "站稳后从箱子边缘走下（不要跳下），重置后重复。"
+    ],
+    "commonMistakes": [
+      "落地时膝盖内扣",
+      "直接跳下箱子增加受伤风险"
+    ],
+    "safetyNotes": [
+      "从低箱开始；落地必须软着陆，不能僵硬砸下；跳箱边缘必须防滑"
+    ]
+  },
+  {
+    "slug": "inverted_row",
+    "nameCn": "水平引体向上",
+    "aliases": [
+      "反向划船",
+      "斜身引体"
+    ],
+    "category": "pull",
+    "primaryMuscles": [
+      "latissimus_dorsi"
+    ],
+    "equipment": [
+      "bodyweight",
+      "bar"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "将杠铃架或史密斯机横杆调至腰部高度，仰躺于下方。",
+      "双手正握横杆，身体呈斜板姿势，脚跟着地，保持全身成一条直线。",
+      "呼气，用背部和二头肌发力将胸口拉近横杆。",
+      "吸气，缓慢还原至手臂伸直。"
+    ],
+    "commonMistakes": [
+      "臀部下沉",
+      "借助腿部弹力"
+    ],
+    "safetyNotes": [
+      "可调节横杆高度控制难度；身体越水平难度越大"
+    ]
+  },
+  {
+    "slug": "dumbbell_rear_lunge",
+    "nameCn": "哑铃后弓步蹲",
+    "aliases": [
+      "哑铃反向弓步",
+      "后退弓步"
+    ],
+    "category": "legs",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "equipment": [
+      "dumbbells"
+    ],
+    "difficulty": "beginner",
+    "instructions": [
+      "双手各握哑铃站立，双脚并拢。",
+      "右脚向后迈一大步，下蹲至左腿大腿平行地面，右膝轻触地面。",
+      "用左腿发力站起，右脚收回并拢。",
+      "完成规定次数后换腿，或左右交替进行。"
+    ],
+    "commonMistakes": [
+      "步幅不足",
+      "前腿膝盖越过脚尖"
+    ],
+    "safetyNotes": [
+      "比前弓步对膝盖压力更小，适合膝盖敏感者"
+    ]
   }
 ]
