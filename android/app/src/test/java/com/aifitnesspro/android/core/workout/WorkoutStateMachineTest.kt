@@ -42,7 +42,25 @@ class WorkoutStateMachineTest {
     }
 
     @Test
-    fun completingFinalSetMarksCompleted() {
+    fun completingFinalSetOfExercisePromptsRpe() {
+        val started = WorkoutStateMachine.start(
+            WorkoutStateMachine.createNotStarted("s1", "p1", day()),
+            nowEpochMs = 1000L
+        )
+        val afterFirstSet = WorkoutStateMachine.completeSet(started, 40.0, 10, 2000L).first
+        val afterSecondSet = WorkoutStateMachine.completeSet(
+            WorkoutStateMachine.skipRest(afterFirstSet),
+            40.0,
+            10,
+            3000L
+        ).first
+
+        assertEquals(WorkoutStatus.AWAITING_EXERCISE_RPE, afterSecondSet.status)
+        assertEquals(0, afterSecondSet.exerciseIndex)
+    }
+
+    @Test
+    fun completingFinalSetMarksCompletedAfterRpe() {
         var snapshot = WorkoutStateMachine.start(
             WorkoutStateMachine.createNotStarted("s1", "p1", day()),
             nowEpochMs = 1000L
@@ -50,11 +68,14 @@ class WorkoutStateMachineTest {
         snapshot = WorkoutStateMachine.completeSet(snapshot, 40.0, 10, 2000L).first
         snapshot = WorkoutStateMachine.skipRest(snapshot)
         snapshot = WorkoutStateMachine.completeSet(snapshot, 40.0, 10, 3000L).first
+        snapshot = WorkoutStateMachine.submitExerciseRpe(snapshot, 8, 3100L)
         snapshot = WorkoutStateMachine.skipRest(snapshot)
         snapshot = WorkoutStateMachine.completeSet(snapshot, 20.0, 8, 4000L).first
+        snapshot = WorkoutStateMachine.submitExerciseRpe(snapshot, 9, 4100L)
 
         assertEquals(WorkoutStatus.COMPLETED, snapshot.status)
-        assertEquals(4000L, snapshot.completedAtEpochMs)
+        assertEquals(4100L, snapshot.completedAtEpochMs)
+        assertEquals(2, snapshot.exerciseFeedbacks.size)
     }
 
     @Test

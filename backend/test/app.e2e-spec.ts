@@ -443,6 +443,76 @@ describe('AIFitnessPro backend foundation', () => {
     expect(stored?.sets).toHaveLength(1);
   });
 
+  it('POST /v1/workouts/sessions/sync stores exercise RPE feedback', async () => {
+    const userRes = await request(app.getHttpServer())
+      .post('/v1/dev/users')
+      .send({ deviceLabel: 'Workout feedback device', externalId: 'workout-feedback-device' })
+      .expect(201);
+    const userId = userRes.body.user.id;
+
+    await request(app.getHttpServer())
+      .put('/v1/users/me/profile')
+      .set('X-Dev-User-Id', userId)
+      .send({
+        gender: 'male', age: 25, heightCm: 175, weightKg: 70,
+        goal: 'strength', experience: 'beginner', daysPerWeek: 3,
+        equipment: ['full_gym'], persona: 'coach',
+      })
+      .expect(200);
+
+    const generated = await request(app.getHttpServer())
+      .post('/v1/plans/generate')
+      .set('X-Dev-User-Id', userId)
+      .expect(201);
+
+    const trainingDay = generated.body.plan.days.find((day: { dayType: string }) => day.dayType !== 'rest');
+    const exercise = trainingDay.exercises[0];
+    const sessionId = '33333333-3333-4333-8333-333333333333';
+    const setId = '44444444-4444-4444-8444-444444444444';
+
+    await request(app.getHttpServer())
+      .post('/v1/workouts/sessions/sync')
+      .set('X-Dev-User-Id', userId)
+      .send({
+        session: {
+          id: sessionId,
+          trainingPlanId: generated.body.plan.id,
+          planDayIndex: trainingDay.dayIndex,
+          status: 'completed',
+          startedAt: '2026-05-21T08:00:00.000Z',
+          completedAt: '2026-05-21T09:00:00.000Z',
+          durationSeconds: 1800,
+        },
+        sets: [
+          {
+            id: setId,
+            exerciseId: exercise.exerciseId,
+            setIndex: 1,
+            targetReps: exercise.targetReps,
+            actualReps: exercise.targetReps,
+            weightKg: 50,
+            completedAt: '2026-05-21T08:20:00.000Z',
+          },
+        ],
+        feedback: [{ exerciseId: exercise.exerciseId, rpe: 8 }],
+      })
+      .expect(200);
+
+    const feedback = await prisma.exerciseFeedback.findMany({
+      where: { workoutSessionId: sessionId },
+    });
+    expect(feedback).toHaveLength(1);
+    expect(feedback[0].rpe).toBe(8);
+
+    const adjustment = await prisma.exerciseAdjustment.findUnique({
+      where: {
+        userId_exerciseId: { userId, exerciseId: exercise.exerciseId },
+      },
+    });
+    expect(adjustment?.feedbackCount).toBe(1);
+    expect(Number(adjustment?.averageRpe)).toBe(8);
+  });
+
   it('POST /v1/workouts/sessions/sync rejects invalid exercise id', async () => {
     const userRes = await request(app.getHttpServer())
       .post('/v1/dev/users')

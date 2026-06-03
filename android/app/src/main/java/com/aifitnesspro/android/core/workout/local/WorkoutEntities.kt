@@ -20,7 +20,8 @@ data class WorkoutSessionEntity(
     val startedAtEpochMs: Long?,
     val completedAtEpochMs: Long?,
     val updatedAtEpochMs: Long,
-    val syncStatus: String = "none"
+    val syncStatus: String = "none",
+    val exerciseFeedbackJson: String = "[]"
 )
 
 @Entity(tableName = "workout_sets")

@@ -58,23 +58,10 @@ object WorkoutStateMachine {
         val isLastSetOfExercise = snapshot.setIndex >= exercise.targetSets
         val isLastExercise = snapshot.exerciseIndex >= snapshot.exercises.lastIndex
 
-        if (isLastSetOfExercise && isLastExercise) {
-            return snapshot.copy(
-                status = WorkoutStatus.COMPLETED,
-                restSecondsRemaining = null,
-                completedAtEpochMs = nowEpochMs
-            ) to record
-        }
-
         if (isLastSetOfExercise) {
-            val nextExercise = snapshot.exercises[snapshot.exerciseIndex + 1]
             return snapshot.copy(
-                status = WorkoutStatus.RESTING,
-                exerciseIndex = snapshot.exerciseIndex + 1,
-                setIndex = 1,
-                restSecondsRemaining = exercise.targetRestSeconds,
-                weightInput = defaultWeightInput(nextExercise),
-                repsInput = nextExercise.targetReps.toString()
+                status = WorkoutStatus.AWAITING_EXERCISE_RPE,
+                restSecondsRemaining = null
             ) to record
         }
 
@@ -83,6 +70,38 @@ object WorkoutStateMachine {
             setIndex = snapshot.setIndex + 1,
             restSecondsRemaining = exercise.targetRestSeconds
         ) to record
+    }
+
+    fun submitExerciseRpe(
+        snapshot: WorkoutSessionSnapshot,
+        rpe: Int,
+        nowEpochMs: Long
+    ): WorkoutSessionSnapshot {
+        require(snapshot.status == WorkoutStatus.AWAITING_EXERCISE_RPE) { "当前不需要动作 RPE 反馈" }
+        require(rpe in 6..10) { "RPE 需在 6-10 之间" }
+        val exercise = snapshot.currentExercise ?: error("缺少当前动作")
+        val feedback = ExerciseRpeFeedback(exerciseId = exercise.exerciseId, rpe = rpe)
+        val feedbacks = snapshot.exerciseFeedbacks + feedback
+        val isLastExercise = snapshot.exerciseIndex >= snapshot.exercises.lastIndex
+
+        if (isLastExercise) {
+            return snapshot.copy(
+                status = WorkoutStatus.COMPLETED,
+                exerciseFeedbacks = feedbacks,
+                completedAtEpochMs = nowEpochMs
+            )
+        }
+
+        val nextExercise = snapshot.exercises[snapshot.exerciseIndex + 1]
+        return snapshot.copy(
+            status = WorkoutStatus.RESTING,
+            exerciseIndex = snapshot.exerciseIndex + 1,
+            setIndex = 1,
+            exerciseFeedbacks = feedbacks,
+            restSecondsRemaining = exercise.targetRestSeconds,
+            weightInput = defaultWeightInput(nextExercise),
+            repsInput = nextExercise.targetReps.toString()
+        )
     }
 
     fun skipRest(snapshot: WorkoutSessionSnapshot): WorkoutSessionSnapshot {

@@ -25,9 +25,16 @@ data class SyncWorkoutSessionRequest(
 )
 
 @Serializable
+data class SyncExerciseFeedbackRequest(
+    val exerciseId: String,
+    val rpe: Int
+)
+
+@Serializable
 data class SyncWorkoutRequest(
     val session: SyncWorkoutSessionRequest,
-    val sets: List<SyncWorkoutSetRequest>
+    val sets: List<SyncWorkoutSetRequest>,
+    val feedback: List<SyncExerciseFeedbackRequest> = emptyList()
 )
 
 @Serializable

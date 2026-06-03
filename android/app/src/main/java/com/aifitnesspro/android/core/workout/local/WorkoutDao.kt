@@ -11,7 +11,7 @@ interface WorkoutDao {
     @Query(
         """
         SELECT * FROM workout_sessions
-        WHERE status IN ('IN_PROGRESS', 'RESTING', 'PAUSED', 'NOT_STARTED')
+        WHERE status IN ('IN_PROGRESS', 'RESTING', 'PAUSED', 'NOT_STARTED', 'AWAITING_EXERCISE_RPE')
         ORDER BY updatedAtEpochMs DESC
         LIMIT 1
         """
@@ -21,7 +21,7 @@ interface WorkoutDao {
     @Query(
         """
         SELECT * FROM workout_sessions
-        WHERE status IN ('IN_PROGRESS', 'RESTING', 'PAUSED', 'NOT_STARTED')
+        WHERE status IN ('IN_PROGRESS', 'RESTING', 'PAUSED', 'NOT_STARTED', 'AWAITING_EXERCISE_RPE')
         ORDER BY updatedAtEpochMs DESC
         LIMIT 1
         """

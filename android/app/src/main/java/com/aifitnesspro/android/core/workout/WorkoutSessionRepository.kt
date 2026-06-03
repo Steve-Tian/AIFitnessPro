@@ -104,6 +104,12 @@ class WorkoutSessionRepository(
         return updated
     }
 
+    suspend fun submitExerciseRpe(snapshot: WorkoutSessionSnapshot, rpe: Int): WorkoutSessionSnapshot {
+        val updated = WorkoutStateMachine.submitExerciseRpe(snapshot, rpe, System.currentTimeMillis())
+        saveSnapshot(updated)
+        return updated
+    }
+
     suspend fun updateInputs(
         snapshot: WorkoutSessionSnapshot,
         weightInput: String,
@@ -147,11 +153,15 @@ private fun WorkoutSessionSnapshot.toEntity(json: Json, syncStatus: String): Wor
         startedAtEpochMs = startedAtEpochMs,
         completedAtEpochMs = completedAtEpochMs,
         updatedAtEpochMs = System.currentTimeMillis(),
-        syncStatus = syncStatus
+        syncStatus = syncStatus,
+        exerciseFeedbackJson = json.encodeToString(snapshot.exerciseFeedbacks)
     )
 
 private fun WorkoutSessionEntity.toSnapshot(json: Json): WorkoutSessionSnapshot {
     val exercises = json.decodeFromString<List<WorkoutExercisePlan>>(exercisesJson)
+    val feedbacks = runCatching {
+        json.decodeFromString<List<ExerciseRpeFeedback>>(exerciseFeedbackJson)
+    }.getOrDefault(emptyList())
     return WorkoutSessionSnapshot(
         sessionId = id,
         planId = planId,
@@ -166,6 +176,7 @@ private fun WorkoutSessionEntity.toSnapshot(json: Json): WorkoutSessionSnapshot 
         weightInput = weightInput,
         repsInput = repsInput,
         startedAtEpochMs = startedAtEpochMs,
-        completedAtEpochMs = completedAtEpochMs
+        completedAtEpochMs = completedAtEpochMs,
+        exerciseFeedbacks = feedbacks
     )
 }

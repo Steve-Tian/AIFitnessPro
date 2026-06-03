@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -171,6 +174,15 @@ fun WorkoutSessionScreen(
                     scope.launch { snapshot = workoutRepository.skipRest(session) }
                 }
             )
+            WorkoutStatus.AWAITING_EXERCISE_RPE -> ExerciseRpeContent(
+                snapshot = session,
+                onSubmit = { rpe ->
+                    scope.launch {
+                        snapshot = workoutRepository.submitExerciseRpe(session, rpe)
+                        errorMessage = null
+                    }
+                }
+            )
             WorkoutStatus.COMPLETED -> SummaryContent(
                 snapshot = session,
                 completedSetCount = completedSetCount,
@@ -288,6 +300,44 @@ private fun RestingContent(snapshot: WorkoutSessionSnapshot, onSkipRest: () -> U
 }
 
 @Composable
+private fun ExerciseRpeContent(
+    snapshot: WorkoutSessionSnapshot,
+    onSubmit: (Int) -> Unit
+) {
+    val exercise = snapshot.pendingRpeExercise ?: return
+    var selectedRpe by remember(exercise.exerciseId) { mutableIntStateOf(8) }
+
+    Column {
+        Text("动作强度反馈", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "${exercise.nameCn} 完成了，这组练得有多吃力？",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("RPE（6 = 轻松，10 = 力竭）", style = MaterialTheme.typography.labelLarge)
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            (6..10).forEach { value ->
+                FilterChip(
+                    selected = selectedRpe == value,
+                    onClick = { selectedRpe = value },
+                    label = { Text("$value") }
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = { onSubmit(selectedRpe) }, modifier = Modifier.fillMaxWidth()) {
+            Text("确认并继续")
+        }
+    }
+}
+
+@Composable
 private fun SummaryContent(
     snapshot: WorkoutSessionSnapshot,
     completedSetCount: Int,
@@ -297,6 +347,14 @@ private fun SummaryContent(
         Text("训练完成 🎉", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(12.dp))
         Text("完成 ${completedSetCount.coerceAtLeast(snapshot.totalSets)} 组")
+        if (snapshot.exerciseFeedbacks.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "已记录 ${snapshot.exerciseFeedbacks.size} 个动作的 RPE 反馈",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
         snapshot.startedAtEpochMs?.let { started ->
             snapshot.completedAtEpochMs?.let { completed ->
                 val minutes = ((completed - started) / 1000 / 60).coerceAtLeast(1)

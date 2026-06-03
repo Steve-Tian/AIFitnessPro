@@ -7,6 +7,7 @@ import {
   IsNumber,
   IsOptional,
   IsUUID,
+  Max,
   Min,
   ValidateNested,
 } from 'class-validator';
@@ -79,6 +80,16 @@ export class SyncWorkoutSessionDto {
   durationSeconds?: number;
 }
 
+export class SyncExerciseFeedbackDto {
+  @IsUUID('4', { message: '动作 ID 无效' })
+  exerciseId!: string;
+
+  @IsInt({ message: 'RPE 必须是整数' })
+  @Min(6, { message: 'RPE 不能低于 6' })
+  @Max(10, { message: 'RPE 不能高于 10' })
+  rpe!: number;
+}
+
 export class SyncWorkoutRequestDto {
   @ValidateNested()
   @Type(() => SyncWorkoutSessionDto)
@@ -89,4 +100,10 @@ export class SyncWorkoutRequestDto {
   @ValidateNested({ each: true })
   @Type(() => SyncWorkoutSetDto)
   sets!: SyncWorkoutSetDto[];
+
+  @IsOptional()
+  @IsArray({ message: '动作反馈必须是数组' })
+  @ValidateNested({ each: true })
+  @Type(() => SyncExerciseFeedbackDto)
+  feedback?: SyncExerciseFeedbackDto[];
 }

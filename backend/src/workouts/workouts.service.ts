@@ -65,6 +65,58 @@ export class WorkoutsService {
         },
       });
 
+      const feedbackItems = dto.feedback ?? [];
+      if (feedbackItems.length > 0) {
+        const feedbackExerciseIds = [...new Set(feedbackItems.map(item => item.exerciseId))];
+        const feedbackExercises = await tx.exercise.findMany({
+          where: { id: { in: feedbackExerciseIds }, status: 'published' },
+        });
+        if (feedbackExercises.length !== feedbackExerciseIds.length) {
+          throw new NotFoundException({ code: 'NOT_FOUND', message: '包含无效动作反馈' });
+        }
+
+        await tx.exerciseFeedback.deleteMany({ where: { workoutSessionId: upserted.id } });
+
+        for (const item of feedbackItems) {
+          await tx.exerciseFeedback.create({
+            data: {
+              userId,
+              exerciseId: item.exerciseId,
+              workoutSessionId: upserted.id,
+              rpe: item.rpe,
+            },
+          });
+
+          const existingAdjustment = await tx.exerciseAdjustment.findUnique({
+            where: {
+              userId_exerciseId: { userId, exerciseId: item.exerciseId },
+            },
+          });
+          const previousCount = existingAdjustment?.feedbackCount ?? 0;
+          const previousAverage = existingAdjustment
+            ? Number(existingAdjustment.averageRpe)
+            : 0;
+          const nextCount = previousCount + 1;
+          const nextAverage = ((previousAverage * previousCount) + item.rpe) / nextCount;
+
+          await tx.exerciseAdjustment.upsert({
+            where: {
+              userId_exerciseId: { userId, exerciseId: item.exerciseId },
+            },
+            create: {
+              userId,
+              exerciseId: item.exerciseId,
+              averageRpe: nextAverage,
+              feedbackCount: nextCount,
+            },
+            update: {
+              averageRpe: nextAverage,
+              feedbackCount: nextCount,
+            },
+          });
+        }
+      }
+
       for (const set of dto.sets) {
         await tx.workoutSet.upsert({
           where: {

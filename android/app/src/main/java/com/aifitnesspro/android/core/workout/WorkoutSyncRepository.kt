@@ -1,9 +1,11 @@
 package com.aifitnesspro.android.core.workout
 
+import com.aifitnesspro.android.core.api.SyncExerciseFeedbackRequest
 import com.aifitnesspro.android.core.api.SyncWorkoutRequest
 import com.aifitnesspro.android.core.api.SyncWorkoutSessionRequest
 import com.aifitnesspro.android.core.api.SyncWorkoutSetRequest
 import com.aifitnesspro.android.core.api.WorkoutApi
+import kotlinx.serialization.json.Json
 import com.aifitnesspro.android.core.workout.local.WorkoutDao
 import com.aifitnesspro.android.core.workout.local.WorkoutSessionEntity
 import com.aifitnesspro.android.core.workout.local.WorkoutSetEntity
@@ -11,7 +13,8 @@ import java.time.Instant
 
 class WorkoutSyncRepository(
     private val dao: WorkoutDao,
-    private val workoutApi: WorkoutApi
+    private val workoutApi: WorkoutApi,
+    private val json: Json = Json { ignoreUnknownKeys = true }
 ) {
     suspend fun syncPendingSessions(devUserId: String): Int {
         val pending = dao.getPendingSyncSessions()
@@ -23,7 +26,7 @@ class WorkoutSyncRepository(
                 continue
             }
             runCatching {
-                workoutApi.syncWorkoutSession(devUserId, session.toSyncRequest(sets))
+                workoutApi.syncWorkoutSession(devUserId, session.toSyncRequest(sets, json))
                 dao.updateSyncStatus(session.id, WorkoutSyncStatus.SYNCED.storageValue())
                 syncedCount++
             }.onFailure {
@@ -34,7 +37,13 @@ class WorkoutSyncRepository(
     }
 }
 
-private fun WorkoutSessionEntity.toSyncRequest(sets: List<WorkoutSetEntity>): SyncWorkoutRequest {
+private fun WorkoutSessionEntity.toSyncRequest(
+    sets: List<WorkoutSetEntity>,
+    json: Json
+): SyncWorkoutRequest {
+    val feedbacks = runCatching {
+        json.decodeFromString<List<ExerciseRpeFeedback>>(exerciseFeedbackJson)
+    }.getOrDefault(emptyList())
     val status = WorkoutStatus.valueOf(status)
     val durationSeconds = if (startedAtEpochMs != null && completedAtEpochMs != null) {
         ((completedAtEpochMs - startedAtEpochMs) / 1000).toInt().coerceAtLeast(0)
@@ -61,6 +70,9 @@ private fun WorkoutSessionEntity.toSyncRequest(sets: List<WorkoutSetEntity>): Sy
                 weightKg = set.weightKg,
                 completedAt = set.completedAtEpochMs.toIsoString()
             )
+        },
+        feedback = feedbacks.map { item ->
+            SyncExerciseFeedbackRequest(exerciseId = item.exerciseId, rpe = item.rpe)
         }
     )
 }

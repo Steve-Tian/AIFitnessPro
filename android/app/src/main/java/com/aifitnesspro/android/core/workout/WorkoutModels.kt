@@ -9,10 +9,12 @@ enum class WorkoutStatus {
     IN_PROGRESS,
     RESTING,
     PAUSED,
+    AWAITING_EXERCISE_RPE,
     COMPLETED,
     ABANDONED;
 
-    fun isActive(): Boolean = this == IN_PROGRESS || this == RESTING || this == PAUSED
+    fun isActive(): Boolean =
+        this == IN_PROGRESS || this == RESTING || this == PAUSED || this == AWAITING_EXERCISE_RPE
 }
 
 enum class WorkoutSyncStatus {
@@ -37,6 +39,12 @@ fun WorkoutStatus.toApiStatus(): String = when (this) {
     WorkoutStatus.COMPLETED -> "completed"
     WorkoutStatus.ABANDONED -> "abandoned"
 }
+
+@Serializable
+data class ExerciseRpeFeedback(
+    val exerciseId: String,
+    val rpe: Int
+)
 
 @Serializable
 data class WorkoutExercisePlan(
@@ -72,8 +80,11 @@ data class WorkoutSessionSnapshot(
     val weightInput: String,
     val repsInput: String,
     val startedAtEpochMs: Long?,
-    val completedAtEpochMs: Long?
+    val completedAtEpochMs: Long?,
+    val exerciseFeedbacks: List<ExerciseRpeFeedback> = emptyList()
 ) {
+    val pendingRpeExercise: WorkoutExercisePlan?
+        get() = if (status == WorkoutStatus.AWAITING_EXERCISE_RPE) currentExercise else null
     val currentExercise: WorkoutExercisePlan?
         get() = exercises.getOrNull(exerciseIndex)
 
