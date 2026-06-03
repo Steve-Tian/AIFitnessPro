@@ -621,12 +621,13 @@ describe('AIFitnessPro backend foundation', () => {
       instructions: expect.any(Array),
       commonMistakes: expect.any(Array),
       safetyNotes: expect.any(Array),
-      previewMediaUrl: 'https://media.aifitnesspro.dev/bench_press.gif',
-      previewMediaType: 'gif',
+      previewMediaUrl: expect.stringContaining('raw.githubusercontent.com'),
+      previewMediaType: 'image',
       media: expect.arrayContaining([
         expect.objectContaining({
-          mediaType: 'gif',
-          url: 'https://media.aifitnesspro.dev/bench_press.gif',
+          mediaType: 'image',
+          source: 'free-exercise-db',
+          license: 'Unlicense',
         }),
       ]),
     });

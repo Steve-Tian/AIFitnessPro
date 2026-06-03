@@ -15,23 +15,31 @@ const mediaPath = path.join(__dirname, 'data/exercise-media.json');
 const mediaCatalog = JSON.parse(fs.readFileSync(mediaPath, 'utf8')) as ExerciseMediaEntry[];
 
 export async function seedExerciseMedia(prisma: PrismaClient): Promise<number> {
-  let seeded = 0;
+  // Group entries by slug so we delete once then insert all images for each exercise
+  const bySlug = new Map<string, ExerciseMediaEntry[]>();
   for (const entry of mediaCatalog) {
-    const exercise = await prisma.exercise.findUnique({ where: { slug: entry.slug } });
+    const list = bySlug.get(entry.slug) ?? [];
+    list.push(entry);
+    bySlug.set(entry.slug, list);
+  }
+
+  let seeded = 0;
+  for (const [slug, entries] of bySlug) {
+    const exercise = await prisma.exercise.findUnique({ where: { slug } });
     if (!exercise) continue;
 
     await prisma.exerciseMedia.deleteMany({ where: { exerciseId: exercise.id } });
-    await prisma.exerciseMedia.create({
-      data: {
+    await prisma.exerciseMedia.createMany({
+      data: entries.map((e) => ({
         exerciseId: exercise.id,
-        mediaType: entry.mediaType,
-        url: entry.url,
-        source: entry.source,
-        license: entry.license,
-        sortOrder: entry.sortOrder,
-      },
+        mediaType: e.mediaType,
+        url: e.url,
+        source: e.source,
+        license: e.license,
+        sortOrder: e.sortOrder,
+      })),
     });
-    seeded += 1;
+    seeded += entries.length;
   }
   return seeded;
 }
