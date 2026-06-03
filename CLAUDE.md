@@ -42,7 +42,7 @@ Both Jest configs set `rootDir: ".."` (the repo root for the test config, which 
 ### Android (`android/`)
 
 ```bash
-export JAVA_HOME=/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"  # JDK 21 from Android Studio (Apple Silicon)
 export GRADLE_USER_HOME=$HOME/.gradle
 ./gradlew :app:assembleDebug
 ./gradlew :app:testDebugUnitTest                                    # all unit tests
