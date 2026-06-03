@@ -1,11 +1,15 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { WorkoutStatus } from '@prisma/client';
+import { AchievementsService } from '../achievements/achievements.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { SyncWorkoutRequestDto } from './workouts.dto';
 
 @Injectable()
 export class WorkoutsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly achievements: AchievementsService,
+  ) {}
 
   async syncSession(userId: string, dto: SyncWorkoutRequestDto) {
     const plan = await this.prisma.trainingPlan.findFirst({
@@ -155,6 +159,11 @@ export class WorkoutsService {
         },
       });
     });
+
+    if (session.status === 'completed') {
+      const stats = await this.achievements.computeStats(userId);
+      await this.achievements.checkAndAward(userId, stats);
+    }
 
     return session;
   }

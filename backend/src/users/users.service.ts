@@ -52,4 +52,9 @@ export class UsersService {
 
     return this.getCurrentUser(userId);
   }
+
+  async deleteAccount(userId: string): Promise<void> {
+    // Cascade deletes handle all child records (profile, sessions, plans, feedback, consent_logs, achievement_logs)
+    await this.prisma.user.delete({ where: { id: userId } });
+  }
 }

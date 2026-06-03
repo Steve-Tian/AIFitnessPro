@@ -80,6 +80,7 @@ model User {
   workoutSessions     WorkoutSession[]
   exerciseFeedback    ExerciseFeedback[]
   exerciseAdjustments ExerciseAdjustment[]
+  achievementLogs     AchievementLog[]
 
   @@map("users")
 }
@@ -294,6 +295,32 @@ model ExerciseMedia {
 
   @@index([exerciseId])
   @@map("exercise_media")
+}
+
+model Achievement {
+  id          String           @id @default(uuid()) @db.Uuid
+  slug        String           @unique
+  nameCn      String           @map("name_cn")
+  descCn      String           @map("desc_cn")
+  iconEmoji   String           @map("icon_emoji")
+  sortOrder   Int              @default(0) @map("sort_order")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  logs        AchievementLog[]
+
+  @@map("achievements")
+}
+
+model AchievementLog {
+  id            String      @id @default(uuid()) @db.Uuid
+  userId        String      @map("user_id") @db.Uuid
+  achievementId String      @map("achievement_id") @db.Uuid
+  unlockedAt    DateTime    @default(now()) @map("unlocked_at")
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@map("achievement_logs")
 }
 
 model Recipe {
