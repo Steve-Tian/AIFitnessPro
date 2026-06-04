@@ -50,3 +50,4 @@ coverage/
 
 # Claude Code 本地记忆（个人笔记、测试账号，不进 git）
 CLAUDE.local.md
+.codebuddy/
