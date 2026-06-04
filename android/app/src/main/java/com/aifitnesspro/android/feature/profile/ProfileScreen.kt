@@ -129,9 +129,9 @@ fun ProfileScreen(
         }
         item {
             SettingsGroup {
-                SettingsItem(label = "隐私政策", url = "https://aifitnesspro.example/privacy")
+                SettingsItem(label = "隐私政策", url = "https://steve-tian.github.io/AIFitnessPro/legal/privacy.html")
                 HorizontalDivider()
-                SettingsItem(label = "用户协议", url = "https://aifitnesspro.example/terms")
+                SettingsItem(label = "用户协议", url = "https://steve-tian.github.io/AIFitnessPro/legal/terms.html")
                 HorizontalDivider()
                 PermissionsItem()
                 HorizontalDivider()

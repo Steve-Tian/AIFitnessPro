@@ -1,9 +1,17 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("com.google.devtools.ksp")
+}
+
+// 从 android/local.properties 读签名配置（文件本身不进 git）
+val localProps = Properties().also { props ->
+    val f = rootProject.file("local.properties")
+    if (f.exists()) props.load(f.inputStream())
 }
 
 android {
@@ -20,6 +28,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(localProps.getProperty("RELEASE_STORE_FILE", "aifitnesspro.jks"))
+            storePassword = localProps.getProperty("RELEASE_STORE_PASSWORD", "")
+            keyAlias = localProps.getProperty("RELEASE_KEY_ALIAS", "aifitnesspro")
+            keyPassword = localProps.getProperty("RELEASE_KEY_PASSWORD", "")
+        }
+    }
+
     buildTypes {
         debug {
             buildConfigField("String", "AIFITNESSPRO_API_BASE_URL", "\"http://10.0.2.2:8000/\"")
@@ -27,7 +44,8 @@ android {
         }
 
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
             buildConfigField("String", "AIFITNESSPRO_API_BASE_URL", "\"https://api.aifitnesspro.example/\"")
             manifestPlaceholders["usesCleartextTraffic"] = "false"
             proguardFiles(
@@ -50,6 +68,11 @@ android {
         compose = true
         buildConfig = true
     }
+}
+
+// 让 Room 把每版 schema JSON 导出到 app/schemas/，迁移测试和 PR review 都能据此比对
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {

@@ -7,7 +7,7 @@
 - **项目名称**：AIFitnessPro
 - **类型**：Android 原生健身 App + NestJS 后端
 - **营养/饮食模块**：已决策延后，专注训练主线
-- **当前阶段**：Plan 1–6 全部完成；动作库扩充完毕；待 Plan 7（上架硬化）
+- **当前阶段**：Plan 1–6 全部完成；动作库扩充完毕；Plan 7A/7C/7D/7F 完成（代码层），剩 7B（CDN，需 OSS）/7E（域名+服务器），以及 7F 的视觉素材（icon/截图/ICP 备案）需你操作
 
 ## 2. 技术栈 & 本地环境
 
@@ -76,7 +76,7 @@ d1d48b3 feat: Profile tab with stats, achievements, account deletion, and settin
 | 风险 | 优先级 | 说明 |
 |---|---|---|
 | 媒体 CDN | **P0** | raw.githubusercontent.com 国内不稳定；须迁移至国内 OSS |
-| Room migration | **P0** | 仍用 `fallbackToDestructiveMigration()`，上架前必须改为正式 migration |
+| ~~Room migration~~ | ✅ 已完成 | 7A：MIGRATION_1_2/2_3 已接入，schema 导出到 `android/app/schemas/` |
 | Release API URL | **P0** | `https://api.aifitnesspro.example/` 是占位，需真实域名 |
 | 隐私政策/用户协议 | **P0** | HTTPS 页面还未部署，设置页链接打不开 |
 | App 备案 | **P0** | 国内安卓上架合规要求 |
@@ -87,10 +87,11 @@ d1d48b3 feat: Profile tab with stats, achievements, account deletion, and settin
 
 **必须完成的任务（按推荐顺序）：**
 
-1. **7A — Room 正式 Migration**
-   - 移除 `fallbackToDestructiveMigration()`
-   - 添加 Room Schema version 迁移脚本
-   - 文件：`android/.../core/workout/local/WorkoutDatabase.kt`
+1. ✅ **7A — Room 正式 Migration**（已完成）
+   - 已移除 `fallbackToDestructiveMigration()`
+   - 已添加 `MIGRATION_1_2`（增 `syncStatus`）和 `MIGRATION_2_3`（增 `exerciseFeedbackJson`）
+   - 已开启 `exportSchema = true`，schema 导出到 `android/app/schemas/`
+   - 文件：`android/.../core/workout/local/WorkoutDatabase.kt`、`android/app/build.gradle.kts`
 
 2. **7B — 媒体 CDN 迁移**（工作量较大，可先做 7A/7C/7D）
    - 下载 102 张 JPG → 上传到阿里云 OSS 或腾讯云 COS
@@ -98,26 +99,28 @@ d1d48b3 feat: Profile tab with stats, achievements, account deletion, and settin
    - 重新 seed 数据库
    - 需要你提供 OSS bucket 和 Access Key
 
-3. **7C — Release 签名配置**
-   - 生成 keystore（建议你自己保管密钥）
-   - 配置 `android/app/build.gradle.kts` 的 signingConfigs
-   - 文件：`android/app/build.gradle.kts`
+3. ✅ **7C — Release 签名配置**（已完成）
+   - 已生成 `android/app/aifitnesspro.jks`（RSA 2048，50 年有效期，不进 git）
+   - 签名参数写在 `android/local.properties`（不进 git）
+   - `build.gradle.kts` 从 `local.properties` 读配置，release buildType 开启 `isMinifyEnabled = true` + R8 混淆
+   - `assembleRelease` 验证通过（v2 scheme，1.9M APK）
+   - **重要**：`aifitnesspro.jks` 请自行备份到安全位置；`local.properties` 的密码在上架前改成强密码
 
-4. **7D — 隐私政策 / 用户协议部署**
-   - 最简方案：GitHub Pages 静态页
-   - 需要你决定域名（可用 `aifitnesspro.github.io` 或自定义域名）
-   - 更新 `ProfileScreen.kt` 里的占位 URL
+4. ✅ **7D — 隐私政策 / 用户协议部署**（本地页面已完成，待你推 GitHub 后生效）
+   - 页面：`docs/legal/privacy.html`、`docs/legal/terms.html`（中文，含权限说明/健康免责/联系方式）
+   - `ProfileScreen.kt` 已改为真实 URL：`https://steve-tian.github.io/AIFitnessPro/legal/privacy.html`
+   - **你还需要做**：把本项目推到 GitHub 仓库 `AIFitnessPro`，然后在仓库 Settings → Pages 选择 `main` 分支 `docs/` 目录即可上线
 
 5. **7E — Release API URL**
    - 购买域名 + 部署后端到云服务器
    - 更新 `android/app/build.gradle.kts` 的 release buildConfigField
    - 后端 `.env` 更新数据库连接和端口
 
-6. **7F — 上架材料**
-   - App icon（1024×1024）、截图（多分辨率）
-   - 应用简介、分类、年龄分级
-   - Android SDK 使用说明
-   - 国内应用市场备案（App ICP）
+6. ✅ **7F — 上架材料**（文档已完成，剩视觉素材需你操作）
+   - 文案：`docs/store-listing.md`（标题/简介/详情/关键词/更新日志）
+   - SDK & 权限说明：`docs/sdk-permissions.md`（可直接复制填入各市场后台）
+   - Icon & 截图指引：`docs/icon-screenshot-guide.md`（含各渠道尺寸、AVD 截图方法、ICP 备案步骤）
+   - **你还需要做**：①制作 512×512 icon PNG；②用 AVD 截 5 张截图；③工信部 App ICP 备案
 
 ## 8. 启动命令参考
 
