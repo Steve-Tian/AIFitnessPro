@@ -54,7 +54,7 @@ data class OnboardingFormState(
         1 -> goal.isNotBlank()
         2 -> experience.isNotBlank()
         3 -> equipment.isNotEmpty()
-        4 -> gender.isNotBlank() && ageInt in 16..65 && heightInt in 140..220 && weightDouble in 30.0..200.0
+        4 -> gender.isNotBlank() && ageInt > 0 && heightInt > 0 && weightDouble > 0.0
         5 -> daysPerWeek in 3..5
         6 -> persona.isNotBlank()
         else -> false
@@ -235,27 +235,30 @@ private fun StepBodyData(
 
         OutlinedTextField(
             value = age, onValueChange = onAge,
-            label = { Text("年龄（16–65岁）") },
+            label = { Text("年龄") },
+            placeholder = { Text("请输入年龄") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            isError = age.isNotBlank() && (age.toIntOrNull() ?: -1) !in 16..65,
+            isError = age.isNotBlank() && (age.toIntOrNull() ?: -1) <= 0,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
             value = heightCm, onValueChange = onHeightCm,
-            label = { Text("身高（140–220cm）") },
+            label = { Text("身高（cm）") },
+            placeholder = { Text("请输入身高") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            isError = heightCm.isNotBlank() && (heightCm.toIntOrNull() ?: -1) !in 140..220,
+            isError = heightCm.isNotBlank() && (heightCm.toIntOrNull() ?: -1) <= 0,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
             value = weightKg, onValueChange = onWeightKg,
-            label = { Text("体重（30–200kg）") },
+            label = { Text("体重（kg）") },
+            placeholder = { Text("请输入体重") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            isError = weightKg.isNotBlank() && (weightKg.toDoubleOrNull() ?: -1.0) !in 30.0..200.0,
+            isError = weightKg.isNotBlank() && (weightKg.toDoubleOrNull() ?: -1.0) <= 0.0,
             modifier = Modifier.fillMaxWidth()
         )
     }

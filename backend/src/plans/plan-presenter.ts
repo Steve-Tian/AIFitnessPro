@@ -25,6 +25,7 @@ export function presentPlan(plan: PlanWithDays) {
           targetReps: pe.targetReps,
           targetRestSeconds: pe.targetRestSeconds,
           recommendedWeightKg: pe.recommendedWeightKg ? Number(pe.recommendedWeightKg) : null,
+          previewMediaUrl: pe.exercise.previewMediaUrl ?? null,
         })),
     })),
   };

@@ -54,7 +54,8 @@ data class WorkoutExercisePlan(
     val targetSets: Int,
     val targetReps: Int,
     val targetRestSeconds: Int,
-    val recommendedWeightKg: Double? = null
+    val recommendedWeightKg: Double? = null,
+    val previewMediaUrl: String? = null
 )
 
 data class CompletedSetRecord(
@@ -111,7 +112,8 @@ fun ApiPlanExercise.toWorkoutExercisePlan() = WorkoutExercisePlan(
     targetSets = targetSets,
     targetReps = targetReps,
     targetRestSeconds = targetRestSeconds,
-    recommendedWeightKg = recommendedWeightKg
+    recommendedWeightKg = recommendedWeightKg,
+    previewMediaUrl = previewMediaUrl
 )
 
 fun ApiPlanDay.toWorkoutExercises(): List<WorkoutExercisePlan> =

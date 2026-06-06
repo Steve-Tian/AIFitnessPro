@@ -1,6 +1,8 @@
 package com.aifitnesspro.android.feature.workout
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import coil.compose.AsyncImage
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
@@ -60,6 +68,9 @@ fun WorkoutSessionScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var showDiscardDialog by remember { mutableStateOf(false) }
     var completedSetCount by remember { mutableIntStateOf(0) }
+    // 记录本次训练中已经预览过的动作，避免同一动作第2组以后重复弹预览
+    val previewedExerciseIds = remember { mutableSetOf<String>() }
+    var showingPreview by remember { mutableStateOf(false) }
     val lifecycleOwner = LocalLifecycleOwner.current
     val latestSnapshot by rememberUpdatedState(snapshot)
 
@@ -78,6 +89,18 @@ fun WorkoutSessionScreen(
         val session = snapshot ?: return@LaunchedEffect
         if (session.status == WorkoutStatus.COMPLETED) {
             completedSetCount = workoutRepository.getCompletedSets(session.sessionId).size
+        }
+    }
+
+    // 每次切换到新动作（IN_PROGRESS 且第1组）时触发动作预览
+    LaunchedEffect(snapshot?.exerciseIndex, snapshot?.status) {
+        val session = snapshot ?: return@LaunchedEffect
+        val exercise = session.currentExercise ?: return@LaunchedEffect
+        if (session.status == WorkoutStatus.IN_PROGRESS
+            && session.setIndex == 1
+            && exercise.exerciseId !in previewedExerciseIds
+        ) {
+            showingPreview = true
         }
     }
 
@@ -143,31 +166,41 @@ fun WorkoutSessionScreen(
                     scope.launch { snapshot = workoutRepository.startSession(session) }
                 }
             )
-            WorkoutStatus.IN_PROGRESS -> InProgressContent(
-                snapshot = session,
-                onWeightChange = { weight ->
-                    scope.launch {
-                        snapshot = workoutRepository.updateInputs(session, weight, session.repsInput)
+            WorkoutStatus.IN_PROGRESS -> if (showingPreview) {
+                ExercisePreviewContent(
+                    snapshot = session,
+                    onStart = {
+                        session.currentExercise?.exerciseId?.let { previewedExerciseIds.add(it) }
+                        showingPreview = false
                     }
-                },
-                onRepsChange = { reps ->
-                    scope.launch {
-                        snapshot = workoutRepository.updateInputs(session, session.weightInput, reps)
-                    }
-                },
-                onCompleteSet = {
-                    scope.launch {
-                        val reps = session.repsInput.toIntOrNull()
-                        if (reps == null || reps <= 0) {
-                            errorMessage = "请输入有效次数"
-                            return@launch
+                )
+            } else {
+                InProgressContent(
+                    snapshot = session,
+                    onWeightChange = { weight ->
+                        scope.launch {
+                            snapshot = workoutRepository.updateInputs(session, weight, session.repsInput)
                         }
-                        val weight = session.weightInput.toDoubleOrNull()
-                        snapshot = workoutRepository.completeSet(session, weight, reps)
-                        errorMessage = null
+                    },
+                    onRepsChange = { reps ->
+                        scope.launch {
+                            snapshot = workoutRepository.updateInputs(session, session.weightInput, reps)
+                        }
+                    },
+                    onCompleteSet = {
+                        scope.launch {
+                            val reps = session.repsInput.toIntOrNull()
+                            if (reps == null || reps <= 0) {
+                                errorMessage = "请输入有效次数"
+                                return@launch
+                            }
+                            val weight = session.weightInput.toDoubleOrNull()
+                            snapshot = workoutRepository.completeSet(session, weight, reps)
+                            errorMessage = null
+                        }
                     }
-                }
-            )
+                )
+            }
             WorkoutStatus.RESTING, WorkoutStatus.PAUSED -> RestingContent(
                 snapshot = session,
                 onSkipRest = {
@@ -219,6 +252,109 @@ fun WorkoutSessionScreen(
     }
 }
 
+// 通用训练要点：适用于绝大多数力量训练动作
+private val UNIVERSAL_TRAINING_TIPS = listOf(
+    "💪 专注感受目标肌肉发力，避免借力代偿",
+    "🔽 离心阶段（放下重量）控制 2 秒，增强肌肉刺激",
+    "🫁 发力时呼气，还原时吸气，保持呼吸节律",
+    "⚙️ 先用轻重量做1组热身，再按计划重量训练",
+    "⚠️ 如感到关节疼痛请立即停止，调整重量或动作"
+)
+
+@Composable
+private fun ExercisePreviewContent(
+    snapshot: WorkoutSessionSnapshot,
+    onStart: () -> Unit
+) {
+    val exercise = snapshot.currentExercise ?: return
+    val exerciseNumber = snapshot.exerciseIndex + 1
+    val totalExercises = snapshot.exercises.size
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
+        // 动作序号标签
+        Text(
+            "第 $exerciseNumber / $totalExercises 个动作",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Spacer(Modifier.height(6.dp))
+
+        // 动作名称
+        Text(
+            exercise.nameCn,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(Modifier.height(4.dp))
+
+        // 目标组数 × 次数 + 参考重量
+        val weightInfo = exercise.recommendedWeightKg?.let { " · 参考 ${it}kg" } ?: ""
+        Text(
+            "${exercise.targetSets} 组 × ${exercise.targetReps} 次$weightInfo",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.height(16.dp))
+
+        // 动作示范图（大图展示）
+        if (!exercise.previewMediaUrl.isNullOrBlank()) {
+            AsyncImage(
+                model = exercise.previewMediaUrl,
+                contentDescription = "${exercise.nameCn} 动作示范",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(260.dp)
+                    .clip(RoundedCornerShape(16.dp))
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("动图同步中", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+        Spacer(Modifier.height(20.dp))
+
+        // 训练要点卡片
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    "训练要点",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(Modifier.height(10.dp))
+                UNIVERSAL_TRAINING_TIPS.forEach { tip ->
+                    Text(
+                        tip,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(vertical = 3.dp)
+                    )
+                }
+            }
+        }
+        Spacer(Modifier.height(24.dp))
+
+        // 开始按钮
+        Button(
+            onClick = onStart,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("明白了，开始训练")
+        }
+        Spacer(Modifier.height(16.dp))
+    }
+}
+
 @Composable
 private fun PreStartContent(snapshot: WorkoutSessionSnapshot, onStart: () -> Unit) {
     Column {
@@ -254,6 +390,19 @@ private fun InProgressContent(
             "第 ${snapshot.setIndex} / ${exercise.targetSets} 组 · 目标 ${exercise.targetReps} 次",
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // 动作参考缩略图（训练中小图，方便记住动作）
+        if (!exercise.previewMediaUrl.isNullOrBlank()) {
+            AsyncImage(
+                model = exercise.previewMediaUrl,
+                contentDescription = "${exercise.nameCn} 动作参考",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .clip(RoundedCornerShape(10.dp))
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = snapshot.weightInput,

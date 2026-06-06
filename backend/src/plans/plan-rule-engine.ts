@@ -136,8 +136,12 @@ export const EXERCISE_SLUGS_BY_DAY_TYPE: Record<TrainingDayType, string[]> = {
   full_body:  [...new Set(DAY_STRUCTURE.full_body.flatMap(s => s.pool))],
 };
 
+// 休息时间按训练强度科学设定：
+// 新手 12次×轻重量 → 60s（心肺恢复快，重点是学动作）
+// 进阶 8次×中重量 → 90s（肌肥大区间标准组间休息）
+// 高阶 5次×大重量 → 150s（力量区间需要充分神经恢复）
 export const TARGETS_BY_EXPERIENCE: Record<string, { sets: number; reps: number; restSeconds: number }> = {
-  beginner:     { sets: 3, reps: 12, restSeconds: 90 },
+  beginner:     { sets: 3, reps: 12, restSeconds: 60 },
   intermediate: { sets: 4, reps: 8,  restSeconds: 90 },
-  advanced:     { sets: 5, reps: 5,  restSeconds: 120 },
+  advanced:     { sets: 5, reps: 5,  restSeconds: 150 },
 };

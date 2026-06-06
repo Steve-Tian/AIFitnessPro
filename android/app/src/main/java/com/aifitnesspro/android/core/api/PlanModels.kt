@@ -9,7 +9,8 @@ data class ApiPlanExercise(
     val targetSets: Int,
     val targetReps: Int,
     val targetRestSeconds: Int,
-    val recommendedWeightKg: Double? = null
+    val recommendedWeightKg: Double? = null,
+    val previewMediaUrl: String? = null
 )
 
 @Serializable
